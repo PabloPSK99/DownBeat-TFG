@@ -654,9 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44598c43df386f4090b7bacfda672be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bpm: 60
-  timeOffset: 1
-  normalizedRhythm: 0
+  audioSource: {fileID: 652924138}
   circle: {fileID: 1144955811}
   dot: {fileID: 9393056}
   externalCircle: {fileID: 866355803}
@@ -667,7 +665,10 @@ MonoBehaviour:
   outGlow: {fileID: 1734269671}
   dotGlowColor: {r: 0.6179246, g: 1, b: 0.99752825, a: 1}
   outGlowColor: {r: 1, g: 0.83773583, b: 0.3915094, a: 1}
-  audioSource: {fileID: 652924138}
+  bpm: 60
+  timeOffset: 1
+  normalized: 0
+  beatLocked: 0
 --- !u!82 &652924138
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1057,8 +1058,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 1657519439}
   center: {fileID: 1680664917}
+  rhythm: {fileID: 652924137}
+  successChanceThreshold: 10
   minStickMovement: 0.2
   moveDuration: 0.5
+  successChance: 0
+  currentAction: 0
 --- !u!4 &822340551
 Transform:
   m_ObjectHideFlags: 0
@@ -9035,7 +9040,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1563912061
 Transform:
   m_ObjectHideFlags: 0

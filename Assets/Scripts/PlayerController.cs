@@ -8,11 +8,18 @@ public class PlayerController : MonoBehaviour
     PlayerControls controls;
     public Node currentNode;
     public Transform center;
+    public Rhythm rhythm;
+    public float successChanceThreshold;
     Node targetNode;
     Vector2 move;
     public float minStickMovement;
     public float moveDuration;
+    public float successChance;
     private bool canMove = true;
+    private bool moveInput = false;
+
+    [Header("Actions")]
+    public Action currentAction;
 
     // Start is called before the first frame update
     private void Awake()
@@ -22,11 +29,12 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Ataque.performed += context => Attack();
         controls.Fight.Move.performed += context => move = context.ReadValue<Vector2>();
         controls.Fight.Move.canceled += context => move = Vector2.zero;
+        controls.Fight.Move.canceled += context => moveInput = false;
     }
 
     private void Update()
     {
-        if(canMove && (Mathf.Abs(move.x) > minStickMovement || Mathf.Abs(move.y) > minStickMovement))
+        if (!moveInput && (Mathf.Abs(move.x) > minStickMovement || Mathf.Abs(move.y) > minStickMovement))
         {
             Move();
         }
@@ -34,39 +42,49 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        print("illo");
+        //CheckSuccessMovement();
     }
 
     private void Move()
     {
-        if(Mathf.Abs(move.x) > Mathf.Abs(move.y)) //Horizontal movement
+        moveInput = true;
+        if (!rhythm.beatLocked && CheckSuccessMovement())
         {
-            if(move.x < 0)  //Left
+            if (Mathf.Abs(move.x) > Mathf.Abs(move.y)) //Horizontal movement
             {
-                targetNode = currentNode.left;
+                if (move.x < 0)  //Left
+                {
+                    targetNode = currentNode.left;
+                }
+                else            //Right
+                {
+                    targetNode = currentNode.right;
+                }
             }
-            else            //Right
+            else //Vertical movement
             {
-                targetNode = currentNode.right;
+                if (move.y > 0) //Forward
+                {
+                    targetNode = currentNode.forward;
+                }
+                else            //Back
+                {
+                    targetNode = currentNode.back;
+                }
             }
-        }
-        else //Vertical movement
-        {
-            if (move.y > 0) //Forward
-            {
-                targetNode = currentNode.forward;
-            }
-            else            //Back
-            {
-                targetNode = currentNode.back;
-            }
-        }
 
 
-        if(targetNode != null)
-        {
-            StartCoroutine(MoveToTarget());
+            if (targetNode != null && canMove)
+            {
+                StartCoroutine(MoveToTarget());
+            }
         }
+        else
+        {
+            if (rhythm.beatLocked) print("LOCKED");
+            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
+        }
+        rhythm.LockThisBeat();
     }
 
     IEnumerator MoveToTarget()
@@ -96,5 +114,24 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         controls.Fight.Disable();
+    }
+
+    private bool CheckSuccessMovement()
+    {
+        if (rhythm.normalized < 0.5f) //Si es tiempo 
+        {
+            successChance = (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold);
+        }
+        else                   //Si es contratiempo
+        {
+            successChance = (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold);
+        }
+        print(successChance);
+        if (successChance < 70)
+        {
+            float rng = Random.value * 100;
+            return successChance >= rng;
+        }
+        return true;
     }
 }

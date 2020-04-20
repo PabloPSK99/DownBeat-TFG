@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 public class Rhythm : MonoBehaviour
 {
-    [Header("Timing")]
-    public float bpm;
-    public float timeOffset;
-    public float normalizedRhythm;
+    [Header("Audio")]
+    public AudioSource audioSource;
 
     [Header("Circles")]
     public Image circle;
@@ -26,9 +24,12 @@ public class Rhythm : MonoBehaviour
     public Color dotGlowColor;
     public Color outGlowColor;
 
+    [Header("Timing")]
+    public float bpm;
+    public float timeOffset;
+    public float normalized;
 
-    [Header("Audio")]
-    public AudioSource audioSource;
+    public bool beatLocked;
 
     private float lastTimeStamp;
     private bool grow;
@@ -40,7 +41,7 @@ public class Rhythm : MonoBehaviour
     void Start()
     {
         beatDuration = bpm / 60f;
-        normalizedRhythm = 1;
+        normalized = 1;
         StartCoroutine(Loop());
     }
 
@@ -64,6 +65,7 @@ public class Rhythm : MonoBehaviour
 
     IEnumerator CircleGrow()
     {
+        grow = true;
         float duration = beatDuration + syncCorrection;
         iTween.ScaleTo(circle.gameObject, iTween.Hash(
             "scale", Vector3.one,
@@ -81,7 +83,7 @@ public class Rhythm : MonoBehaviour
         );
         yield return new WaitForSeconds(duration);
         circle.transform.localScale = Vector3.one;
-        normalizedRhythm = 1;
+        normalized = 1;
         externalCircle.color = upBeatColor;
         outGlow.color = outGlowColor;
         iTween.ValueTo(gameObject, iTween.Hash(
@@ -99,6 +101,7 @@ public class Rhythm : MonoBehaviour
 
     IEnumerator CircleShrink()
     {
+        grow = false;
         float duration = beatDuration + syncCorrection;
         iTween.ScaleTo(circle.gameObject, iTween.Hash(
             "scale", minScale,
@@ -116,7 +119,7 @@ public class Rhythm : MonoBehaviour
         );
         yield return new WaitForSeconds(duration);
         circle.transform.localScale = minScale;
-        normalizedRhythm = 0;
+        normalized = 0;
         dot.color = downBeatColor;
         dotGlow.color = dotGlowColor;
         iTween.ValueTo(gameObject, iTween.Hash(
@@ -135,7 +138,7 @@ public class Rhythm : MonoBehaviour
     private void FixSync()
     {
         float offset = (lastTimeStamp + beatDuration + syncCorrection) - audioSource.time; //tiempo esperado - tiempo real
-        print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
+        //print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
         lastTimeStamp = audioSource.time;
         if(offset > 30) // Si la canción ha vuelto a empezar
         {
@@ -164,8 +167,8 @@ public class Rhythm : MonoBehaviour
 
     private void OnCircleUpdate(float newValue)
     {
-        normalizedRhythm = newValue;
-        UpdateColor(normalizedRhythm);
+        normalized = newValue;
+        UpdateColor(normalized);
     }
 
     private void UpdateDotColor(float newValue)
@@ -191,4 +194,32 @@ public class Rhythm : MonoBehaviour
         externalCircle.color = offBeatColor;
         outGlow.color = Color.clear;
     }
+
+
+    public void LockThisBeat()
+    {
+        beatLocked = true;
+        StartCoroutine(WaitForNextBeat());
+    }
+
+    IEnumerator WaitForNextBeat()
+    {
+        float lastNormalized = normalized;
+        bool lastGrowing = grow;
+        bool isNextBeat = false;
+        while (!isNextBeat)
+        {
+            if (lastNormalized >= 0.5f)
+            {
+                isNextBeat = !grow && normalized <= 0.5f;
+            }
+            else
+            {
+                isNextBeat = grow && normalized >= 0.5f;
+            }
+            yield return null;
+        }
+        beatLocked = false;
+    }
+
 }
