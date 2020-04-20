@@ -655,18 +655,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bpm: 60
-  timeOffset: 0
+  timeOffset: 1
   normalizedRhythm: 0
   circle: {fileID: 1144955811}
   dot: {fileID: 9393056}
   externalCircle: {fileID: 866355803}
-  downBeatColor: {r: 1, g: 0.5523083, b: 0, a: 1}
+  downBeatColor: {r: 0, g: 0.93607855, b: 1, a: 1}
   offBeatColor: {r: 1, g: 1, b: 1, a: 0.40392157}
-  upBeatColor: {r: 0, g: 0.93607855, b: 1, a: 1}
+  upBeatColor: {r: 1, g: 0.5523083, b: 0, a: 1}
   dotGlow: {fileID: 702898772}
   outGlow: {fileID: 1734269671}
-  dotGlowColor: {r: 1, g: 0.83773583, b: 0.3915094, a: 1}
-  outGlowColor: {r: 0.6179246, g: 1, b: 0.99752825, a: 1}
+  dotGlowColor: {r: 0.6179246, g: 1, b: 0.99752825, a: 1}
+  outGlowColor: {r: 1, g: 0.83773583, b: 0.3915094, a: 1}
   audioSource: {fileID: 652924138}
 --- !u!82 &652924138
 AudioSource:
@@ -3730,7 +3730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.93607855, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.6404138, b: 0, a: 0}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:

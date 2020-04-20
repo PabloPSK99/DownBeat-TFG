@@ -135,9 +135,16 @@ public class Rhythm : MonoBehaviour
     private void FixSync()
     {
         float offset = (lastTimeStamp + beatDuration + syncCorrection) - audioSource.time; //tiempo esperado - tiempo real
-        Debug.Log("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
+        print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
         lastTimeStamp = audioSource.time;
-        syncCorrection = Mathf.Min(offset, 0);
+        if(offset > 30) // Si la canción ha vuelto a empezar
+        {
+            syncCorrection = -audioSource.time;
+        }
+        else                    // Si no
+        {
+            syncCorrection = offset;
+        }
     }
 
     public void UpdateColor(float value)
