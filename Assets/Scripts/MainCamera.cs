@@ -5,15 +5,18 @@ using UnityEngine;
 public class MainCamera : MonoBehaviour
 {
     public Transform characterPivot;
-    // Start is called before the first frame update
-    void Start()
+
+
+    public void Rotate(float rotation, float duration)
     {
-        
+        StartCoroutine(RotateBy(rotation, duration));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator RotateBy(float rotation, float duration)
     {
-        transform.rotation = characterPivot.rotation;
+        float lastRotation = transform.rotation.eulerAngles.y;
+        iTween.RotateBy(gameObject, Vector3.up * rotation, duration);
+        yield return new WaitForSeconds(duration);
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     PlayerControls controls;
+    public MainCamera camera;
     public Node currentNode;
     public Transform center;
     public Rhythm rhythm;
@@ -25,8 +26,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         controls = new PlayerControls();
-
         controls.Fight.Ataque.performed += context => Attack();
+        controls.Fight.Move.started += context => print(context.ReadValue<Vector2>());
         controls.Fight.Move.performed += context => move = context.ReadValue<Vector2>();
         controls.Fight.Move.canceled += context => move = Vector2.zero;
         controls.Fight.Move.canceled += context => moveInput = false;
@@ -90,20 +91,30 @@ public class PlayerController : MonoBehaviour
     IEnumerator MoveToTarget()
     {
         canMove = false;
+        float rotation = 0;
+        float lastRotation = transform.rotation.eulerAngles.y;
         if (targetNode == currentNode.left)
         {
-
+            rotation = 1/6f;
+            camera.Rotate(rotation, moveDuration);
         }
         else if (targetNode == currentNode.right)
         {
-
+            rotation = -1/6f;
+            camera.Rotate(rotation, moveDuration);
         }
+        else
+        {
+            iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
+        }
+        iTween.RotateBy(transform.parent.gameObject, Vector3.up * rotation, moveDuration);
         currentNode = targetNode;
-        iTween.MoveTo(this.gameObject, targetNode.transform.position, moveDuration);
-        //float degrees =   
-        //iTween.RotateTo(this.gameObject, )
-        yield return new WaitForSeconds(moveDuration/2);
+        yield return new WaitForSeconds(moveDuration);
+        transform.position = targetNode.transform.position;
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
         canMove = true;
+
+
     }
 
     private void OnEnable()

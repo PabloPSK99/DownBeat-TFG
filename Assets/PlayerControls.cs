@@ -106,6 +106,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""15224008-2221-41b7-a4da-332caf285404"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""efaa3db6-fb96-4705-b95b-ad76ec414218"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
