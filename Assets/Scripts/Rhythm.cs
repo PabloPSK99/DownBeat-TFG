@@ -202,11 +202,52 @@ public class Rhythm : MonoBehaviour
         StartCoroutine(WaitForNextBeat());
     }
 
+    public void LockTwoBeats()
+    {
+        beatLocked = true;
+        StartCoroutine(WaitTwoBeats());
+    }
+
     IEnumerator WaitForNextBeat()
     {
         float lastNormalized = normalized;
         bool lastGrowing = grow;
         bool isNextBeat = false;
+        while (!isNextBeat)
+        {
+            if (lastNormalized >= 0.5f)
+            {
+                isNextBeat = !grow && normalized <= 0.5f;
+            }
+            else
+            {
+                isNextBeat = grow && normalized >= 0.5f;
+            }
+            yield return null;
+        }
+        beatLocked = false;
+    }
+
+    IEnumerator WaitTwoBeats()
+    {
+        float lastNormalized = normalized;
+        bool lastGrowing = grow;
+        bool isNextBeat = false;
+        while (!isNextBeat)
+        {
+            if (lastNormalized >= 0.5f)
+            {
+                isNextBeat = !grow && normalized <= 0.5f;
+            }
+            else
+            {
+                isNextBeat = grow && normalized >= 0.5f;
+            }
+            yield return null;
+        }
+        lastNormalized = normalized;
+        lastGrowing = grow;
+        isNextBeat = false;
         while (!isNextBeat)
         {
             if (lastNormalized >= 0.5f)

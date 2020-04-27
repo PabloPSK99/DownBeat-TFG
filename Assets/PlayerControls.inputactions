@@ -6,7 +6,7 @@
             "id": "00a39836-553f-4a1f-8e1e-b4b607698818",
             "actions": [
                 {
-                    "name": "Ataque",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "03e8ae2e-40ee-472e-99ce-58153a202bbe",
                     "expectedControlType": "",
@@ -14,7 +14,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Bloqueo",
+                    "name": "Block",
                     "type": "Button",
                     "id": "12a34afb-02b2-4381-a9e7-2f8e03dd56fa",
                     "expectedControlType": "",
@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Técnica",
+                    "name": "Tech",
                     "type": "Button",
                     "id": "1d0c2716-b7e2-4479-87e6-7218146c23f0",
                     "expectedControlType": "",
@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Corte",
+                    "name": "Cut",
                     "type": "Button",
                     "id": "53038458-6c51-4b7a-8365-16d64ab3acfb",
                     "expectedControlType": "",
@@ -54,7 +54,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Ataque",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -65,7 +65,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Bloqueo",
+                    "action": "Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -76,7 +76,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Técnica",
+                    "action": "Tech",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -109,7 +109,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Corte",
+                    "action": "Cut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

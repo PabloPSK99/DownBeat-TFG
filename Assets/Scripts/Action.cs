@@ -7,6 +7,9 @@ public enum Action
     Attack,
     Block,
     Tech,
+    Reload,
+    Twirl,
+    Flash,
     Cut,
     Move,
     None

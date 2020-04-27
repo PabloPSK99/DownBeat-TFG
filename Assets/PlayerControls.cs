@@ -19,7 +19,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
             ""id"": ""00a39836-553f-4a1f-8e1e-b4b607698818"",
             ""actions"": [
                 {
-                    ""name"": ""Ataque"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""03e8ae2e-40ee-472e-99ce-58153a202bbe"",
                     ""expectedControlType"": """",
@@ -27,7 +27,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Bloqueo"",
+                    ""name"": ""Block"",
                     ""type"": ""Button"",
                     ""id"": ""12a34afb-02b2-4381-a9e7-2f8e03dd56fa"",
                     ""expectedControlType"": """",
@@ -35,7 +35,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Técnica"",
+                    ""name"": ""Tech"",
                     ""type"": ""Button"",
                     ""id"": ""1d0c2716-b7e2-4479-87e6-7218146c23f0"",
                     ""expectedControlType"": """",
@@ -43,7 +43,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Corte"",
+                    ""name"": ""Cut"",
                     ""type"": ""Button"",
                     ""id"": ""53038458-6c51-4b7a-8365-16d64ab3acfb"",
                     ""expectedControlType"": """",
@@ -67,7 +67,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Ataque"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -78,7 +78,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Bloqueo"",
+                    ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -89,7 +89,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Técnica"",
+                    ""action"": ""Tech"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -122,7 +122,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Corte"",
+                    ""action"": ""Cut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -133,10 +133,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
 }");
         // Fight
         m_Fight = asset.FindActionMap("Fight", throwIfNotFound: true);
-        m_Fight_Ataque = m_Fight.FindAction("Ataque", throwIfNotFound: true);
-        m_Fight_Bloqueo = m_Fight.FindAction("Bloqueo", throwIfNotFound: true);
-        m_Fight_Técnica = m_Fight.FindAction("Técnica", throwIfNotFound: true);
-        m_Fight_Corte = m_Fight.FindAction("Corte", throwIfNotFound: true);
+        m_Fight_Attack = m_Fight.FindAction("Attack", throwIfNotFound: true);
+        m_Fight_Block = m_Fight.FindAction("Block", throwIfNotFound: true);
+        m_Fight_Tech = m_Fight.FindAction("Tech", throwIfNotFound: true);
+        m_Fight_Cut = m_Fight.FindAction("Cut", throwIfNotFound: true);
         m_Fight_Move = m_Fight.FindAction("Move", throwIfNotFound: true);
     }
 
@@ -187,19 +187,19 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     // Fight
     private readonly InputActionMap m_Fight;
     private IFightActions m_FightActionsCallbackInterface;
-    private readonly InputAction m_Fight_Ataque;
-    private readonly InputAction m_Fight_Bloqueo;
-    private readonly InputAction m_Fight_Técnica;
-    private readonly InputAction m_Fight_Corte;
+    private readonly InputAction m_Fight_Attack;
+    private readonly InputAction m_Fight_Block;
+    private readonly InputAction m_Fight_Tech;
+    private readonly InputAction m_Fight_Cut;
     private readonly InputAction m_Fight_Move;
     public struct FightActions
     {
         private @PlayerControls m_Wrapper;
         public FightActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Ataque => m_Wrapper.m_Fight_Ataque;
-        public InputAction @Bloqueo => m_Wrapper.m_Fight_Bloqueo;
-        public InputAction @Técnica => m_Wrapper.m_Fight_Técnica;
-        public InputAction @Corte => m_Wrapper.m_Fight_Corte;
+        public InputAction @Attack => m_Wrapper.m_Fight_Attack;
+        public InputAction @Block => m_Wrapper.m_Fight_Block;
+        public InputAction @Tech => m_Wrapper.m_Fight_Tech;
+        public InputAction @Cut => m_Wrapper.m_Fight_Cut;
         public InputAction @Move => m_Wrapper.m_Fight_Move;
         public InputActionMap Get() { return m_Wrapper.m_Fight; }
         public void Enable() { Get().Enable(); }
@@ -210,18 +210,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_FightActionsCallbackInterface != null)
             {
-                @Ataque.started -= m_Wrapper.m_FightActionsCallbackInterface.OnAtaque;
-                @Ataque.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnAtaque;
-                @Ataque.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnAtaque;
-                @Bloqueo.started -= m_Wrapper.m_FightActionsCallbackInterface.OnBloqueo;
-                @Bloqueo.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnBloqueo;
-                @Bloqueo.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnBloqueo;
-                @Técnica.started -= m_Wrapper.m_FightActionsCallbackInterface.OnTécnica;
-                @Técnica.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnTécnica;
-                @Técnica.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnTécnica;
-                @Corte.started -= m_Wrapper.m_FightActionsCallbackInterface.OnCorte;
-                @Corte.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnCorte;
-                @Corte.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnCorte;
+                @Attack.started -= m_Wrapper.m_FightActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnAttack;
+                @Block.started -= m_Wrapper.m_FightActionsCallbackInterface.OnBlock;
+                @Block.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnBlock;
+                @Block.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnBlock;
+                @Tech.started -= m_Wrapper.m_FightActionsCallbackInterface.OnTech;
+                @Tech.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnTech;
+                @Tech.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnTech;
+                @Cut.started -= m_Wrapper.m_FightActionsCallbackInterface.OnCut;
+                @Cut.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnCut;
+                @Cut.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnCut;
                 @Move.started -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
@@ -229,18 +229,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
             m_Wrapper.m_FightActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Ataque.started += instance.OnAtaque;
-                @Ataque.performed += instance.OnAtaque;
-                @Ataque.canceled += instance.OnAtaque;
-                @Bloqueo.started += instance.OnBloqueo;
-                @Bloqueo.performed += instance.OnBloqueo;
-                @Bloqueo.canceled += instance.OnBloqueo;
-                @Técnica.started += instance.OnTécnica;
-                @Técnica.performed += instance.OnTécnica;
-                @Técnica.canceled += instance.OnTécnica;
-                @Corte.started += instance.OnCorte;
-                @Corte.performed += instance.OnCorte;
-                @Corte.canceled += instance.OnCorte;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+                @Block.started += instance.OnBlock;
+                @Block.performed += instance.OnBlock;
+                @Block.canceled += instance.OnBlock;
+                @Tech.started += instance.OnTech;
+                @Tech.performed += instance.OnTech;
+                @Tech.canceled += instance.OnTech;
+                @Cut.started += instance.OnCut;
+                @Cut.performed += instance.OnCut;
+                @Cut.canceled += instance.OnCut;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
@@ -250,10 +250,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     public FightActions @Fight => new FightActions(this);
     public interface IFightActions
     {
-        void OnAtaque(InputAction.CallbackContext context);
-        void OnBloqueo(InputAction.CallbackContext context);
-        void OnTécnica(InputAction.CallbackContext context);
-        void OnCorte(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
+        void OnTech(InputAction.CallbackContext context);
+        void OnCut(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
     }
 }
