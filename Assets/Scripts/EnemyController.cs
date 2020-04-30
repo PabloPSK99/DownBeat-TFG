@@ -5,10 +5,19 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("References")]
+    public Rhythm rhythm;
+    public PlayerController player;
 
     [Header("Stats")]
     public int maxHealth;
     private int health;
+    public int damage;
+
+    [Header("Actions")]
+    public Action currentAction;
+    public float successChance;
+    public float randomness;
 
     [Header("UI")]
 
@@ -21,9 +30,51 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         health = maxHealth;
+        currentAction = Action.None;
+    }
+
+    private void Update()
+    {
+        if(currentAction == Action.None && rhythm.normalized < 0.05f)
+        {
+            currentAction = Action.Attack;
+            float random = Random.value * randomness;
+            rhythm.ScheduleFunction(2f + random - randomness/2, "Attack", this);
+            rhythm.ScheduleFunction(3, "GoIdle", this);
+        }
+    }
+
+    public void GoIdle()
+    {
+        currentAction = Action.None;
+    }
+
+    public void OffBeat()
+    {
+
+    }
+
+    public void Attack()
+    {
+        CheckSuccess();
+        if (successChance == 100f) //Crítico
+        {
+            player.GetAttack(damage * 1.5f);
+        }
+        else
+        {
+            player.GetAttack(damage * successChance / 100);
+        }
+
+
     }
 
     public void GetAttack(float damage)
+    {
+        GetDamage(damage);
+    }
+
+    public void GetTech(float damage)
     {
         GetDamage(damage);
     }
@@ -47,4 +98,29 @@ public class EnemyController : MonoBehaviour
         );
         yield return null;
     }
+
+
+
+    //------------------------------------------SUCCESS----------------------------------------------
+
+    private bool CheckSuccess()
+    {
+        if (rhythm.IsDownBeat()) //Si es tiempo 
+        {
+            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 200);
+        }
+        else                   //Si es contratiempo
+        {
+            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 200);
+        }
+
+        if (successChance < 50)
+        {
+            float rng = Random.value * 100;
+            return successChance >= rng;
+        }
+        return true;
+    }
+
+
 }

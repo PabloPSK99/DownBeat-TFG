@@ -19,4 +19,22 @@ public class MainCamera : MonoBehaviour
         yield return new WaitForSeconds(duration);
         transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
     }
+
+    public void Rotate(float rotation, float duration, iTween.EaseType easetype)
+    {
+        StartCoroutine(RotateByEased(rotation, duration, easetype));
+    }
+
+    IEnumerator RotateByEased(float rotation, float duration, iTween.EaseType easetype)
+    {
+        float lastRotation = transform.rotation.eulerAngles.y;
+        iTween.RotateBy(gameObject, iTween.Hash(
+            "amount", Vector3.up * rotation,
+            "time", duration,
+            "easetype", easetype
+            )
+        );
+        yield return new WaitForSeconds(duration);
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
+    }
 }

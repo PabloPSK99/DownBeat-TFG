@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Node currentNode;
     public Transform center;
     public Rhythm rhythm;
+    public UIController UIController;
     public float successChanceThreshold;
     Node targetNode;
     Vector2 move;
@@ -29,7 +30,10 @@ public class PlayerController : MonoBehaviour
     [Header("Actions")]
     public Action currentAction;
     public bool charged;
+    public float jumpHeight;
     private Bullet[] chamber;
+    public float damageToBlock;
+    public float maxBlockableRatio;
 
     [Header("UI")]
     public Image healthBar;
@@ -48,18 +52,25 @@ public class PlayerController : MonoBehaviour
     public float shotCameraShake;
     public float plusShotCameraShake;
 
-    // Start is called before the first frame update
+
+
     private void Awake()
     {
         health = maxHealth;
         chamber = new Bullet[] { Bullet.One, Bullet.One, Bullet.One, Bullet.Plus };
-        //chamber = new Bullet[] { Bullet.Empty, Bullet.Empty, Bullet.Empty, Bullet.Empty };
-        UpdateAmmoUI();
+        for(int i = 0; i < 4; i++)
+        {
+            //Shoot();
+        }
         currentAction = Action.None;
 
         controls = new PlayerControls();
+
         controls.Fight.Attack.started += context => ChargeAttack();
         controls.Fight.Attack.canceled += context => Attack();
+
+        controls.Fight.Block.started += context => ChargeBlock();
+        controls.Fight.Block.canceled += context => Block();
 
         controls.Fight.Tech.started += context => ChargeTech();
         controls.Fight.Tech.canceled += context => Tech();
@@ -67,16 +78,12 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Move.performed += context => move = context.ReadValue<Vector2>();
         controls.Fight.Move.canceled += context => move = Vector2.zero;
         controls.Fight.Move.canceled += context => moveInput = false;
-
-        GetDamage(90f);
     }
 
     private void Update()
     {
         if (Mathf.Abs(move.x) > minStickMovement || Mathf.Abs(move.y) > minStickMovement)
         {
-
-
             if (!moveInput)
             {
                 Move();
@@ -85,231 +92,33 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-
-    private void ChargeTech()
-    {
-        if ((!rhythm.beatLocked || (rhythm.beatLocked && currentAction == Action.Move)) && CheckSuccess())
-        {
-            if (move.y > minStickMovement && currentNode.forward == null)
-            {
-                currentAction = Action.Twirl;
-            }
-            else if (move.y < -minStickMovement && currentNode.back == null)
-            {
-                currentAction = Action.Flash;
-            }
-            else if (Mathf.Abs(move.y) < minStickMovement)
-            {
-                currentAction = Action.Reload;
-                StartCoroutine(WaitForTechCorrection(1.2f));
-            }
-            charged = true;
-        }
-        rhythm.LockTwoBeats();
-    }
-
-    private void Tech()
-    {
-
-        if (!rhythm.beatLocked)
-        {
-            if (currentAction == Action.Reload)  //Recarga
-            {
-                if (successChance == 100f) //Crítico
-                {
-                    Reload(4);
-                }
-                else
-                {
-                    Reload(Mathf.FloorToInt(successChance) / 30);
-                }
-                print("reload");
-            }
-            else if(currentAction == Action.Twirl)
-            {
-
-            }
-            
-        }
-        else
-        {
-            if (rhythm.beatLocked) print("LOCKED");
-            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
-        }
-        charged = false;
-        currentAction = Action.None;
-    }
-
-    private void Move()
-    {
-        moveInput = true;
-        if (currentAction == Action.None)
-        {
-            currentAction = Action.Move;
-            StartCoroutine(ScheduleFinish(rhythm.bpm / 60f));
-        }
-        if (!rhythm.beatLocked && CheckSuccess())
-        {
-            if (Mathf.Abs(move.x) > Mathf.Abs(move.y)) //Horizontal movement
-            {
-                if (move.x < 0)  //Left
-                {
-                    targetNode = currentNode.left;
-                }
-                else            //Right
-                {
-                    targetNode = currentNode.right;
-                }
-            }
-            else //Vertical movement
-            {
-                if (move.y > 0) //Forward
-                {
-                    targetNode = currentNode.forward;
-                }
-                else            //Back
-                {
-                    targetNode = currentNode.back;
-                }
-            }
-
-
-            if (targetNode != null && canMove)
-            {
-                if(currentAction == Action.Move)
-                {
-                    currentAction = Action.None;
-                    StartCoroutine(MoveToTarget());
-                }
-            }
-        }
-        else
-        {
-            if (rhythm.beatLocked) print("LOCKED");
-            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
-        }
-        rhythm.LockThisBeat();
-
-    }
-
-    IEnumerator MoveToTarget()
-    {
-        canMove = false;
-        float rotation = 0;
-        float lastRotation = transform.rotation.eulerAngles.y;
-        if (targetNode == currentNode.left)
-        {
-            rotation = 1/6f;
-            mainCamera.Rotate(rotation, moveDuration);
-        }
-        else if (targetNode == currentNode.right)
-        {
-            rotation = -1/6f;
-            mainCamera.Rotate(rotation, moveDuration);
-        }
-        else
-        {
-            iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
-        }
-        iTween.RotateBy(transform.parent.gameObject, Vector3.up * rotation, moveDuration);
-        currentNode = targetNode;
-        yield return new WaitForSeconds(moveDuration);
-        transform.position = targetNode.transform.position;
-        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
-        canMove = true;
-    }
-
-    private void OnEnable()
-    {
-        controls.Fight.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Fight.Disable();
-    }
-
-    private bool CheckSuccess()
-    {
-        if (rhythm.normalized < 0.5f) //Si es tiempo 
-        {
-            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
-        }
-        else                   //Si es contratiempo
-        {
-            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
-        }
-
-
-        if (successChance < 70)
-        {
-            float rng = Random.value * 100;
-            return successChance >= rng;
-        }
-        return true;
-    }
-
-
-    
-
-    IEnumerator WaitForTechCorrection(float time)
-    {
-        float elapsed = 0;
-        print("START: " + currentAction + "--------------");
-        while (currentAction == Action.Reload && elapsed <= time)
-        {
-            if (move.y > minStickMovement && currentNode.forward == null)
-            {
-                print("while: " + currentAction + "   twirlcondition");
-                currentAction = Action.Twirl;
-            }
-            else if (move.y < -minStickMovement && currentNode.back == null)
-            {
-                print("while: " + currentAction + "   flashcondition");
-                currentAction = Action.Flash;
-            }
-            elapsed += Time.deltaTime;
-            print(elapsed);
-            yield return null;
-        }
-        print("FINISH: " + currentAction + "--------------");
-
-    }
-
-    IEnumerator ScheduleFinish(float time)
-    {
-        float elapsed = 0;
-        Action lastAction = currentAction;
-        while (lastAction == currentAction && elapsed <= time)
-        {
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        if(lastAction == currentAction) currentAction = Action.None;
-    }
-
-
-
-
+   
     //-------------------------------------------ATTACK----------------------------------------------
 
     private void ChargeAttack()
     {
-        if (!rhythm.beatLocked && CheckSuccess())
+        if (!rhythm.beatLocked && CheckSuccess() && rhythm.IsDownBeat())
         {
+            UIController.PopUpChance(successChance, Action.Attack);
             currentAction = Action.Attack;
             charged = true;
         }
+        else
+        {
+            UIController.PopUpText("FAIL!");
+        }
+
         rhythm.LockTwoBeats();
+        rhythm.ScheduleDischarge(3);
     }
 
     private void Attack()
     {
 
-        if (!rhythm.beatLocked && currentAction == Action.Attack && charged == true)
+        if (!rhythm.beatLocked && currentAction == Action.Attack && charged == true && rhythm.IsDownBeat())
         {
             CheckSuccess();
+            UIController.PopUpChance(successChance, Action.Attack);
             if (currentNode.forward == null)  //Ataque Melee
             {
                 if (successChance == 100f) //Crítico
@@ -320,7 +129,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    enemy.GetAttack(damage * successChance * 0.01f);
+                    enemy.GetAttack(damage * successChance / 100);
                 }
             }
             else                          //Ataque a distancia
@@ -332,14 +141,13 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    enemy.GetAttack(Shoot() * successChance * 0.01f);
+                    enemy.GetAttack(Shoot() * successChance / 100);
                 }
             }
         }
         else
         {
-            if (rhythm.beatLocked) print("LOCKED");
-            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
+            UIController.PopUpText("FAIL!");
         }
         charged = false;
         currentAction = Action.None;
@@ -374,6 +182,132 @@ public class PlayerController : MonoBehaviour
 
 
 
+    //-------------------------------------------BLOCK-----------------------------------------------
+
+    private void ChargeBlock()
+    {
+        if (!rhythm.beatLocked && CheckSuccess())
+        {
+            UIController.PopUpChance(successChance, Action.Block);
+            currentAction = Action.Block;
+            charged = true;
+        }
+        else
+        {
+            UIController.PopUpText("FAIL!");
+        }
+        rhythm.LockThisBeat();
+        rhythm.ScheduleDischarge(3);
+    }
+
+    private void Block()
+    {
+        if (!rhythm.beatLocked && currentAction == Action.Block && charged == true && rhythm.IsDownBeat())
+        {
+            CheckSuccess();
+            UIController.PopUpChance(successChance, Action.Block);
+            if (successChance == 100f) //Crítico
+            {
+                enemy.OffBeat();
+                UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
+            }
+            else
+            {
+                UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
+                GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+            }
+            damageToBlock = 0;
+        }
+        else
+        {
+            UIController.PopUpText("FAIL!");
+        }
+        charged = false;
+        currentAction = Action.None;
+    }
+
+
+
+    //-----------------------------------------TECHNIQUES--------------------------------------------
+
+    private void ChargeTech()
+    {
+        if ((!rhythm.beatLocked || (rhythm.beatLocked && currentAction == Action.Move)) && CheckSuccess() && !rhythm.IsDownBeat())
+        {
+            UIController.PopUpChance(successChance, Action.Tech);
+            if (move.y > minStickMovement && currentNode.forward == null)
+            {
+                currentAction = Action.Twirl;
+            }
+            else if (move.y < -minStickMovement && currentNode.back == null)
+            {
+                currentAction = Action.Flash;
+            }
+            else if (Mathf.Abs(move.y) < minStickMovement)
+            {
+                currentAction = Action.Reload;
+                StartCoroutine(WaitForTechCorrection(0.2f));
+            }
+            charged = true;
+        }
+        else
+        {
+            UIController.PopUpText("FAIL!");
+        }
+        rhythm.LockTwoBeats();
+        rhythm.ScheduleDischarge(3);
+    }
+
+    private void Tech()
+    {
+
+        if (!rhythm.beatLocked && !rhythm.IsDownBeat())
+        {
+            CheckSuccess();
+            UIController.PopUpChance(successChance, Action.Tech);
+
+            if (currentAction == Action.Reload)  //Recarga
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    Reload(4);
+                }
+                else
+                {
+                    Reload(Mathf.FloorToInt(successChance) / 30);
+                }
+            }
+            else if (currentAction == Action.Twirl) //Pirueta
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    FillChamberSlot(true);
+                }
+                enemy.GetTech(damage * successChance / 100);
+                targetNode = currentNode.GetLastNodeOnThisAxis();
+                StartCoroutine(TwirlToTarget());
+            }
+            else if (currentAction == Action.Flash) //Destello
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    FillChamberSlot(true);
+                }
+                enemy.GetTech(damage * successChance / 100);
+                targetNode = currentNode.GetFirstNodeOnOppositeAxis();
+                StartCoroutine(FlashToTarget());
+            }
+        }
+        else
+        {
+            UIController.PopUpText("FAIL!");
+        }
+        charged = false;
+        currentAction = Action.None;
+    }
+
+
+
 
     //--------------------------------------------AMMO-----------------------------------------------
 
@@ -383,35 +317,25 @@ public class PlayerController : MonoBehaviour
         {
             if (chamber[i] == Bullet.Empty)
             {
-                chamber[i] = isPlus ? Bullet.Plus : Bullet.One;
+                bulletsUI[i].transform.localScale = Vector3.one * 0.6f;
+                if (isPlus)
+                {
+                    chamber[i] = Bullet.Plus;
+                    bulletsUI[i].color = plusBulletColor;
+                }
+                else
+                {
+                    chamber[i] = Bullet.One;
+                    bulletsUI[i].color = Color.white;
+                }
                 break;
             }
         }
-        UpdateAmmoUI();
-    }
-
-    private void UpdateAmmoUI()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (chamber[i] == Bullet.Empty)
-            {
-                bulletsUI[i].color = Color.clear; ;
-            }
-            else if (chamber[i] == Bullet.One)
-            {
-                bulletsUI[i].color = Color.white;
-            }
-            else
-            {
-                bulletsUI[i].color = plusBulletColor;
-            }
-        }
-
     }
 
     private void Reload(int bullets)
     {
+        print("BULLETS:  " + bullets);
         StartCoroutine(ReloadCoroutine(bullets));
     }
 
@@ -422,12 +346,13 @@ public class PlayerController : MonoBehaviour
         {
             if (chamber[i] == Bullet.Empty)
             {
+                bulletsUI[i].transform.localScale = Vector3.one * 0.6f;
                 emptySlots++;
             }
         }
-        for (int i = emptySlots - 1; i >= 0; i--)
+        for (int i = emptySlots - 1; i >= 0 && bullets > 0; i--)
         {
-            if (i == 3)
+            if (i == 3 && bullets == 4)
             {
                 chamber[i] = Bullet.Plus;
                 bulletsUI[i].color = plusBulletColor;
@@ -439,6 +364,7 @@ public class PlayerController : MonoBehaviour
             }
             iTween.PunchScale(bulletsUI[i].gameObject, new Vector3(0.1f, -0.1f, 0), 1f);
             yield return new WaitForSeconds(0.1f);
+            bullets--;
         }
     }
 
@@ -451,6 +377,7 @@ public class PlayerController : MonoBehaviour
         iTween.ScaleTo(bulletsUI[slot].gameObject, iTween.Hash(
             "scale", new Vector3(1.2f, 0.6f, 0.6f),
             "time", burnBulletTime * 1.5f,
+            "oncomplete", "onBurnBulletComplete",
             "easetype", iTween.EaseType.easeOutCubic
             )
         );
@@ -462,18 +389,26 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         bulletsUI[slot].color = Color.clear;
-        bulletsUI[slot].transform.localScale = startScale;
+        yield return null;
     }
 
     //-------------------------------------------HEALTH----------------------------------------------
 
     public void GetAttack(float damage)
     {
-        GetDamage(damage);
+        if(currentAction == Action.Block)
+        {
+            damageToBlock = damage;
+        }
+        else
+        {
+            GetDamage(damage);
+        }
     }
 
     public void GetDamage(float damage)
     {
+        UIController.PopUpNumber(damage, NumberType.Damage, damageToBlock > enemy.damage);
         health = Mathf.Max(health - Mathf.RoundToInt(damage), 0);
         StartCoroutine(UpdateHealthBar());
     }
@@ -516,4 +451,207 @@ public class PlayerController : MonoBehaviour
     {
         damageBar.fillAmount = newValue;
     }
+
+
+
+
+    //------------------------------------------MOVEMENT---------------------------------------------
+    private void Move()
+    {
+        moveInput = true;
+        if (currentAction == Action.None)
+        {
+            currentAction = Action.Move;
+            StartCoroutine(ScheduleFinish(rhythm.bpm / 60f));
+        }
+        if (!rhythm.beatLocked && ((currentAction == Action.Block && CheckSuccess()) || !(currentAction == Action.Block && CheckMovementSuccess())))
+        {
+            if (Mathf.Abs(move.x) > Mathf.Abs(move.y)) //Horizontal movement
+            {
+                if (move.x < 0)  //Left
+                {
+                    targetNode = currentNode.left;
+                }
+                else            //Right
+                {
+                    targetNode = currentNode.right;
+                }
+            }
+            else //Vertical movement
+            {
+                if (move.y > 0) //Forward
+                {
+                    targetNode = currentNode.forward;
+                }
+                else            //Back
+                {
+                    targetNode = currentNode.back;
+                }
+            }
+
+
+            if (targetNode != null && canMove)
+            {
+                if (currentAction == Action.Move)
+                {
+                    currentAction = Action.None;
+                    StartCoroutine(MoveToTarget());
+                }
+            }
+        }
+        else
+        {
+            if (rhythm.beatLocked) print("LOCKED");
+            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
+        }
+        rhythm.LockThisBeat();
+
+    }
+
+    IEnumerator MoveToTarget()
+    {
+        canMove = false;
+        float rotation = 0;
+        float lastRotation = transform.rotation.eulerAngles.y;
+        if (targetNode == currentNode.left)
+        {
+            rotation = 1 / 6f;
+            mainCamera.Rotate(rotation, moveDuration);
+        }
+        else if (targetNode == currentNode.right)
+        {
+            rotation = -1 / 6f;
+            mainCamera.Rotate(rotation, moveDuration);
+        }
+
+        else
+        {
+            iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
+        }
+        iTween.RotateBy(transform.parent.gameObject, Vector3.up * rotation, moveDuration);
+        currentNode = targetNode;
+        yield return new WaitForSeconds(moveDuration);
+        transform.position = targetNode.transform.position;
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
+        canMove = true;
+    }
+
+    IEnumerator TwirlToTarget()
+    {
+        canMove = false;
+        iTween.MoveTo(gameObject, iTween.Hash(
+            "path", new Vector3[2] { (targetNode.transform.position + transform.position) / 2 + Vector3.up * jumpHeight, targetNode.transform.position },
+            "time", moveDuration,
+            "easetype", iTween.EaseType.easeOutQuad
+            )
+        );
+        currentNode = targetNode;
+        yield return new WaitForSeconds(moveDuration);
+        transform.position = targetNode.transform.position;
+        canMove = true;
+    }
+
+
+    IEnumerator FlashToTarget()
+    {
+        canMove = false;
+        iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
+        currentNode = targetNode;
+        mainCamera.Rotate(0.5f, moveDuration, iTween.EaseType.easeInOutCubic);
+        yield return new WaitForSeconds(moveDuration);
+        iTween.RotateBy(gameObject, Vector3.up * 0.5f, moveDuration);
+        transform.position = targetNode.transform.position;
+        canMove = true;
+    }
+
+
+
+
+    //------------------------------------------SUCCESS----------------------------------------------
+
+    private bool CheckMovementSuccess()
+    {
+        if (rhythm.IsDownBeat()) //Si es tiempo 
+        {
+            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
+        }
+        else                   //Si es contratiempo
+        {
+            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
+        }
+        if (successChance < 80)
+        {
+            float rng = Random.value * 100;
+            return successChance >= rng;
+        }
+        return true;
+    }
+
+    private bool CheckSuccess()
+    {
+        if (rhythm.IsDownBeat()) //Si es tiempo 
+        {
+            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
+        }
+        else                   //Si es contratiempo
+        {
+            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
+        }
+
+        if (successChance < 50)
+        {
+            float rng = Random.value * 100;
+            return successChance >= rng;
+        }
+        return true;
+    }
+
+
+    //------------------------------------CONTROL & SCHEDULING---------------------------------------
+
+    private void OnEnable()
+    {
+        controls.Fight.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Fight.Disable();
+    }
+
+    IEnumerator WaitForTechCorrection(float time)
+    {
+        float elapsed = 0;
+        //print("START: " + currentAction + "--------------");
+        while (currentAction == Action.Reload && elapsed <= time)
+        {
+            if (move.y > minStickMovement && currentNode.forward == null)
+            {
+                //print("while: " + currentAction + "   twirlcondition");
+                currentAction = Action.Twirl;
+            }
+            else if (move.y < -minStickMovement && currentNode.back == null)
+            {
+                //print("while: " + currentAction + "   flashcondition");
+                currentAction = Action.Flash;
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        //print("FINISH: " + currentAction + "--------------");
+
+    }
+
+    IEnumerator ScheduleFinish(float time)
+    {
+        float elapsed = 0;
+        Action lastAction = currentAction;
+        while (lastAction == currentAction && elapsed <= time)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        if (lastAction == currentAction) currentAction = Action.None;
+    }
+
 }

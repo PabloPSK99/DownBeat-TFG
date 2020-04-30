@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Rhythm : MonoBehaviour
 {
+    [Header("References")]
+    public PlayerController player;
+
     [Header("Audio")]
     public AudioSource audioSource;
 
@@ -195,6 +198,10 @@ public class Rhythm : MonoBehaviour
         outGlow.color = Color.clear;
     }
 
+    public bool IsDownBeat()
+    {
+        return normalized <= 0.5f;
+    }
 
     public void LockThisBeat()
     {
@@ -263,4 +270,74 @@ public class Rhythm : MonoBehaviour
         beatLocked = false;
     }
 
+
+    public void ScheduleDischarge(int beats)
+    {
+        StartCoroutine(DischargeAfter(beats));
+    }
+
+    IEnumerator DischargeAfter(int beats)
+    {
+        for(int i = 0; i<beats; i++)
+        {
+            float lastNormalized = normalized;
+            bool lastGrowing = grow;
+            bool isNextBeat = false;
+            while (!isNextBeat)
+            {
+                if (lastNormalized >= 0.5f)
+                {
+                    isNextBeat = !grow && normalized <= 0.5f;
+                }
+                else
+                {
+                    isNextBeat = grow && normalized >= 0.5f;
+                }
+                yield return null;
+            }
+            yield return null;
+        }
+        player.charged = false;
+        player.currentAction = Action.None;
+    }
+
+    public void ScheduleFunction(int beats, string function, MonoBehaviour script)
+    {
+        StartCoroutine(ExecuteFunctionAfter(beats, function, script));
+    }
+
+    IEnumerator ExecuteFunctionAfter(int beats, string function, MonoBehaviour script)
+    {
+        for (int i = 0; i < beats; i++)
+        {
+            float lastNormalized = normalized;
+            bool lastGrowing = grow;
+            bool isNextBeat = false;
+            while (!isNextBeat)
+            {
+                if (lastNormalized >= 0.5f)
+                {
+                    isNextBeat = !grow && normalized <= 0.5f;
+                }
+                else
+                {
+                    isNextBeat = grow && normalized >= 0.5f;
+                }
+                yield return null;
+            }
+            yield return null;
+        }
+        script.SendMessage(function);
+    }
+
+    public void ScheduleFunction(float time, string function, MonoBehaviour script)
+    {
+        StartCoroutine(ExecuteFunctionAfter(time, function, script));
+    }
+
+    IEnumerator ExecuteFunctionAfter(float time, string function, MonoBehaviour script)
+    {
+        yield return new WaitForSeconds(time);
+        script.SendMessage(function);
+    }
 }

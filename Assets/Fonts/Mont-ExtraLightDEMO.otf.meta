@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b82fa51e1b650974db1e12b19bef52e3
+guid: 97144f940f46dc74bb308912816115a4
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,10 +8,11 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Couture
+  fontName: Mont
   fontNames:
-  - Couture
-  fallbackFontReferences: []
+  - Mont
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 432c87b1507430c47881bda754734032, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
