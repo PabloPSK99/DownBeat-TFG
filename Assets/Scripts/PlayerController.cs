@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public int damage;
     public int maxHealth;
     private int health;
+    public bool offBeat;
 
     [Header("Actions")]
     public Action currentAction;
@@ -75,6 +76,8 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Tech.started += context => ChargeTech();
         controls.Fight.Tech.canceled += context => Tech();
 
+        controls.Fight.Cut.started += context => Cut();
+
         controls.Fight.Move.performed += context => move = context.ReadValue<Vector2>();
         controls.Fight.Move.canceled += context => move = Vector2.zero;
         controls.Fight.Move.canceled += context => moveInput = false;
@@ -92,7 +95,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-   
+    #region Attack
     //-------------------------------------------ATTACK----------------------------------------------
 
     private void ChargeAttack()
@@ -124,7 +127,6 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     enemy.GetAttack(damage * 1.5f);
-                    print("CRÍTICO");
                     FillChamberSlot(false);
                 }
                 else
@@ -137,7 +139,6 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     enemy.GetAttack(Shoot() * 1.5f);
-                    print("CRÍTICO");
                 }
                 else
                 {
@@ -147,10 +148,13 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            UIController.PopUpText("FAIL!");
+            if (currentAction == Action.Attack)
+            {
+                UIController.PopUpText("FAIL!");
+                currentAction = Action.None;
+            }
         }
         charged = false;
-        currentAction = Action.None;
     }
 
     private float Shoot()
@@ -179,9 +183,9 @@ public class PlayerController : MonoBehaviour
         return bulletDamage;
     }
 
+#endregion
 
-
-
+    #region Block
     //-------------------------------------------BLOCK-----------------------------------------------
 
     private void ChargeBlock()
@@ -206,28 +210,67 @@ public class PlayerController : MonoBehaviour
         {
             CheckSuccess();
             UIController.PopUpChance(successChance, Action.Block);
-            if (successChance == 100f) //Crítico
+            if(damageToBlock != 0)
             {
-                enemy.OffBeat();
-                UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
+                if (successChance == 100f) //Crítico
+                {
+                    enemy.OffBeat();
+                    UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
+                }
+                else
+                {
+                    UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
+                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+                }
+                damageToBlock = 0;
+                charged = false;
+                currentAction = Action.None;
             }
             else
             {
-                UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
-                GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+                StartCoroutine(WaitForDamage(0.2f));
             }
-            damageToBlock = 0;
         }
         else
         {
-            UIController.PopUpText("FAIL!");
+            if (currentAction == Action.Block)
+            {
+                UIController.PopUpText("FAIL!");
+                currentAction = Action.None;
+            }
+            charged = false;
+        }
+    }
+
+    IEnumerator WaitForDamage(float time)
+    {
+        float elapsed = 0;
+        while (elapsed <= time)
+        {
+            if (damageToBlock != 0)
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    enemy.OffBeat();
+                    UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
+                }
+                else
+                {
+                    UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
+                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+                }
+                damageToBlock = 0;
+                break;
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
         }
         charged = false;
         currentAction = Action.None;
     }
+#endregion
 
-
-
+    #region Techniques
     //-----------------------------------------TECHNIQUES--------------------------------------------
 
     private void ChargeTech()
@@ -261,13 +304,13 @@ public class PlayerController : MonoBehaviour
     private void Tech()
     {
 
-        if (!rhythm.beatLocked && !rhythm.IsDownBeat())
+        if (!rhythm.beatLocked && !rhythm.IsDownBeat() && charged == true)
         {
             CheckSuccess();
-            UIController.PopUpChance(successChance, Action.Tech);
 
             if (currentAction == Action.Reload)  //Recarga
             {
+                UIController.PopUpChance(successChance, Action.Tech);
                 if (successChance == 100f) //Crítico
                 {
                     Reload(4);
@@ -279,6 +322,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (currentAction == Action.Twirl) //Pirueta
             {
+                UIController.PopUpChance(successChance, Action.Tech);
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
@@ -289,6 +333,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (currentAction == Action.Flash) //Destello
             {
+                UIController.PopUpChance(successChance, Action.Tech);
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
@@ -300,10 +345,13 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            UIController.PopUpText("FAIL!");
+            if (currentAction == Action.Block)
+            {
+                UIController.PopUpText("FAIL!");
+                currentAction = Action.None;
+            }
         }
         charged = false;
-        currentAction = Action.None;
     }
 
 
@@ -391,7 +439,48 @@ public class PlayerController : MonoBehaviour
         bulletsUI[slot].color = Color.clear;
         yield return null;
     }
+    #endregion
 
+    #region Cut
+    //--------------------------------------------CUT------------------------------------------------
+
+    private void Cut()
+    {
+        if (!rhythm.beatLocked)
+        {
+            CheckSuccess();
+            if (successChance == 100f && (enemy.currentAction == Action.Block || enemy.currentAction == Action.Tech))
+            {
+                UIController.PopUpChance(successChance, Action.Cut);
+                enemy.OffBeat();
+            }
+            else
+            {
+                UIController.PopUpText("FAIL!");
+                OffBeat();
+            }
+        }
+    }
+
+    public void OffBeat()
+    {
+        print("OFFBEAT!!");
+        currentAction = Action.None;
+        charged = false;
+        offBeat = true;
+        rhythm.OffBeat(true);
+        StartCoroutine(WaitForRecover());
+    }
+
+    public void RecoverBeat()
+    {
+        offBeat = false;
+        rhythm.OffBeat(false);
+    }
+
+    #endregion
+
+    #region Health
     //-------------------------------------------HEALTH----------------------------------------------
 
     public void GetAttack(float damage)
@@ -400,8 +489,12 @@ public class PlayerController : MonoBehaviour
         {
             damageToBlock = damage;
         }
-        else
+        else 
         {
+            if(currentAction == Action.Reload || currentAction == Action.Twirl || currentAction == Action.Flash)
+            {
+                OffBeat();
+            }
             GetDamage(damage);
         }
     }
@@ -452,9 +545,9 @@ public class PlayerController : MonoBehaviour
         damageBar.fillAmount = newValue;
     }
 
+    #endregion
 
-
-
+    #region Movement
     //------------------------------------------MOVEMENT---------------------------------------------
     private void Move()
     {
@@ -464,7 +557,7 @@ public class PlayerController : MonoBehaviour
             currentAction = Action.Move;
             StartCoroutine(ScheduleFinish(rhythm.bpm / 60f));
         }
-        if (!rhythm.beatLocked && ((currentAction == Action.Block && CheckSuccess()) || !(currentAction == Action.Block && CheckMovementSuccess())))
+        if (!rhythm.beatLocked)
         {
             if (Mathf.Abs(move.x) > Mathf.Abs(move.y)) //Horizontal movement
             {
@@ -489,20 +582,37 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-
             if (targetNode != null && canMove)
             {
                 if (currentAction == Action.Move)
                 {
-                    currentAction = Action.None;
-                    StartCoroutine(MoveToTarget());
+                    if (CheckMovementSuccess())
+                    {
+                        StartCoroutine(MoveToTarget());
+                        UIController.PopUpChance(successChance, Action.Move);
+                    }
+                    else
+                    {
+                        UIController.PopUpText("FAIL!");
+                    }
                 }
+                else if (currentAction == Action.Block && CheckSuccess())
+                {
+                    if (CheckSuccess())
+                    {
+                        StartCoroutine(MoveToTarget());
+                        UIController.PopUpChance(successChance, Action.Move);
+                    }
+                    else
+                    {
+                        UIController.PopUpText("FAIL!");
+                    }
+                }
+                currentAction = Action.None;
             }
         }
         else
         {
-            if (rhythm.beatLocked) print("LOCKED");
-            else print("Faaaaaaaaaaaaaaaaaaaaaaaail");
         }
         rhythm.LockThisBeat();
 
@@ -565,8 +675,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    #endregion
 
-
+    #region Success
     //------------------------------------------SUCCESS----------------------------------------------
 
     private bool CheckMovementSuccess()
@@ -579,9 +690,21 @@ public class PlayerController : MonoBehaviour
         {
             successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
         }
-        if (successChance < 80)
+        if (offBeat)
         {
-            float rng = Random.value * 100;
+            if (successChance == 100)
+            {
+                return true;
+            }
+            return false;
+        }
+        if (successChance < 90)
+        {
+            if (successChance < 50)
+            {
+                return false;
+            }
+            float rng = Random.value * 120;
             return successChance >= rng;
         }
         return true;
@@ -597,7 +720,14 @@ public class PlayerController : MonoBehaviour
         {
             successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
         }
-
+        if (offBeat)
+        {
+            if (successChance == 100)
+            {
+                return true;
+            }
+            return false;
+        }
         if (successChance < 50)
         {
             float rng = Random.value * 100;
@@ -606,7 +736,24 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    IEnumerator WaitForRecover()
+    {
+        yield return new WaitForSeconds(0.5f);
+        successChance = 0;
+        while (offBeat)
+        {
+            if(successChance == 100f)
+            {
+                RecoverBeat();
+                break;
+            }
+            yield return null;
+        }
+    }
 
+    #endregion
+
+    #region Control & Scheduling
     //------------------------------------CONTROL & SCHEDULING---------------------------------------
 
     private void OnEnable()
@@ -653,5 +800,5 @@ public class PlayerController : MonoBehaviour
         }
         if (lastAction == currentAction) currentAction = Action.None;
     }
-
+    #endregion
 }

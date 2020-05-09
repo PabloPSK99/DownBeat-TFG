@@ -8,6 +8,7 @@ public class UIController : MonoBehaviour
     public Transform[] pivots;
     public Transform chancePivot;
     bool[] empty;
+    bool emptyChance;
     GameObject bubble;
 
 
@@ -39,6 +40,7 @@ public class UIController : MonoBehaviour
     void Awake()
     {
         empty = new bool[4] { true, true, true, true };
+        emptyChance = true;
     }
 
     public void PopUpNumber(float number, NumberType type, bool crit)
@@ -56,7 +58,10 @@ public class UIController : MonoBehaviour
 
     public void PopUpChance(float number, Action action)
     {
-        SetupChance(Instantiate(Resources.Load<GameObject>("PopUpText"), chancePivot).GetComponent<Text>(), number, action);
+        if (emptyChance)
+        {
+            SetupChance(Instantiate(Resources.Load<GameObject>("PopUpText"), chancePivot).GetComponent<Text>(), number, action);
+        }
     }
 
     public void Setup(Text text, int index, float number, NumberType numberType, bool crit)
@@ -173,6 +178,7 @@ public class UIController : MonoBehaviour
 
     IEnumerator Animate(Text text, float screen, float fade)
     {
+        emptyChance = false;
         iTween.ScaleTo(text.gameObject, iTween.Hash(
             "scale", new Vector3(1.2f, 1.2f, 1.2f),
             "time", (screenTime + fadeTime) * 0.1f,
@@ -181,12 +187,13 @@ public class UIController : MonoBehaviour
         );
         yield return new WaitForSeconds((screenTime + fadeTime) * 0.09f);
         iTween.ScaleTo(text.gameObject, iTween.Hash(
-            "scale", new Vector3(0.5f, 0.5f, 0.5f),
+            "scale", new Vector3(0.7f, 0.7f, 0.7f),
             "time", (screenTime + fadeTime) * 0.9f,
             "easetype", iTween.EaseType.easeInCubic
             )
         );
         yield return new WaitForSeconds(screenTime - (screenTime + fadeTime) * 0.09f);
+        emptyChance = true;
         float elapsed = 0;
         while (elapsed < fadeTime)
         {
@@ -203,10 +210,13 @@ public class UIController : MonoBehaviour
 
     public void PopUpText(string message)
     {
-        Text text = Instantiate(Resources.Load<GameObject>("PopUpText"), chancePivot).GetComponent<Text>();
-        text.text = message;
-        text.color = Color.white;
-        text.fontSize = maxChanceSize;
-        StartCoroutine(Animate(text, screenTime, fadeTime));
+        if (emptyChance)
+        {
+            Text text = Instantiate(Resources.Load<GameObject>("PopUpText"), chancePivot).GetComponent<Text>();
+            text.text = message;
+            text.color = Color.white;
+            text.fontSize = maxChanceSize;
+            StartCoroutine(Animate(text, screenTime, fadeTime));
+        }
     }
 }

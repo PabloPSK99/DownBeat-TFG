@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Rhythm : MonoBehaviour
 {
     [Header("References")]
     public PlayerController player;
+    public PostProcessVolume postVolume;
+    public Image flashPanel;
+    
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -32,8 +36,19 @@ public class Rhythm : MonoBehaviour
     public float timeOffset;
     public float normalized;
 
+    [Header("Post Process")]
+    public float transitionTime;
+    public float aberrationThreshold;
+    public float maxAberration;
+
     public bool beatLocked;
 
+    private PostProcessProfile crimsonProfile;
+    private PostProcessProfile offBeatProfile;
+    private ChromaticAberration chromaticAberration;
+
+
+    private bool offBeat;
     private float lastTimeStamp;
     private bool grow;
     private float beatDuration;
@@ -43,6 +58,10 @@ public class Rhythm : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        crimsonProfile = Resources.Load<PostProcessProfile>("PostProcess Profiles/Crimson");
+        offBeatProfile = Resources.Load<PostProcessProfile>("PostProcess Profiles/OffBeat");
+        postVolume.profile = crimsonProfile;
+        postVolume.profile.TryGetSettings(out chromaticAberration);
         beatDuration = bpm / 60f;
         normalized = 1;
         StartCoroutine(Loop());
@@ -50,9 +69,52 @@ public class Rhythm : MonoBehaviour
 
     private void Update()
     {
-        
+        float intensity = Mathf.Abs(0.5f - normalized) * 2;
+        if (intensity > aberrationThreshold)
+        {
+            chromaticAberration.intensity.value = (intensity- aberrationThreshold) * (maxAberration / (1-aberrationThreshold));
+        }
+        else
+        {
+            chromaticAberration.intensity.value = 0;
+        }
+
     }
 
+    public void OffBeat(bool offBeat)
+    {
+        this.offBeat = offBeat;
+        if(offBeat)
+        {
+            dot.color = offBeatColor;
+            externalCircle.color = offBeatColor;
+            circle.color = offBeatColor;
+        }
+        StartCoroutine(PostProcessTransition());
+    }
+
+    IEnumerator PostProcessTransition()
+    {
+        Color panelColor = Color.white;
+        flashPanel.color = panelColor;
+        if (offBeat)
+        {
+            postVolume.profile = offBeatProfile;
+        }
+        else
+        {
+            postVolume.profile = crimsonProfile;
+        }
+        float elapsed = 0;
+        while (elapsed < transitionTime)
+        {
+            panelColor.a -= Time.deltaTime / transitionTime;
+            flashPanel.color = panelColor;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        flashPanel.color = Color.clear;
+    }
 
     IEnumerator Loop()
     {
@@ -87,8 +149,11 @@ public class Rhythm : MonoBehaviour
         yield return new WaitForSeconds(duration);
         circle.transform.localScale = Vector3.one;
         normalized = 1;
-        externalCircle.color = upBeatColor;
-        outGlow.color = outGlowColor;
+        if (!offBeat)
+        {
+            externalCircle.color = upBeatColor;
+            outGlow.color = outGlowColor;
+        }
         iTween.ValueTo(gameObject, iTween.Hash(
             "from", 1,
             "to", 0,
@@ -123,8 +188,11 @@ public class Rhythm : MonoBehaviour
         yield return new WaitForSeconds(duration);
         circle.transform.localScale = minScale;
         normalized = 0;
-        dot.color = downBeatColor;
-        dotGlow.color = dotGlowColor;
+        if (!offBeat)
+        {
+            dot.color = downBeatColor;
+            dotGlow.color = dotGlowColor;
+        }
         iTween.ValueTo(gameObject, iTween.Hash(
             "from", 1,
             "to", 0,
@@ -155,17 +223,19 @@ public class Rhythm : MonoBehaviour
 
     public void UpdateColor(float value)
     {
-        if(value >= 0.5)
+        if (!offBeat)
         {
-            value = (value - 0.5f) * 2;
-            circle.color = ((1f - value) * offBeatColor) + (value * upBeatColor);
+            if (value >= 0.5)
+            {
+                value = (value - 0.5f) * 2;
+                circle.color = ((1f - value) * offBeatColor) + (value * upBeatColor);
+            }
+            else
+            {
+                value = value * 2;
+                circle.color = ((1f - value) * downBeatColor) + (value * offBeatColor);
+            }
         }
-        else
-        {
-            value = value  * 2;
-            circle.color = ((1f - value) * downBeatColor) + (value * offBeatColor);
-        }
-        
     }
 
     private void OnCircleUpdate(float newValue)
@@ -176,8 +246,11 @@ public class Rhythm : MonoBehaviour
 
     private void UpdateDotColor(float newValue)
     {
-        dot.color = ((1f - newValue) * offBeatColor) + (newValue * downBeatColor);
-        dotGlow.color = new Color(dotGlowColor.r, dotGlowColor.g, dotGlowColor.b, newValue);
+        if (!offBeat)
+        {
+            dot.color = ((1f - newValue) * offBeatColor) + (newValue * downBeatColor);
+            dotGlow.color = new Color(dotGlowColor.r, dotGlowColor.g, dotGlowColor.b, newValue);
+        }
     }
 
     private void FinalDotColor()
@@ -188,8 +261,11 @@ public class Rhythm : MonoBehaviour
 
     private void UpdateExternalCircleColor(float newValue)
     {
-        externalCircle.color = ((1f - newValue) * offBeatColor) + (newValue * upBeatColor);
-        outGlow.color = new Color(outGlowColor.r, outGlowColor.g, outGlowColor.b, newValue);
+        if (!offBeat)
+        {
+            externalCircle.color = ((1f - newValue) * offBeatColor) + (newValue * upBeatColor);
+            outGlow.color = new Color(outGlowColor.r, outGlowColor.g, outGlowColor.b, newValue);
+        }
     }
 
     private void FinalExternalCircleColor()

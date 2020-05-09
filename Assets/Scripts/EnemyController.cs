@@ -8,15 +8,20 @@ public class EnemyController : MonoBehaviour
     [Header("References")]
     public Rhythm rhythm;
     public PlayerController player;
+    public Node currentNode;
 
     [Header("Stats")]
     public int maxHealth;
     private int health;
     public int damage;
+    private float damageToBlock;
+    public float maxBlockableRatio;
+    public bool offbeat;
 
     [Header("Actions")]
     public Action currentAction;
     public float successChance;
+    public float successChanceThreshold;
     public float randomness;
 
     [Header("UI")]
@@ -35,11 +40,54 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if(currentAction == Action.None && rhythm.normalized < 0.05f)
+        if (!offbeat)
+        {
+            Phase1();
+        }
+        else
+        {
+            rhythm.ScheduleFunction(3, "RecoverBeat", this);
+        }
+    }
+
+    public void Phase1()
+    {
+        if(currentAction == Action.None)
+        {
+
+            if (player.currentAction == Action.Attack || player.currentAction == Action.Block || player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
+            {
+                if(rhythm.normalized < 0.02f || rhythm.normalized > 0.98f)
+                {
+                    Counter();
+                }
+            }
+            else if (rhythm.normalized < 0.02f)
+            {
+                currentAction = Action.Attack;
+                float random = Random.value * randomness;
+                RandomAttack(2f + random - randomness / 2, new int[2] { 0, 1 });
+                rhythm.ScheduleFunction(3, "GoIdle", this);
+            }
+        }
+    }
+
+    public void Phase2()
+    {
+        if (currentAction == Action.None && rhythm.normalized < 0.05f)
         {
             currentAction = Action.Attack;
             float random = Random.value * randomness;
-            rhythm.ScheduleFunction(2f + random - randomness/2, "Attack", this);
+            //RandomAttack(2f + random - randomness / 2);
+            rhythm.ScheduleFunction(3, "GoIdle", this);
+        }
+
+
+        if ( currentAction == Action.None && rhythm.normalized > 0.95f && player.currentNode.forward == null)
+        {
+            currentAction = Action.Tech;
+            float random = Random.value * randomness;
+            RandomTech(2f + random - randomness / 2);
             rhythm.ScheduleFunction(3, "GoIdle", this);
         }
     }
@@ -47,31 +95,231 @@ public class EnemyController : MonoBehaviour
     public void GoIdle()
     {
         currentAction = Action.None;
+        currentNode = player.currentNode.GetFirstNodeOnThisAxis();
     }
 
     public void OffBeat()
     {
-
+        print("OffBeat");
+        currentAction = Action.None;
+        offbeat = true;
+        Node node = currentNode;
+        for (int circle = 0; circle <3; circle++)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                node.Cancel();
+                node = node.left;
+            }
+            node = node.back;
+        }
     }
 
-    public void Attack()
+    public void RecoverBeat()
     {
-        CheckSuccess();
-        if (successChance == 100f) //Crítico
+        offbeat = false;
+    }
+
+    public void Counter()
+    {
+        if (player.currentAction == Action.Attack)
         {
-            player.GetAttack(damage * 1.5f);
+            float random = Random.value * randomness;
+            if (rhythm.IsDownBeat())
+            {
+                currentAction = Action.Block;
+                rhythm.ScheduleFunction(2f + random, "Block", this);            }
+            else
+            {
+                currentAction = Action.Block;
+                rhythm.ScheduleFunction(1f + random, "Block", this);
+            }
+        }
+        else if (player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
+        {
+            float random = Random.value * randomness / 2;
+            if (rhythm.IsDownBeat())
+            {
+                rhythm.ScheduleFunction(random, "Cut", this);
+                rhythm.ScheduleFunction(1, "GoIdle", this);
+            }
+        }
+        else if (player.currentAction == Action.Block)
+        {
+            float random = Random.value * randomness / 2;
+            if (!rhythm.IsDownBeat())
+            {
+                rhythm.ScheduleFunction(random, "Cut", this);
+                rhythm.ScheduleFunction(1, "GoIdle", this);
+            }
+        }
+    }
+
+    public void Cut()
+    {
+        currentAction = Action.Cut;
+        if (player.currentAction == Action.Block || player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
+        {
+            CheckSuccess();
+            if (successChance == 100f) //Crítico
+            {
+                player.OffBeat();
+            }
+            else
+            {
+                OffBeat();
+            }
         }
         else
         {
-            player.GetAttack(damage * successChance / 100);
+            OffBeat();
         }
+    }
+
+    public void RandomAttack(float time, int[] indexes)
+    {
+        int index = indexes[Mathf.FloorToInt(Random.value * indexes.Length - 0.01f)];
+        switch (index)
+        {
+            case 0:
+                Stab(time);
+                break;
+            case 1:
+                Spear(time);
+                break;
+            case 2:
+                Swipe(time);
+                break;
+        }
+    }
+
+    public void RandomTech(float time)
+    {
+        FireSwipe(time);
+        /*
+        int index = Mathf.FloorToInt(Random.value * 2.99f);
+        switch (index)
+        {
+            case 0:
+                Spear(time);
+                break;
+            case 1:
+                Swipe(time);
+                break;
+            case 2:
+                Stab(time);
+                break;
+        }
+        */
+    }
+
+    #region Attacks
+
+    public void Stab(float time)
+    {
+        player.currentNode.ChargeHere(damage, false, time);
+    }
 
 
+    public void Spear(float time)
+    {
+        Node node = currentNode;
+        for (int i = 0; i < 3; i++)
+        {
+            node.ChargeHere(damage, false, time);
+            node = node.back;
+        }
+    }
+
+    public void Swipe(float time)
+    {
+        Node node = player.currentNode;
+        for (int i = 0; i < 6; i++)
+        {
+            node.ChargeHere(damage, false, time);
+            node = node.left;
+        }
+    }
+
+    #endregion
+
+    public void FireSwipe(float time)
+    {
+        Node node = currentNode;
+        for (int i = 0; i < 6; i++)
+        {
+            node.ChargeHere(damage, true, time);
+            node = node.left;
+        }
+    }
+
+    private void Block()
+    {
+        if (rhythm.IsDownBeat())
+        {
+            CheckSuccess();
+            if (damageToBlock != 0)
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    player.OffBeat();
+                }
+                else
+                {
+                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+                }
+                damageToBlock = 0;
+                currentAction = Action.None;
+            }
+            else
+            {
+                StartCoroutine(WaitForDamage(0.5f));
+            }
+        }
+        else
+        {
+            currentAction = Action.None;
+        }
+    }
+
+    IEnumerator WaitForDamage(float time)
+    {
+        float elapsed = 0;
+        while (elapsed <= time)
+        {
+            if (damageToBlock != 0)
+            {
+                if (successChance == 100f) //Crítico
+                {
+                    player.OffBeat();
+                }
+                else
+                {
+                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
+                }
+                damageToBlock = 0;
+                break;
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        currentAction = Action.None;
     }
 
     public void GetAttack(float damage)
     {
-        GetDamage(damage);
+        if (currentAction == Action.Block)
+        {
+            damageToBlock = damage;
+        }
+        else
+        {
+            GetDamage(damage);
+            if (currentAction == Action.Tech)
+            {
+                OffBeat();
+            }
+        }
     }
 
     public void GetTech(float damage)
@@ -107,11 +355,11 @@ public class EnemyController : MonoBehaviour
     {
         if (rhythm.IsDownBeat()) //Si es tiempo 
         {
-            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 200);
+            successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
         }
         else                   //Si es contratiempo
         {
-            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 200);
+            successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
         }
 
         if (successChance < 50)
