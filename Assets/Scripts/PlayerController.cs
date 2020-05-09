@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public float successChance;
     private bool canMove = true;
     private bool moveInput = false;
+    public Animator animator;
 
     public EnemyController enemy;
 
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         health = maxHealth;
         chamber = new Bullet[] { Bullet.One, Bullet.One, Bullet.One, Bullet.Plus };
         for(int i = 0; i < 4; i++)
@@ -285,6 +287,7 @@ public class PlayerController : MonoBehaviour
             else if (move.y < -minStickMovement && currentNode.back == null)
             {
                 currentAction = Action.Flash;
+                animator.SetTrigger("Charging Flash");
             }
             else if (Mathf.Abs(move.y) < minStickMovement)
             {
@@ -469,6 +472,20 @@ public class PlayerController : MonoBehaviour
         charged = false;
         offBeat = true;
         rhythm.OffBeat(true);
+
+        if(currentNode.forward == null)
+        {
+            animator.SetTrigger("Inner");
+        }
+        else if(currentNode.back == null)
+        {
+            animator.SetTrigger("External");
+        }
+        else
+        {
+            animator.SetTrigger("Middle");
+        }
+
         StartCoroutine(WaitForRecover());
     }
 
@@ -633,9 +650,17 @@ public class PlayerController : MonoBehaviour
             rotation = -1 / 6f;
             mainCamera.Rotate(rotation, moveDuration);
         }
-
         else
         {
+            if(targetNode == currentNode.forward)
+            {
+                animator.SetTrigger("Forward");
+            }
+            else
+            {
+                print("BACK!");
+                animator.SetTrigger("Backward");
+            }
             iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         }
         iTween.RotateBy(transform.parent.gameObject, Vector3.up * rotation, moveDuration);
@@ -656,6 +681,7 @@ public class PlayerController : MonoBehaviour
             )
         );
         currentNode = targetNode;
+        animator.SetTrigger("Forward");
         yield return new WaitForSeconds(moveDuration);
         transform.position = targetNode.transform.position;
         canMove = true;
@@ -665,6 +691,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator FlashToTarget()
     {
         canMove = false;
+        animator.SetTrigger("Flash");
         iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         currentNode = targetNode;
         mainCamera.Rotate(0.5f, moveDuration, iTween.EaseType.easeInOutCubic);
@@ -781,6 +808,7 @@ public class PlayerController : MonoBehaviour
             {
                 //print("while: " + currentAction + "   flashcondition");
                 currentAction = Action.Flash;
+                animator.SetTrigger("Charging Flash");
             }
             elapsed += Time.deltaTime;
             yield return null;
