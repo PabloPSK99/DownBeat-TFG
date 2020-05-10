@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
     public float successChance;
     public float successChanceThreshold;
     public float randomness;
+    public float cutFixRatio;
 
     [Header("UI")]
 
@@ -31,6 +32,7 @@ public class EnemyController : MonoBehaviour
     public float healthBarTime;
     public float damageBarTime;
     public float damageBarDelay;
+    public UIController UIController;
 
     private void Awake()
     {
@@ -138,7 +140,7 @@ public class EnemyController : MonoBehaviour
 
     public void OffBeat()
     {
-        print("OffBeat");
+        UIController.PopUpText("OFFBEAT!");
         currentAction = Action.None;
         offbeat = true;
         Node node = currentNode;
@@ -178,7 +180,8 @@ public class EnemyController : MonoBehaviour
             float random = Random.value * randomness / 2;
             if (rhythm.IsDownBeat())
             {
-                rhythm.ScheduleFunction(random, "Cut", this);
+                currentAction = Action.Cut;
+                rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
                 rhythm.ScheduleFunction(1, "GoIdle", this);
             }
         }
@@ -187,14 +190,16 @@ public class EnemyController : MonoBehaviour
             float random = Random.value * randomness / 2;
             if (!rhythm.IsDownBeat())
             {
-                rhythm.ScheduleFunction(random, "Cut", this);
+                currentAction = Action.Cut;
+                rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
+                rhythm.ScheduleFunction(1, "GoIdle", this);
             }
         }
     }
 
     public void Cut()
     {
-        currentAction = Action.Cut;
+        UpdateCurrentNode();
         if (player.currentAction == Action.Block || player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
         {
             CheckSuccess();
@@ -215,7 +220,7 @@ public class EnemyController : MonoBehaviour
 
     public void RandomAttack(float time, int[] indexes)
     {
-        int index = indexes[Mathf.FloorToInt(Random.value * indexes.Length - 0.01f)];
+        int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
         UpdateCurrentNode();
         switch (index)
         {
@@ -296,23 +301,7 @@ public class EnemyController : MonoBehaviour
         if (rhythm.IsDownBeat())
         {
             CheckSuccess();
-            if (damageToBlock != 0)
-            {
-                if (successChance == 100f) //Crítico
-                {
-                    player.OffBeat();
-                }
-                else
-                {
-                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
-                }
-                damageToBlock = 0;
-                currentAction = Action.None;
-            }
-            else
-            {
-                StartCoroutine(WaitForDamage(0.5f));
-            }
+            StartCoroutine(WaitForDamage(0.5f));
         }
         else
         {
@@ -329,10 +318,13 @@ public class EnemyController : MonoBehaviour
             {
                 if (successChance == 100f) //Crítico
                 {
+                    UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
                     player.OffBeat();
                 }
                 else
                 {
+                    UIController.PopUpNumber(damageToBlock * (maxBlockableRatio * successChance / 100), NumberType.Block, false);
+                    UIController.PopUpNumber(damageToBlock * (1 - maxBlockableRatio * successChance / 100), NumberType.Attack, false);
                     GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
                 }
                 damageToBlock = 0;
@@ -352,6 +344,14 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
+            if(damage > player.damage)
+            {
+                UIController.PopUpNumber(damage, NumberType.Attack, true);
+            }
+            else
+            {
+                UIController.PopUpNumber(damage, NumberType.Attack, false);
+            }
             GetDamage(damage);
             if (currentAction == Action.Tech)
             {
@@ -362,6 +362,7 @@ public class EnemyController : MonoBehaviour
 
     public void GetTech(float damage)
     {
+        UIController.PopUpNumber(damage, NumberType.Tech, true);
         GetDamage(damage);
     }
 
@@ -394,12 +395,13 @@ public class EnemyController : MonoBehaviour
         if (rhythm.IsDownBeat()) //Si es tiempo 
         {
             successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
+            print((0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold) + "%");
         }
         else                   //Si es contratiempo
         {
             successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
+            print((rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold) + "%");
         }
-
         if (successChance < 50)
         {
             float rng = Random.value * 100;

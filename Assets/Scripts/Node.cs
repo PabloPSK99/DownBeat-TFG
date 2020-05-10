@@ -106,7 +106,9 @@ public class Node : MonoBehaviour
 
     public void AttackHere(float damage, bool tech)
     {
-        if(player.currentNode == this)
+        float successChance = Mathf.Min(1, (0.5f - rhythm.normalized) * 2);
+        //print(successChance * 100f + "%  (attack)");
+        if (player.currentNode == this)
         {
             if (tech)
             {
@@ -114,7 +116,7 @@ public class Node : MonoBehaviour
             }
             else
             {
-                float successChance = Mathf.Min(1, (0.5f - rhythm.normalized) * 2);
+                
                 if (successChance > 0.99f)
                 {
                     player.GetAttack(damage * 1.5f);

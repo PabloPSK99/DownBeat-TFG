@@ -212,26 +212,7 @@ public class PlayerController : MonoBehaviour
         {
             CheckSuccess();
             UIController.PopUpChance(successChance, Action.Block);
-            if(damageToBlock != 0)
-            {
-                if (successChance == 100f) //Crítico
-                {
-                    enemy.OffBeat();
-                    UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
-                }
-                else
-                {
-                    UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
-                    GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
-                }
-                damageToBlock = 0;
-                charged = false;
-                currentAction = Action.None;
-            }
-            else
-            {
-                StartCoroutine(WaitForDamage(0.2f));
-            }
+            StartCoroutine(WaitForDamage(0.2f));
         }
         else
         {

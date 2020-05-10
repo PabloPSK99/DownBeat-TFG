@@ -9,7 +9,6 @@ public class UIController : MonoBehaviour
     public Transform chancePivot;
     bool[] empty;
     bool emptyChance;
-    GameObject bubble;
 
 
     public int minSize;
@@ -18,7 +17,6 @@ public class UIController : MonoBehaviour
     public int maxChanceSize;
     public int minValue;
     public int maxValue;
-    private Transform origin;
 
 
     [Header("Movement")]
@@ -81,7 +79,7 @@ public class UIController : MonoBehaviour
                 text.color = blockColor;
                 break;
             case NumberType.Tech:
-                text.color = damageColor;
+                text.color = techColor;
                 break;
             case NumberType.Cut:
                 break;
