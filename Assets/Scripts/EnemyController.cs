@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
                 RandomAttack(2f + random - randomness / 2, new int[2] { 0, 1 });
-                rhythm.ScheduleFunction(3, "GoIdle", this);
+                rhythm.ScheduleFunction(2.1f, "GoIdle", this);
             }
         }
     }
@@ -95,8 +95,46 @@ public class EnemyController : MonoBehaviour
     public void GoIdle()
     {
         currentAction = Action.None;
-        currentNode = player.currentNode.GetFirstNodeOnThisAxis();
+        UpdateCurrentNode();
     }
+
+    private void UpdateCurrentNode()
+    {
+        Node targetNode = player.currentNode.GetFirstNodeOnThisAxis();
+        //Contar nodos hacia la izquierda 
+        int nodes = 0;
+        Node aux = currentNode;
+        while (aux != targetNode)
+        {
+            aux = aux.left;
+            nodes++;
+        }
+        float distance;
+        if (nodes <= 3)
+        {
+            distance = nodes / 6f;
+        }
+        else
+        {
+            distance = -(6 - nodes) / 6f;
+        }
+        StartCoroutine(RotateByEased(distance, 0.2f + Mathf.Abs(distance), iTween.EaseType.easeInOutQuad));
+        currentNode = targetNode;
+    }
+
+    IEnumerator RotateByEased(float rotation, float duration, iTween.EaseType easetype)
+    {
+        float lastRotation = transform.rotation.eulerAngles.y;
+        iTween.RotateBy(gameObject, iTween.Hash(
+            "amount", Vector3.up * rotation,
+            "time", duration,
+            "easetype", easetype
+            )
+        );
+        yield return new WaitForSeconds(duration);
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
+    }
+
 
     public void OffBeat()
     {
@@ -150,7 +188,6 @@ public class EnemyController : MonoBehaviour
             if (!rhythm.IsDownBeat())
             {
                 rhythm.ScheduleFunction(random, "Cut", this);
-                rhythm.ScheduleFunction(1, "GoIdle", this);
             }
         }
     }
@@ -179,6 +216,7 @@ public class EnemyController : MonoBehaviour
     public void RandomAttack(float time, int[] indexes)
     {
         int index = indexes[Mathf.FloorToInt(Random.value * indexes.Length - 0.01f)];
+        UpdateCurrentNode();
         switch (index)
         {
             case 0:
