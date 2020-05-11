@@ -57,6 +57,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Debug 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""df180da2-6c21-40c1-825e-d0c5d7d76c78"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Debug 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""5ba43d56-826a-432b-99b4-22fb90959161"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -125,6 +141,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Cut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96a37558-a9c7-4803-86d3-736e996ca6a0"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f3a0a09-53db-402a-8dc5-12f6c84d8d20"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -138,6 +176,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Fight_Tech = m_Fight.FindAction("Tech", throwIfNotFound: true);
         m_Fight_Cut = m_Fight.FindAction("Cut", throwIfNotFound: true);
         m_Fight_Move = m_Fight.FindAction("Move", throwIfNotFound: true);
+        m_Fight_Debug1 = m_Fight.FindAction("Debug 1", throwIfNotFound: true);
+        m_Fight_Debug2 = m_Fight.FindAction("Debug 2", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -192,6 +232,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Fight_Tech;
     private readonly InputAction m_Fight_Cut;
     private readonly InputAction m_Fight_Move;
+    private readonly InputAction m_Fight_Debug1;
+    private readonly InputAction m_Fight_Debug2;
     public struct FightActions
     {
         private @PlayerControls m_Wrapper;
@@ -201,6 +243,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Tech => m_Wrapper.m_Fight_Tech;
         public InputAction @Cut => m_Wrapper.m_Fight_Cut;
         public InputAction @Move => m_Wrapper.m_Fight_Move;
+        public InputAction @Debug1 => m_Wrapper.m_Fight_Debug1;
+        public InputAction @Debug2 => m_Wrapper.m_Fight_Debug2;
         public InputActionMap Get() { return m_Wrapper.m_Fight; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -225,6 +269,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnMove;
+                @Debug1.started -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug1;
+                @Debug1.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug1;
+                @Debug1.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug1;
+                @Debug2.started -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
+                @Debug2.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
+                @Debug2.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
             }
             m_Wrapper.m_FightActionsCallbackInterface = instance;
             if (instance != null)
@@ -244,6 +294,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Debug1.started += instance.OnDebug1;
+                @Debug1.performed += instance.OnDebug1;
+                @Debug1.canceled += instance.OnDebug1;
+                @Debug2.started += instance.OnDebug2;
+                @Debug2.performed += instance.OnDebug2;
+                @Debug2.canceled += instance.OnDebug2;
             }
         }
     }
@@ -255,5 +311,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnTech(InputAction.CallbackContext context);
         void OnCut(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnDebug1(InputAction.CallbackContext context);
+        void OnDebug2(InputAction.CallbackContext context);
     }
 }

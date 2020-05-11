@@ -83,6 +83,9 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Move.performed += context => move = context.ReadValue<Vector2>();
         controls.Fight.Move.canceled += context => move = Vector2.zero;
         controls.Fight.Move.canceled += context => moveInput = false;
+
+        controls.Fight.Debug1.started += context => Heal(maxHealth);
+        controls.Fight.Debug2.started += context => Heal(maxHealth);
     }
 
     private void Update()
