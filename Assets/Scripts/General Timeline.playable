@@ -159,10 +159,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C1 Hero Profile 1
   - m_Version: 1
-    m_Start: 5.016666666666667
-    m_ClipIn: 0.41666666666666696
+    m_Start: 5.016666666666666
+    m_ClipIn: 0.0000000000000008881784197001252
     m_Asset: {fileID: 64539351515609357}
-    m_Duration: 3.9833333333333334
+    m_Duration: 3.9833333333333343
     m_TimeScale: 1
     m_ParentTrack: {fileID: -2178191134991533072}
     m_EaseInDuration: 0
