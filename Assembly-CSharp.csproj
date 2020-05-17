@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Effects.cs" />
+    <Compile Include="Assets\Particles\Misc Effects\Scripts\SpawnEffect.cs" />
     <Compile Include="Assets\PlayerControls.cs" />
     <Compile Include="Assets\Scripts\Action.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
@@ -75,6 +77,10 @@
     <Compile Include="Assets\Scripts\Rhythm.cs" />
     <Compile Include="Assets\Scripts\UIController.cs" />
     <None Include="Assets\Resources\Text\C1\T1.txt" />
+    <None Include="Assets\Particles\Misc Effects\Prefabs\Readme_Dissolve_Respawn_.txt" />
+    <None Include="Assets\Particles\Misc Effects\Shaders\Respawn.shader" />
+    <None Include="Assets\Particles\Misc Effects\Shaders\FireFly.shader" />
+    <None Include="Assets\Particles\Misc Effects\Shaders\Dissolve.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Escritorio/Documentos/DownBeat/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     public float successChance;
     private bool canMove = true;
     private bool moveInput = false;
-    public Animator animator;
+    private Animator camAnimator;
+    public Animator charAnimator;
 
     public EnemyController enemy;
 
@@ -58,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        camAnimator = GetComponent<Animator>();
         health = maxHealth;
         chamber = new Bullet[] { Bullet.One, Bullet.One, Bullet.One, Bullet.Plus };
         for(int i = 0; i < 4; i++)
@@ -110,6 +111,7 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Attack);
             currentAction = Action.Attack;
             charged = true;
+            charAnimator.SetTrigger("chargePunch");
         }
         else
         {
@@ -126,17 +128,20 @@ public class PlayerController : MonoBehaviour
         if (!rhythm.beatLocked && currentAction == Action.Attack && charged == true && rhythm.IsDownBeat())
         {
             CheckSuccess();
+            charAnimator.SetTrigger("release");
             UIController.PopUpChance(successChance, Action.Attack);
             if (currentNode.forward == null)  //Ataque Melee
             {
                 if (successChance == 100f) //Crítico
                 {
+                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake, 0.25f);
                     enemy.GetAttack(damage * 1.5f);
                     FillChamberSlot(false);
                 }
                 else
                 {
                     enemy.GetAttack(damage * successChance / 100);
+                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.15f);
                 }
             }
             else                          //Ataque a distancia
@@ -172,13 +177,20 @@ public class PlayerController : MonoBehaviour
                 bulletDamage = damage;
                 if (chamber[i] == Bullet.Plus)
                 {
-                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * successChance / 100, 0.15f);
+                    if(successChance == 100)
+                    {
+                        iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * 1.5f, 0.25f);
+                    }
+                    else
+                    {
+                        iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * successChance / 100, 0.25f);
+                    }
                     bulletDamage *= 2;
                     Heal(20f);
                 }
                 else
                 {
-                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.1f);
+                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.15f);
                 }
                 StartCoroutine(BurnBullet(i));
                 chamber[i] = Bullet.Empty;
@@ -271,7 +283,7 @@ public class PlayerController : MonoBehaviour
             else if (move.y < -minStickMovement && currentNode.back == null)
             {
                 currentAction = Action.Flash;
-                animator.SetTrigger("Charging Flash");
+                camAnimator.SetTrigger("Charging Flash");
             }
             else if (Mathf.Abs(move.y) < minStickMovement)
             {
@@ -451,7 +463,7 @@ public class PlayerController : MonoBehaviour
 
     public void OffBeat()
     {
-        print("OFFBEAT!!");
+        charAnimator.SetTrigger("offBeat");
         currentAction = Action.None;
         charged = false;
         offBeat = true;
@@ -459,15 +471,15 @@ public class PlayerController : MonoBehaviour
 
         if(currentNode.forward == null)
         {
-            animator.SetTrigger("Inner");
+            camAnimator.SetTrigger("Inner");
         }
         else if(currentNode.back == null)
         {
-            animator.SetTrigger("External");
+            camAnimator.SetTrigger("External");
         }
         else
         {
-            animator.SetTrigger("Middle");
+            camAnimator.SetTrigger("Middle");
         }
 
         StartCoroutine(WaitForRecover());
@@ -626,11 +638,13 @@ public class PlayerController : MonoBehaviour
         float lastRotation = transform.rotation.eulerAngles.y;
         if (targetNode == currentNode.left)
         {
+            charAnimator.SetTrigger("left");
             rotation = 1 / 6f;
             mainCamera.Rotate(rotation, moveDuration);
         }
         else if (targetNode == currentNode.right)
         {
+            charAnimator.SetTrigger("right");
             rotation = -1 / 6f;
             mainCamera.Rotate(rotation, moveDuration);
         }
@@ -638,12 +652,14 @@ public class PlayerController : MonoBehaviour
         {
             if(targetNode == currentNode.forward)
             {
-                animator.SetTrigger("Forward");
+                camAnimator.SetTrigger("Forward");
+                charAnimator.SetTrigger("forward");
             }
             else
             {
                 print("BACK!");
-                animator.SetTrigger("Backward");
+                camAnimator.SetTrigger("Backward");
+                charAnimator.SetTrigger("back");
             }
             iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         }
@@ -665,7 +681,7 @@ public class PlayerController : MonoBehaviour
             )
         );
         currentNode = targetNode;
-        animator.SetTrigger("Forward");
+        camAnimator.SetTrigger("Forward");
         yield return new WaitForSeconds(moveDuration);
         transform.position = targetNode.transform.position;
         canMove = true;
@@ -675,7 +691,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator FlashToTarget()
     {
         canMove = false;
-        animator.SetTrigger("Flash");
+        camAnimator.SetTrigger("Flash");
         iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         currentNode = targetNode;
         mainCamera.Rotate(0.5f, moveDuration, iTween.EaseType.easeInOutCubic);
@@ -792,7 +808,7 @@ public class PlayerController : MonoBehaviour
             {
                 //print("while: " + currentAction + "   flashcondition");
                 currentAction = Action.Flash;
-                animator.SetTrigger("Charging Flash");
+                camAnimator.SetTrigger("Charging Flash");
             }
             elapsed += Time.deltaTime;
             yield return null;
