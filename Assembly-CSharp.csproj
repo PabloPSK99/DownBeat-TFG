@@ -62,13 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Effects.cs" />
     <Compile Include="Assets\Particles\Misc Effects\Scripts\SpawnEffect.cs" />
     <Compile Include="Assets\PlayerControls.cs" />
+    <Compile Include="Assets\Rotate.cs" />
     <Compile Include="Assets\Scripts\Action.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\CanvasLookAt.cs" />
     <Compile Include="Assets\Scripts\CutsceneText.cs" />
+    <Compile Include="Assets\Scripts\Effects.cs" />
     <Compile Include="Assets\Scripts\EnemyController.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
     <Compile Include="Assets\Scripts\Node.cs" />

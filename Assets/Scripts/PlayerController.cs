@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool moveInput = false;
     private Animator camAnimator;
     public Animator charAnimator;
-
+    public Effects effects;
     public EnemyController enemy;
 
     [Header("Stats")]
@@ -111,7 +111,10 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Attack);
             currentAction = Action.Attack;
             charged = true;
-            charAnimator.SetTrigger("chargePunch");
+            if (currentNode.forward == null)  //Ataque Melee
+                SetTrigger("chargePunch");
+            else
+                SetTrigger("chargeShot");
         }
         else
         {
@@ -128,7 +131,7 @@ public class PlayerController : MonoBehaviour
         if (!rhythm.beatLocked && currentAction == Action.Attack && charged == true && rhythm.IsDownBeat())
         {
             CheckSuccess();
-            charAnimator.SetTrigger("release");
+            SetTrigger("release");
             UIController.PopUpChance(successChance, Action.Attack);
             if (currentNode.forward == null)  //Ataque Melee
             {
@@ -162,6 +165,7 @@ public class PlayerController : MonoBehaviour
             {
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
+                SetTrigger("fail");
             }
         }
         charged = false;
@@ -185,11 +189,13 @@ public class PlayerController : MonoBehaviour
                     {
                         iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * successChance / 100, 0.25f);
                     }
+                    effects.Bullet(true);
                     bulletDamage *= 2;
                     Heal(20f);
                 }
                 else
                 {
+                    effects.Bullet(false);
                     iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.15f);
                 }
                 StartCoroutine(BurnBullet(i));
@@ -209,6 +215,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!rhythm.beatLocked && CheckSuccess())
         {
+            SetTrigger("chargeBlock");
             UIController.PopUpChance(successChance, Action.Block);
             currentAction = Action.Block;
             charged = true;
@@ -233,6 +240,7 @@ public class PlayerController : MonoBehaviour
         {
             if (currentAction == Action.Block)
             {
+                SetTrigger("fail");
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
             }
@@ -250,18 +258,27 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     enemy.OffBeat();
+                    SetTrigger("parry");
                     UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
                 }
                 else
                 {
+                    SetTrigger("block");
                     UIController.PopUpNumber(damageToBlock * maxBlockableRatio * successChance / 100, NumberType.Block, false);
                     GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));
                 }
-                damageToBlock = 0;
                 break;
             }
             elapsed += Time.deltaTime;
             yield return null;
+        }
+        if (damageToBlock == 0)
+        {
+            SetTrigger("fail");
+        }
+        else
+        {
+            damageToBlock = 0;
         }
         charged = false;
         currentAction = Action.None;
@@ -346,6 +363,7 @@ public class PlayerController : MonoBehaviour
         {
             if (currentAction == Action.Block)
             {
+                SetTrigger("fail");
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
             }
@@ -463,7 +481,7 @@ public class PlayerController : MonoBehaviour
 
     public void OffBeat()
     {
-        charAnimator.SetTrigger("offBeat");
+        SetTrigger("offBeat");
         currentAction = Action.None;
         charged = false;
         offBeat = true;
@@ -638,13 +656,13 @@ public class PlayerController : MonoBehaviour
         float lastRotation = transform.rotation.eulerAngles.y;
         if (targetNode == currentNode.left)
         {
-            charAnimator.SetTrigger("left");
+            SetTrigger("left");
             rotation = 1 / 6f;
             mainCamera.Rotate(rotation, moveDuration);
         }
         else if (targetNode == currentNode.right)
         {
-            charAnimator.SetTrigger("right");
+            SetTrigger("right");
             rotation = -1 / 6f;
             mainCamera.Rotate(rotation, moveDuration);
         }
@@ -653,13 +671,13 @@ public class PlayerController : MonoBehaviour
             if(targetNode == currentNode.forward)
             {
                 camAnimator.SetTrigger("Forward");
-                charAnimator.SetTrigger("forward");
+                SetTrigger("forward");
             }
             else
             {
                 print("BACK!");
                 camAnimator.SetTrigger("Backward");
-                charAnimator.SetTrigger("back");
+                SetTrigger("back");
             }
             iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         }
@@ -791,6 +809,15 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         controls.Fight.Disable();
+    }
+
+    private void SetTrigger(string trigger)
+    {
+        foreach (AnimatorControllerParameter parameter in charAnimator.parameters)
+        {
+            charAnimator.ResetTrigger(parameter.name);
+        }
+        charAnimator.SetTrigger(trigger);
     }
 
     IEnumerator WaitForTechCorrection(float time)
