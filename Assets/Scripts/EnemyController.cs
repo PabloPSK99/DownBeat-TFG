@@ -44,11 +44,11 @@ public class EnemyController : MonoBehaviour
     {
         if (!offbeat)
         {
-            Phase1();
+            //Phase1();
         }
         else
         {
-            rhythm.ScheduleFunction(3, "RecoverBeat", this);
+            //rhythm.ScheduleFunction(3, "RecoverBeat", this);
         }
     }
 

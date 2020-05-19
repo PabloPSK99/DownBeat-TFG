@@ -354,6 +354,7 @@ public class Rhythm : MonoBehaviour
 
     IEnumerator DischargeAfter(int beats)
     {
+        Action currentAction = player.currentAction;
         for(int i = 0; i<beats; i++)
         {
             float lastNormalized = normalized;
@@ -373,8 +374,11 @@ public class Rhythm : MonoBehaviour
             }
             yield return null;
         }
-        player.charged = false;
-        player.currentAction = Action.None;
+        if(player.currentAction == currentAction)
+        {
+            player.charged = false;
+            player.currentAction = Action.None;
+        }
     }
 
     public void ScheduleFunction(int beats, string function, MonoBehaviour script)

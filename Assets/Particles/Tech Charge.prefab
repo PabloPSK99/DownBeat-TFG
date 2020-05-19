@@ -5153,7 +5153,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.16
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14450,6 +14450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 90
+  delay: 0
 --- !u!1 &4090528262786508286
 GameObject:
   m_ObjectHideFlags: 0
@@ -15041,7 +15042,7 @@ PrefabInstance:
     - target: {fileID: 6414201117064080983, guid: 0c457f7bffc6e2d40a31d4b19e0ac771,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
-      value: 0.7019608
+      value: 0.2784314
       objectReference: {fileID: 0}
     - target: {fileID: 6414201117064080983, guid: 0c457f7bffc6e2d40a31d4b19e0ac771,
         type: 3}

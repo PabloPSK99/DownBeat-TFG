@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Assets\Particles\Misc Effects\Scripts\SpawnEffect.cs" />
     <Compile Include="Assets\PlayerControls.cs" />
-    <Compile Include="Assets\Rotate.cs" />
     <Compile Include="Assets\Scripts\Action.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\CanvasLookAt.cs" />
@@ -76,6 +75,8 @@
     <Compile Include="Assets\Scripts\NumberType.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Rhythm.cs" />
+    <Compile Include="Assets\Scripts\Rotate.cs" />
+    <Compile Include="Assets\Scripts\Scale.cs" />
     <Compile Include="Assets\Scripts\UIController.cs" />
     <None Include="Assets\Resources\Text\C1\T1.txt" />
     <None Include="Assets\Particles\Misc Effects\Prefabs\Readme_Dissolve_Respawn_.txt" />

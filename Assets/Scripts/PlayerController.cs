@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private Animator camAnimator;
     public Animator charAnimator;
     public Effects effects;
+    public Transform punch;
     public EnemyController enemy;
 
     [Header("Stats")]
@@ -45,9 +47,11 @@ public class PlayerController : MonoBehaviour
     public float damageBarTime;
     public float damageBarDelay;
     public Image[] bulletsUI;
+    public Transform bulletsBackground;
     public Color plusBulletColor;
     public Color burntBulletColor;
     public Color burntPlusBulletColor;
+    public Color warningBulletColor;
     public float burnBulletTime;
     private readonly float maxFillAmount = 0.2f;
 
@@ -62,7 +66,7 @@ public class PlayerController : MonoBehaviour
         camAnimator = GetComponent<Animator>();
         health = maxHealth;
         chamber = new Bullet[] { Bullet.One, Bullet.One, Bullet.One, Bullet.Plus };
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             //Shoot();
         }
@@ -85,8 +89,8 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Move.canceled += context => move = Vector2.zero;
         controls.Fight.Move.canceled += context => moveInput = false;
 
-        controls.Fight.Debug1.started += context => Heal(maxHealth);
-        controls.Fight.Debug2.started += context => Heal(maxHealth);
+        controls.Fight.Debug1.started += context => Debug1();
+        controls.Fight.Debug2.started += context => Debug2();
     }
 
     private void Update()
@@ -108,13 +112,27 @@ public class PlayerController : MonoBehaviour
     {
         if (!rhythm.beatLocked && CheckSuccess() && rhythm.IsDownBeat())
         {
-            UIController.PopUpChance(successChance, Action.Attack);
             currentAction = Action.Attack;
             charged = true;
             if (currentNode.forward == null)  //Ataque Melee
+            {
+                UIController.PopUpChance(successChance, Action.Attack);
                 SetTrigger("chargePunch");
+            }
             else
-                SetTrigger("chargeShot");
+            {
+                if (chamber[3] != Bullet.Empty)
+                {
+                    UIController.PopUpChance(successChance, Action.Attack);
+                    SetTrigger("chargeShot");
+                }
+                else
+                {
+                    UIController.PopUpText("OUT OF AMMO!");
+                    StartCoroutine(OutOfAmmo());
+                    SetTrigger("outOfAmmo");
+                }
+            }
         }
         else
         {
@@ -166,6 +184,11 @@ public class PlayerController : MonoBehaviour
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
                 SetTrigger("fail");
+                ParticleSystem[] pSystems = punch.GetComponentsInChildren<ParticleSystem>();
+                foreach (ParticleSystem ps in pSystems)
+                {
+                    Destroy(ps.gameObject);
+                }
             }
         }
         charged = false;
@@ -301,10 +324,13 @@ public class PlayerController : MonoBehaviour
             {
                 currentAction = Action.Flash;
                 camAnimator.SetTrigger("Charging Flash");
+                SetTrigger("chargeFlash");
             }
             else if (Mathf.Abs(move.y) < minStickMovement)
             {
                 currentAction = Action.Reload;
+                SetTrigger("reload");
+                effects.Reload();
                 StartCoroutine(WaitForTechCorrection(0.2f));
             }
             charged = true;
@@ -323,7 +349,7 @@ public class PlayerController : MonoBehaviour
         if (!rhythm.beatLocked && !rhythm.IsDownBeat() && charged == true)
         {
             CheckSuccess();
-
+            SetTrigger("release");
             if (currentAction == Action.Reload)  //Recarga
             {
                 UIController.PopUpChance(successChance, Action.Tech);
@@ -430,6 +456,24 @@ public class PlayerController : MonoBehaviour
             iTween.PunchScale(bulletsUI[i].gameObject, new Vector3(0.1f, -0.1f, 0), 1f);
             yield return new WaitForSeconds(0.1f);
             bullets--;
+        }
+    }
+
+    IEnumerator OutOfAmmo()
+    {
+        Image[] backgrounds = bulletsBackground.GetComponentsInChildren<Image>();
+        for (int i = backgrounds.Length-1; i >= 0; i--)
+        {
+            backgrounds[i].transform.localScale = Vector3.one * 0.6f;
+            backgrounds[i].color = warningBulletColor;
+            iTween.PunchScale(backgrounds[i].gameObject, new Vector3(0.1f, -0.1f, 0), 1f);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        for (int i = backgrounds.Length - 1; i >= 0; i--)
+        {
+            backgrounds[i].color = Color.black / 2f;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -836,6 +880,7 @@ public class PlayerController : MonoBehaviour
                 //print("while: " + currentAction + "   flashcondition");
                 currentAction = Action.Flash;
                 camAnimator.SetTrigger("Charging Flash");
+                SetTrigger("chargeFlash");
             }
             elapsed += Time.deltaTime;
             yield return null;
@@ -853,7 +898,21 @@ public class PlayerController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        if (lastAction == currentAction) currentAction = Action.None;
+        if (lastAction == currentAction)
+        {
+            currentAction = Action.None;
+            SetTrigger("fail");
+        }
+    }
+
+    void Debug1()
+    {
+        Debug.Break();
+    }
+
+    void Debug2()
+    {
+        Heal(maxHealth);
     }
     #endregion
 }
