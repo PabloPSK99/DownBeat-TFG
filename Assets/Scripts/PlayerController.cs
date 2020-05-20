@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     private Animator camAnimator;
     public Animator charAnimator;
     public Effects effects;
-    public Transform punch;
     public EnemyController enemy;
 
     [Header("Stats")]
@@ -184,11 +183,7 @@ public class PlayerController : MonoBehaviour
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
                 SetTrigger("fail");
-                ParticleSystem[] pSystems = punch.GetComponentsInChildren<ParticleSystem>();
-                foreach (ParticleSystem ps in pSystems)
-                {
-                    Destroy(ps.gameObject);
-                }
+                effects.Fail();
             }
         }
         charged = false;
@@ -242,6 +237,7 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Block);
             currentAction = Action.Block;
             charged = true;
+            effects.Block(rhythm.IsDownBeat());
         }
         else
         {
@@ -319,6 +315,7 @@ public class PlayerController : MonoBehaviour
             if (move.y > minStickMovement && currentNode.forward == null)
             {
                 currentAction = Action.Twirl;
+                SetTrigger("chargeTwirl");
             }
             else if (move.y < -minStickMovement && currentNode.back == null)
             {
@@ -387,10 +384,13 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (currentAction == Action.Block)
+            if (currentAction == Action.Reload || currentAction == Action.Twirl || currentAction == Action.Flash)
             {
                 SetTrigger("fail");
+                camAnimator.ResetTrigger("Charging Flash");
+                camAnimator.SetTrigger("Fail");
                 UIController.PopUpText("FAIL!");
+                effects.Fail();
                 currentAction = Action.None;
             }
         }

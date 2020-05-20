@@ -13,13 +13,13 @@ public class Scale : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        intensity = lamp.intensity;
+        if (lamp != null) intensity = lamp.intensity;
         StartCoroutine(Grow());
     }
 
     void Update()
     {
-        lamp.intensity = intensity * transform.localScale.magnitude;
+        if(lamp!=null) lamp.intensity = intensity * transform.localScale.magnitude;
     }
 
     IEnumerator Grow()

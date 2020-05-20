@@ -11,16 +11,42 @@ public class Effects : MonoBehaviour
     public GameObject wideTrail;
     public GameObject bulletExplosion;
     public GameObject plusBulletExplosion;
+    public GameObject blockCharge;
+    public GameObject blockChargeHalf;
     public GameObject flashCharge;
     public GameObject techCharge;
     public GameObject reloadSparks;
+    public GameObject spearTrails;
     public float flashTrailDelay;
     public GameObject flashImpact;
     public GameObject attackCharge;
     public Transform leftHand;
     public Transform rightHand;
+    public Transform rightFoot;
     public Transform chest;
     public Transform enemy;
+    public Transform halberd;
+    public Transform halberdPoint;
+
+    public void FixHalberd()
+    {
+        transform.parent.GetComponent<EnemyController>().FixHalberd();
+        GameObject t = Instantiate(spearTrails, halberd);
+        TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer tr in trs)
+        {
+            StartCoroutine(Trail(tr));
+        }
+        iTween.MoveBy(t, Vector3.down * 8, 0.2f);
+        iTween.RotateBy(t, Vector3.up * 360, 0.2f);
+        iTween.ScaleTo(t, Vector3.zero, 0.2f);
+        Destroy(t, 2);
+    }
+
+    public void RevertHalberd(float time)
+    {
+        transform.parent.GetComponent<EnemyController>().RevertHalberd(time);
+    }
 
     public void Punch()
     {
@@ -46,9 +72,22 @@ public class Effects : MonoBehaviour
 
     public void Reload()
     {
-        print("!");
         Destroy(Instantiate(reloadSparks, transform), 5f);
         Destroy(Instantiate(techCharge, chest), 2f);
+    }
+
+    public void Block(bool downBeat)
+    {
+        Destroy(Instantiate(downBeat? blockCharge:blockChargeHalf, rightHand), 3f);
+    }
+
+    public void Fail()
+    {
+        ParticleSystem[] pSystems = GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem ps in pSystems)
+        {
+            Destroy(ps.gameObject);
+        }
     }
 
     public void ChargeFlash()
@@ -58,9 +97,19 @@ public class Effects : MonoBehaviour
         StartCoroutine(Trail(t.GetComponentInChildren<TrailRenderer>(), flashTrailDelay));
     }
 
+    public void ChargeTwirl()
+    {
+        Destroy(Instantiate(techCharge, chest), 2f);
+    }
+
     public void FlashImpact()
     {
         Destroy(Instantiate(flashImpact, enemy.position + (leftHand.position - enemy.position).normalized, flashImpact.transform.rotation), 2);
+    }
+
+    public void TwirlImpact()
+    {
+        Destroy(Instantiate(flashImpact, (enemy.position+rightFoot.position)/2, flashImpact.transform.rotation), 2);
     }
 
     IEnumerator ShootBullet(bool plus)
@@ -96,7 +145,7 @@ public class Effects : MonoBehaviour
         while (tr != null)
         {
             print(tr.widthMultiplier);
-            tr.widthMultiplier -= Time.deltaTime / fadeTime;
+            if(tr.widthMultiplier > 0) tr.widthMultiplier -= Time.deltaTime / fadeTime;
             yield return null;
         }
     }
