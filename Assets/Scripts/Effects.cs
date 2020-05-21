@@ -27,25 +27,94 @@ public class Effects : MonoBehaviour
     public Transform enemy;
     public Transform halberd;
     public Transform halberdPoint;
+    public Transform halberdPivot;
 
     public void FixHalberd()
     {
-        transform.parent.GetComponent<EnemyController>().FixHalberd();
+        StartCoroutine(FixHalberdWhile(0.2f));
         GameObject t = Instantiate(spearTrails, halberd);
         TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
         foreach (TrailRenderer tr in trs)
         {
             StartCoroutine(Trail(tr));
+            StartCoroutine(StopEmit(tr, 0.2f));
         }
-        iTween.MoveBy(t, Vector3.down * 8, 0.2f);
-        iTween.RotateBy(t, Vector3.up * 360, 0.2f);
-        iTween.ScaleTo(t, Vector3.zero, 0.2f);
+        iTween.MoveBy(t, Vector3.down * 15, 0.2f);
+        iTween.RotateBy(t, Vector3.up * 1, 0.2f);
+        iTween.ScaleTo(t.transform.GetChild(0).gameObject, Vector3.zero, 0.2f);
         Destroy(t, 2);
+    }
+
+    IEnumerator FixHalberdWhile(float time)
+    {
+        float elapsed = 0;
+        while (elapsed < time)
+        {
+            halberd.LookAt(halberdPivot);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator StopEmit(TrailRenderer tr, float time)
+    {
+        yield return new WaitForSeconds(time);
+        tr.emitting = false;
     }
 
     public void RevertHalberd(float time)
     {
-        transform.parent.GetComponent<EnemyController>().RevertHalberd(time);
+        StartCoroutine(RevertHalberdWhile(time));
+    }
+
+    IEnumerator RevertHalberdWhile(float time)
+    {
+        float elapsed = 0;
+        while (elapsed < time)
+        {
+            halberd.localRotation = Quaternion.Lerp(halberd.localRotation, Quaternion.identity, elapsed / time);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        halberd.localRotation = Quaternion.identity;
+    }
+
+    public void Sweep()
+    {
+        Transform parent = halberdPivot.parent;
+        halberdPivot.SetParent(transform);
+        halberdPivot.position += Vector3.up;
+        GameObject t = Instantiate(spearTrails, halberdPivot);
+        TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer tr in trs)
+        {
+            StartCoroutine(Trail(tr));
+            StartCoroutine(StopEmit(tr, 0.3f));
+        }
+        iTween.RotateBy(t, Vector3.up * 3, 0.2f);
+        iTween.ScaleTo(t.transform.GetChild(0).gameObject, Vector3.zero, 0.3f);
+        StartCoroutine(RotateByEased(1f, 0.2f, iTween.EaseType.easeOutSine));
+        StartCoroutine(NewParent(halberdPivot, parent, 0.2f));
+        Destroy(t, 2);
+    }
+
+    IEnumerator NewParent(Transform target, Transform newParent, float time)
+    {
+        yield return new WaitForSeconds(time);
+        target.parent = newParent;
+    }
+
+    IEnumerator RotateByEased(float rotation, float duration, iTween.EaseType easetype)
+    {
+        float lastRotation = transform.rotation.eulerAngles.y;
+        iTween.RotateBy(gameObject, iTween.Hash(
+            "amount", Vector3.up * rotation,
+            "time", duration,
+            "easetype", easetype
+            )
+        );
+        yield return new WaitForSeconds(duration);
+        transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
     }
 
     public void Punch()
@@ -144,8 +213,8 @@ public class Effects : MonoBehaviour
         yield return null;
         while (tr != null)
         {
-            print(tr.widthMultiplier);
-            if(tr.widthMultiplier > 0) tr.widthMultiplier -= Time.deltaTime / fadeTime;
+            if (tr.widthMultiplier > 0) tr.widthMultiplier -= Time.deltaTime / fadeTime;
+            else tr.widthMultiplier = 0;
             yield return null;
         }
     }

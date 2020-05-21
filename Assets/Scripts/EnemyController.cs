@@ -11,7 +11,6 @@ public class EnemyController : MonoBehaviour
     public Node currentNode;
     public Transform halberdPivot;
     public Transform halberd;
-    private Quaternion halberdRotation;
 
     [Header("Stats")]
     public int maxHealth;
@@ -43,7 +42,6 @@ public class EnemyController : MonoBehaviour
         health = maxHealth;
         currentAction = Action.None;
         anim = GetComponentInChildren<Animator>();
-        halberdRotation = halberd.rotation;
     }
 
     private void Update()
@@ -54,7 +52,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            //rhythm.ScheduleFunction(3, "RecoverBeat", this);
+            rhythm.ScheduleFunction(3, "RecoverBeat", this);
         }
     }
 
@@ -74,7 +72,7 @@ public class EnemyController : MonoBehaviour
             {
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
-                RandomAttack(2f + random - randomness / 2, new int[2] { 1, 1 }); ///////////////////////////////// PONER 0
+                RandomAttack(2f + random - randomness / 2, new int[2] { 1, 2 }); ///////////////////////////////// PONER 0
                 rhythm.ScheduleFunction(2.1f, "GoIdle", this);
             }
         }
@@ -103,6 +101,7 @@ public class EnemyController : MonoBehaviour
     public void GoIdle()
     {
         currentAction = Action.None;
+        iTween.MoveTo(transform.GetChild(0).gameObject, Vector3.zero, 0.2f);
         UpdateCurrentNode();
     }
 
@@ -147,6 +146,7 @@ public class EnemyController : MonoBehaviour
     public void OffBeat()
     {
         UIController.PopUpText("OFFBEAT!");
+        SetTrigger("offBeat");
         currentAction = Action.None;
         offbeat = true;
         Node node = currentNode;
@@ -269,27 +269,6 @@ public class EnemyController : MonoBehaviour
         player.currentNode.ChargeHere(damage, false, time);
     }
 
-    public void FixHalberd()
-    {
-        StartCoroutine(FixHalberdWhile(0.2f));
-    }
-
-    IEnumerator FixHalberdWhile(float time)
-    {
-        float elapsed = 0;
-        while (elapsed < time)
-        {
-            halberd.LookAt(halberdPivot);
-            yield return null;
-        }
-    }
-
-    public void RevertHalberd(float time)
-    {
-        iTween.RotateTo(halberd.gameObject, halberdRotation.eulerAngles, time);
-    }
-
-
 
     public void Spear(float time)
     {
@@ -307,11 +286,13 @@ public class EnemyController : MonoBehaviour
     public void Swipe(float time)
     {
         Node node = player.currentNode;
+        SetTrigger("chargeSweep");
         for (int i = 0; i < 6; i++)
         {
             node.ChargeHere(damage, false, time);
             node = node.left;
         }
+        halberdPivot.position = player.currentNode.right.transform.position;
     }
 
     #endregion
