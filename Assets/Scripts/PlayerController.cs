@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Block);
             currentAction = Action.Block;
             charged = true;
-            effects.Block(rhythm.IsDownBeat());
+            effects.Block(rhythm.IsDownBeat(), true);
         }
         else
         {

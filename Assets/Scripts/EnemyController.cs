@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     public Node currentNode;
     public Transform halberdPivot;
     public Transform halberd;
+    public Effects effects;
 
     [Header("Stats")]
     public int maxHealth;
@@ -269,15 +270,18 @@ public class EnemyController : MonoBehaviour
     {
         if (player.currentAction == Action.Attack)
         {
+            SetTrigger("chargeBlock");
+            effects.Block(rhythm.IsDownBeat(), false);
             float random = Random.value * randomness;
             if (rhythm.IsDownBeat())
             {
                 currentAction = Action.Block;
-                rhythm.ScheduleFunction(2f + random, "Block", this);            }
+                rhythm.ScheduleFunction(2f + random - randomness / 2, "Block", this);
+            }
             else
             {
                 currentAction = Action.Block;
-                rhythm.ScheduleFunction(1f + random, "Block", this);
+                rhythm.ScheduleFunction(1f + random - randomness / 2, "Block", this);
             }
         }
         else if (player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
@@ -344,8 +348,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-
-
     #region Attacks
 
     public void Thunder(float time)
@@ -405,6 +407,7 @@ public class EnemyController : MonoBehaviour
     {
         Node node = player.currentNode;
         SetTrigger("chargeSweep");
+        Release(time);
         for (int i = 0; i < 6; i++)
         {
             node.ChargeHere(damage, false, time);
@@ -422,10 +425,10 @@ public class EnemyController : MonoBehaviour
         switch (index)
         {
             case 0:
-                FireSweep(time);
+                Prayer(time);
                 break;
             case 1:
-
+                FireSweep(time);
                 break;
             case 2:
 
@@ -436,20 +439,24 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void Prayer(float time)
+    {
+        SetTrigger("chargePray");
+        Release(time);
+        rhythm.ScheduleFunction(time, "Heal", this);
+    }
+
     public void FireSweep(float time)
     {
+        SetTrigger("chargeFireSweep");
+        Release(time);
         Node node = currentNode;
         for (int i = 0; i < 6; i++)
         {
             node.ChargeHere(damage, true, time);
             node = node.left;
         }
-    }
-
-    public void Prayer(float time)
-    {
-        SetTrigger("chargePray");
-        rhythm.ScheduleFunction(time, "Heal", this);
+        halberdPivot.position = player.currentNode.left.transform.position;
     }
 
     private void Block()
@@ -474,11 +481,13 @@ public class EnemyController : MonoBehaviour
             {
                 if (successChance == 100f) //Crítico
                 {
+                    SetTrigger("parry");
                     UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
                     player.OffBeat();
                 }
                 else
                 {
+                    SetTrigger("release");
                     UIController.PopUpNumber(damageToBlock * (maxBlockableRatio * successChance / 100), NumberType.Block, false);
                     UIController.PopUpNumber(damageToBlock * (1 - maxBlockableRatio * successChance / 100), NumberType.Attack, false);
                     GetDamage(damageToBlock * (1 - maxBlockableRatio * successChance / 100));

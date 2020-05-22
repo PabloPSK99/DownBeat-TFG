@@ -108,6 +108,21 @@ public class Effects : MonoBehaviour
         Destroy(t, 2);
     }
 
+    public void FireSweep()
+    {
+        Transform parent = halberdPivot.parent;
+        halberdPivot.SetParent(transform);
+        halberdPivot.position += Vector3.up;
+        GameObject t = Instantiate(trail, halberdPivot);
+        TrailRenderer tr = t.GetComponent<TrailRenderer>();
+        tr.enabled = true;
+        StartCoroutine(Trail(tr));
+        StartCoroutine(StopEmit(tr, 0.3f));
+        StartCoroutine(RotateByEased(-1f, 0.2f, iTween.EaseType.easeOutSine));
+        StartCoroutine(NewParent(halberdPivot, parent, 0.2f));
+        Destroy(t, 2);
+    }
+
     public void Cast(string attack)
     {
         GameObject t = Instantiate(spearTrails, halberd);
@@ -262,9 +277,18 @@ public class Effects : MonoBehaviour
         Destroy(Instantiate(techCharge, chest), 2f);
     }
 
-    public void Block(bool downBeat)
+    public void Block(bool downBeat, bool player)
     {
-        Destroy(Instantiate(downBeat? blockCharge:blockChargeHalf, rightHand), 3f);
+        if (player)
+        {
+            Destroy(Instantiate(downBeat ? blockCharge : blockChargeHalf, rightHand), 3f);
+        }
+        else
+        {
+            GameObject b = Instantiate(downBeat ? blockCharge : blockChargeHalf, halberd);
+            b.transform.position += halberd.forward * 0.7f;
+            Destroy(b, 3f);
+        }
     }
 
     public void Fail()
