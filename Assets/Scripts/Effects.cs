@@ -17,6 +17,7 @@ public class Effects : MonoBehaviour
     public GameObject techCharge;
     public GameObject reloadSparks;
     public GameObject spearTrails;
+    public GameObject thunderStrike;
     public float flashTrailDelay;
     public GameObject flashImpact;
     public GameObject attackCharge;
@@ -28,6 +29,15 @@ public class Effects : MonoBehaviour
     public Transform halberd;
     public Transform halberdPoint;
     public Transform halberdPivot;
+    public Transform net;
+    public Node enemyNode;
+
+    public void Pray()
+    {
+        enemyNode.ChargeHere(0, true, 2f);
+        Destroy(Instantiate(reloadSparks, transform), 5f);
+        Destroy(Instantiate(techCharge, enemy.position + enemy.forward, techCharge.transform.rotation, enemy), 2f);
+    }
 
     public void FixHalberd()
     {
@@ -59,7 +69,7 @@ public class Effects : MonoBehaviour
     IEnumerator StopEmit(TrailRenderer tr, float time)
     {
         yield return new WaitForSeconds(time);
-        tr.emitting = false;
+        if(tr != null) tr.emitting = false;
     }
 
     public void RevertHalberd(float time)
@@ -96,6 +106,113 @@ public class Effects : MonoBehaviour
         StartCoroutine(RotateByEased(1f, 0.2f, iTween.EaseType.easeOutSine));
         StartCoroutine(NewParent(halberdPivot, parent, 0.2f));
         Destroy(t, 2);
+    }
+
+    public void Cast(string attack)
+    {
+        GameObject t = Instantiate(spearTrails, halberd);
+        t.transform.position = Vector3.up * 15;
+        TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer tr in trs)
+        {
+            tr.minVertexDistance = 0.2f;
+            tr.widthMultiplier *= 0.5f;
+            StartCoroutine(Trail(tr));
+            StartCoroutine(StopEmit(tr, 0.3f));
+        }
+        if(attack == "Thunder")
+        {
+            iTween.MoveTo(t, iTween.Hash(
+                "path", new Vector3[3] { halberdPoint.position, halberd.position, enemy.position },
+                "time", 0.2f,
+                "easetype", iTween.EaseType.linear
+                )
+            );
+        }
+        else if(attack == "Storm")
+        {
+            Destroy(Instantiate(attackCharge, enemy.position + enemy.forward, attackCharge.transform.rotation, enemy), 2);
+        }
+
+        iTween.RotateBy(t, iTween.Hash(
+            "amount", Vector3.up * 3,
+            "time", 0.2f,
+            "easetype", iTween.EaseType.easeInCubic)
+        );
+        iTween.ScaleTo(t.transform.GetChild(0).gameObject, iTween.Hash(
+            "scale", Vector3.zero,
+            "time", 0.2f,
+            "easetype", iTween.EaseType.easeInOutQuad)
+        );
+        Destroy(t, 2);
+    }
+
+    public void Storm()
+    {
+        foreach(Transform tr in halberdPivot)
+        {
+            if (tr.parent == halberdPivot)
+            {
+                Destroy(tr.gameObject, 1);
+                Thunder(tr, false);
+            }
+        }
+    }
+
+    private Vector3 RandomVector(float randomness, float height)
+    {
+        return new Vector3(randomness * (Random.value - 0.5f) * 2, height, randomness * (Random.value - 0.5f) * 2);
+    }
+
+    public void CastOnPivot()
+    {
+        Thunder(halberdPivot, true);
+    }
+
+    public void Thunder(Transform pivot, bool reParent)
+    {
+
+        if (reParent)
+        {
+            Transform parent = halberdPivot.parent;
+            StartCoroutine(NewParent(halberdPivot, parent, 0.5f));
+        }
+        halberdPivot.SetParent(null);
+        GameObject t = Instantiate(spearTrails, pivot);
+        t.transform.position = Vector3.up * 20;
+        TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer tr in trs)
+        {
+            tr.minVertexDistance = 0.2f;
+            StartCoroutine(Trail(tr));
+            StartCoroutine(StopEmit(tr, 0.5f));
+        }
+
+        iTween.MoveTo(t, iTween.Hash(
+            "path", new Vector3[3] { pivot.position + RandomVector(3,14), pivot.position + RandomVector(2, 7), pivot.position },
+            "time", 0.1f,
+            "easetype", iTween.EaseType.linear
+            )
+        );
+        iTween.RotateBy(t, iTween.Hash(
+            "amount", Vector3.up * 3,
+            "time", 0.1f,
+            "easetype", iTween.EaseType.easeInCubic)
+        );
+        iTween.ScaleTo(t.transform.GetChild(0).gameObject, iTween.Hash(
+            "scale", Vector3.zero,
+            "time", 0.1f,
+            "easetype", iTween.EaseType.easeInOutQuad)
+        );
+
+        StartCoroutine(ThunderStrikeIn(pivot, 0.1f));
+        Destroy(t, 2);
+    }
+
+    IEnumerator ThunderStrikeIn(Transform pivot, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Instantiate(thunderStrike, pivot);
     }
 
     IEnumerator NewParent(Transform target, Transform newParent, float time)
@@ -200,7 +317,6 @@ public class Effects : MonoBehaviour
         yield return null;
         while (tr != null)
         {
-            print(tr.widthMultiplier);
             tr.widthMultiplier -= Time.deltaTime / fadeTime;
             yield return null;
         }
@@ -211,9 +327,10 @@ public class Effects : MonoBehaviour
         float fadeTime = tr.time;
         Destroy(tr.gameObject, fadeTime);
         yield return null;
+        float multiplier = tr.widthMultiplier;
         while (tr != null)
         {
-            if (tr.widthMultiplier > 0) tr.widthMultiplier -= Time.deltaTime / fadeTime;
+            if (tr.widthMultiplier > 0) tr.widthMultiplier -= multiplier * Time.deltaTime / fadeTime;
             else tr.widthMultiplier = 0;
             yield return null;
         }

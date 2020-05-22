@@ -27,6 +27,10 @@ public class EnemyController : MonoBehaviour
     public float randomness;
     public float cutFixRatio;
     private Animator anim;
+    public int maxThunders;
+    public float healing;
+    public int retaliate;
+    private int phase;
 
     [Header("UI")]
 
@@ -40,6 +44,8 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         health = maxHealth;
+        retaliate = 5;
+        phase = 1;
         currentAction = Action.None;
         anim = GetComponentInChildren<Animator>();
     }
@@ -48,12 +54,18 @@ public class EnemyController : MonoBehaviour
     {
         if (!offbeat)
         {
-            Phase1();
+            Phase3();
         }
         else
         {
             rhythm.ScheduleFunction(3, "RecoverBeat", this);
         }
+    }
+
+    public void NextPhase()
+    {
+        phase++;
+        if (phase == 3) retaliate = 5;
     }
 
     public void Phase1()
@@ -72,29 +84,107 @@ public class EnemyController : MonoBehaviour
             {
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
-                RandomAttack(2f + random - randomness / 2, new int[2] { 1, 2 }); ///////////////////////////////// PONER 0
-                rhythm.ScheduleFunction(2.1f, "GoIdle", this);
+                RandomAttack(2f + random - randomness / 2, new int[2] {0, 3}); ///////////////////////////////// PONER 0
+                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
             }
         }
     }
 
     public void Phase2()
     {
-        if (currentAction == Action.None && rhythm.normalized < 0.05f)
+        if (currentAction == Action.None)
         {
-            currentAction = Action.Attack;
-            float random = Random.value * randomness;
-            //RandomAttack(2f + random - randomness / 2);
-            rhythm.ScheduleFunction(3, "GoIdle", this);
+            if (rhythm.normalized < 0.02f)
+            {
+                currentAction = Action.Attack;
+                float random = Random.value * randomness;
+                RandomAttack(2f + random - randomness / 2, new int[3] { 0, 1, 2 });
+                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+            }
+            else if (rhythm.normalized > 0.98f)
+            {
+                if (player.currentNode.forward == null) //Melee
+                {
+                    if(player.currentAction == Action.Attack)
+                    {
+                        if(Random.value < 0.5f)
+                        {
+                            currentAction = Action.Wait;
+                            rhythm.ScheduleFunction(0.5f, "GoIdle", this);
+                        }
+                        else
+                        {
+                            Counter();
+                        }
+                    }
+                    else
+                    {
+                        currentAction = Action.Tech;
+                        float random = Random.value * randomness;
+                        FireSweep(2f + random - randomness / 2);
+                        rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                    }
+                }
+                else
+                {
+                    if (Random.value < 0.8f && (player.currentAction == Action.Attack || player.currentAction == Action.Block || player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload))
+                    {
+                        Counter();
+                    }
+                }
+            }
         }
+    }
 
-
-        if ( currentAction == Action.None && rhythm.normalized > 0.95f && player.currentNode.forward == null)
+    public void Phase3()
+    {
+        if (currentAction == Action.None)
         {
-            currentAction = Action.Tech;
-            float random = Random.value * randomness;
-            RandomTech(2f + random - randomness / 2);
-            rhythm.ScheduleFunction(3, "GoIdle", this);
+            if (Random.value < 0.8f && (player.currentAction == Action.Attack || player.currentAction == Action.Block || player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload))
+            {
+                if (rhythm.normalized < 0.02f || rhythm.normalized > 0.98f) Counter();
+            }
+            else if (rhythm.normalized < 0.02f)
+            {
+                currentAction = Action.Attack;
+                float random = Random.value * randomness;
+                RandomAttack(2f + random - randomness / 2, new int[3] { 1, 2, 3 });
+                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+            }
+            else if (rhythm.normalized > 0.98f)
+            {
+                if(player.currentAction == Action.Attack)
+                {
+                    currentAction = Action.Wait;
+                    rhythm.ScheduleFunction(0.5f, "GoIdle", this);
+                }
+                else
+                {
+                    float random = Random.value * randomness;
+                    if (player.currentNode.forward == null) //Melee
+                    {
+                        currentAction = Action.Tech;
+                        FireSweep(2f + random - randomness / 2);
+                        rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                    }
+                    else
+                    {
+                        if( health < maxHealth * 0.9f && Random.value * 10 <= retaliate)
+                        {
+                            currentAction = Action.Tech;
+                            Prayer(2f + random - randomness / 2);
+                            retaliate = 0;
+                            rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                        }
+                        else
+                        {
+                            currentAction = Action.Wait;
+                            retaliate = Mathf.Min(retaliate + 1, 10);
+                            rhythm.ScheduleFunction(0.5f, "GoIdle", this);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -102,10 +192,16 @@ public class EnemyController : MonoBehaviour
     {
         currentAction = Action.None;
         iTween.MoveTo(transform.GetChild(0).gameObject, Vector3.zero, 0.2f);
+        StartCoroutine(UpdateCurrentNodeIn(0.2f));
+    }
+
+    IEnumerator UpdateCurrentNodeIn(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         UpdateCurrentNode();
     }
 
-    private void UpdateCurrentNode()
+    public void UpdateCurrentNode()
     {
         Node targetNode = player.currentNode.GetFirstNodeOnThisAxis();
         //Contar nodos hacia la izquierda 
@@ -125,7 +221,7 @@ public class EnemyController : MonoBehaviour
         {
             distance = -(6 - nodes) / 6f;
         }
-        StartCoroutine(RotateByEased(distance, 0.2f + Mathf.Abs(distance), iTween.EaseType.easeInOutQuad));
+        StartCoroutine(RotateByEased(distance, 0.2f + Mathf.Abs(distance/2), iTween.EaseType.easeInOutQuad));
         currentNode = targetNode;
     }
 
@@ -142,9 +238,12 @@ public class EnemyController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
     }
 
-
     public void OffBeat()
     {
+        if(currentAction == Action.Tech)
+        {
+            retaliate = Mathf.Max(retaliate - 1, 0);
+        }
         UIController.PopUpText("OFFBEAT!");
         SetTrigger("offBeat");
         currentAction = Action.None;
@@ -231,44 +330,63 @@ public class EnemyController : MonoBehaviour
         switch (index)
         {
             case 0:
-                Stab(time);
+                Thunder(time);
                 break;
             case 1:
                 Spear(time);
                 break;
             case 2:
-                Swipe(time);
+                Sweep(time);
+                break;
+            case 3:
+                Storm(time);
                 break;
         }
     }
 
-    public void RandomTech(float time)
-    {
-        FireSwipe(time);
-        /*
-        int index = Mathf.FloorToInt(Random.value * 2.99f);
-        switch (index)
-        {
-            case 0:
-                Spear(time);
-                break;
-            case 1:
-                Swipe(time);
-                break;
-            case 2:
-                Stab(time);
-                break;
-        }
-        */
-    }
+
 
     #region Attacks
 
-    public void Stab(float time)
+    public void Thunder(float time)
     {
+        SetTrigger("chargeThunder");
+        Release(time);
+        halberdPivot.position = player.currentNode.transform.position;
         player.currentNode.ChargeHere(damage, false, time);
     }
 
+    public void Storm(float time)
+    {
+        SetTrigger("chargeStorm");
+        Release(time);
+        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 3);
+        List<Node> targets = new List<Node>();
+        targets.Add(player.currentNode);
+        Node node = currentNode;
+        for (int i = 0; i < 3; i++)
+        {
+            if (node != player.currentNode)
+            {
+                targets.Add(node);
+            }
+            targets.Add(node.left);
+            targets.Add(node.right);
+            if (i != 2) node = node.back;
+        }
+        for (int i = 0; i < 9-thunders; i++)
+        {
+            int index = Mathf.FloorToInt(Random.value * (targets.Count-1) * 0.99f) + 1;
+            targets.RemoveAt(index);
+        }
+        foreach(Node n in targets)
+        {
+            GameObject g = new GameObject();
+            g.transform.position = n.transform.position;
+            g.transform.SetParent(halberdPivot);
+            n.ChargeHere(damage, false, time);
+        }
+    }
 
     public void Spear(float time)
     {
@@ -283,7 +401,7 @@ public class EnemyController : MonoBehaviour
         halberdPivot.position = node.transform.position;
     }
 
-    public void Swipe(float time)
+    public void Sweep(float time)
     {
         Node node = player.currentNode;
         SetTrigger("chargeSweep");
@@ -297,7 +415,28 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
-    public void FireSwipe(float time)
+    public void RandomTech(float time, int[] indexes)
+    {
+        int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
+        UpdateCurrentNode();
+        switch (index)
+        {
+            case 0:
+                FireSweep(time);
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+        }
+    }
+
+    public void FireSweep(float time)
     {
         Node node = currentNode;
         for (int i = 0; i < 6; i++)
@@ -305,6 +444,12 @@ public class EnemyController : MonoBehaviour
             node.ChargeHere(damage, true, time);
             node = node.left;
         }
+    }
+
+    public void Prayer(float time)
+    {
+        SetTrigger("chargePray");
+        rhythm.ScheduleFunction(time, "Heal", this);
     }
 
     private void Block()
@@ -368,6 +513,10 @@ public class EnemyController : MonoBehaviour
             {
                 OffBeat();
             }
+            else
+            {
+                retaliate = Mathf.Min(retaliate + 1, 10);
+            }
         }
     }
 
@@ -397,7 +546,11 @@ public class EnemyController : MonoBehaviour
         yield return null;
     }
 
-
+    public void Heal()
+    {
+        health = Mathf.Min(health + Mathf.RoundToInt(healing), maxHealth);
+        StartCoroutine(UpdateHealthBar());
+    }
 
     //------------------------------------------SUCCESS----------------------------------------------
 

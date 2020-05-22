@@ -12,5 +12,6 @@ public enum Action
     Flash,
     Cut,
     Move,
+    Wait,
     None
 }

@@ -719,7 +719,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                print("BACK!");
                 camAnimator.SetTrigger("Backward");
                 SetTrigger("back");
             }
