@@ -86,7 +86,7 @@ public class EnemyController : MonoBehaviour
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
                 RandomAttack(2f + random - randomness / 2, new int[2] {0, 3}); ///////////////////////////////// PONER 0
-                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                rhythm.ScheduleFunction(2f, "GoIdle", this);
             }
         }
     }
@@ -100,7 +100,7 @@ public class EnemyController : MonoBehaviour
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
                 RandomAttack(2f + random - randomness / 2, new int[3] { 0, 1, 2 });
-                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                rhythm.ScheduleFunction(2f, "GoIdle", this);
             }
             else if (rhythm.normalized > 0.98f)
             {
@@ -123,7 +123,7 @@ public class EnemyController : MonoBehaviour
                         currentAction = Action.Tech;
                         float random = Random.value * randomness;
                         FireSweep(2f + random - randomness / 2);
-                        rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                        rhythm.ScheduleFunction(2f, "GoIdle", this);
                     }
                 }
                 else
@@ -150,14 +150,14 @@ public class EnemyController : MonoBehaviour
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
                 RandomAttack(2f + random - randomness / 2, new int[3] { 1, 2, 3 });
-                rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                rhythm.ScheduleFunction(2f, "GoIdle", this);
             }
             else if (rhythm.normalized > 0.98f)
             {
                 if(player.currentAction == Action.Attack)
                 {
                     currentAction = Action.Wait;
-                    rhythm.ScheduleFunction(0.5f, "GoIdle", this);
+                    rhythm.ScheduleFunction(2f, "GoIdle", this);
                 }
                 else
                 {
@@ -166,7 +166,7 @@ public class EnemyController : MonoBehaviour
                     {
                         currentAction = Action.Tech;
                         FireSweep(2f + random - randomness / 2);
-                        rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                        rhythm.ScheduleFunction(2f, "GoIdle", this);
                     }
                     else
                     {
@@ -175,7 +175,7 @@ public class EnemyController : MonoBehaviour
                             currentAction = Action.Tech;
                             Prayer(2f + random - randomness / 2);
                             retaliate = 0;
-                            rhythm.ScheduleFunction(2.2f, "GoIdle", this);
+                            rhythm.ScheduleFunction(2f, "GoIdle", this);
                         }
                         else
                         {
@@ -189,9 +189,94 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void Phase4()
+    {
+        if (currentAction == Action.None)
+        {
+            if (rhythm.normalized < 0.02f)
+            {
+                currentAction = Action.Attack;
+                float random = Random.value * randomness;
+                Random2Combo(2f + random - randomness / 2, new int[1] { 0 });
+                rhythm.ScheduleFunction(3f, "GoIdle", this);
+            }
+        }
+    }
+
+    public void Random2Combo(float time, int[] indexes)
+    {
+        int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
+        UpdateCurrentNode();
+        switch (index)
+        {
+            case 0:
+                StormCombo(time);
+                break;
+            case 1:
+                Spear(time);
+                break;
+            case 2:
+                Sweep(time);
+                break;
+            case 3:
+                Storm(time);
+                break;
+        }
+    }
+
+    public void StormCombo(float time)
+    {
+        SetTrigger("chargeStorm");
+        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 3);
+        PriorityQueue<Node> targets = new PriorityQueue<Node>(5);
+        Node node = currentNode;
+
+        for (int i = 0; i < 6; i++)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                if(node != player.currentNode)
+                {
+                    int distance = Mathf.Abs(player.currentNode.GetIndexInAxis() - j) + i < 3 ? i : 6 - i;
+                    targets.Add(distance, node);
+                }
+                if(j!=2) node = node.back;
+            }
+            node = node.left.GetFirstNodeOnThisAxis();
+        }
+
+        player.currentNode.ChargeHere(damage, false, time);
+        Node aux;
+        for (int i = 0; i < thunders && targets.Count > 0; i++) // First
+        {
+            GameObject g = new GameObject();
+            g.name = "First";
+            print("Firsts: "+ targets.PeekPriority());
+            aux = targets.RemoveMin();
+            g.transform.position = aux.transform.position;
+            g.transform.SetParent(halberdPivot);
+            aux.ChargeHere(damage, false, time);
+        }
+        for (int i = 0; i < thunders && targets.Count > 0; i++) // Second
+        {
+            GameObject g = new GameObject();
+            g.name = "Second";
+            print("Seconds: " + targets.PeekPriority());
+            aux = targets.RemoveMin();
+            g.transform.position = aux.transform.position;
+            g.transform.SetParent(halberdPivot);
+            aux.ChargeHere(damage, true, time, 1);
+        }
+    }
+
+    public void SweepCombo(float time, int startingRing, bool ext)
+    {
+
+    }
+
     public void GoIdle()
     {
-        currentAction = Action.None;
+        currentAction = Action.Wait;
         iTween.MoveTo(transform.GetChild(0).gameObject, Vector3.zero, 0.2f);
         StartCoroutine(UpdateCurrentNodeIn(0.2f));
     }
@@ -199,6 +284,7 @@ public class EnemyController : MonoBehaviour
     IEnumerator UpdateCurrentNodeIn(float delay)
     {
         yield return new WaitForSeconds(delay);
+        currentAction = Action.None;
         UpdateCurrentNode();
     }
 
@@ -456,8 +542,31 @@ public class EnemyController : MonoBehaviour
             node.ChargeHere(damage, true, time);
             node = node.left;
         }
-        halberdPivot.position = player.currentNode.left.transform.position;
+        halberdPivot.position = player.currentNode.left.left.left.transform.position;
     }
+
+    public void RandomAttackPlusTech(float time, int[] indexes)
+    {
+        int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
+        UpdateCurrentNode();
+        switch (index)
+        {
+            case 0:
+                Sweep(time);
+                break;
+            case 1:
+                Spear(time);
+                break;
+            case 2:
+                Sweep(time);
+                break;
+            case 3:
+                Storm(time);
+                break;
+        }
+    }
+
+
 
     private void Block()
     {

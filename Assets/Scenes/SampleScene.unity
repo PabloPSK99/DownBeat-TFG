@@ -2345,7 +2345,7 @@ MonoBehaviour:
     type: 3}
   dust: {fileID: 6791486430178121601, guid: a938a96b16722804ba1d118b57ed1cf3, type: 3}
   flash: {fileID: 7168345058085833649, guid: 6bd036c5b3704244984b0cdfb8956bcf, type: 3}
-  trail: {fileID: 8117850618287104434, guid: 5972bbffe307efa49b9e80e31c5373f9, type: 3}
+  trail: {fileID: 8117850618287104434, guid: e620f7bc135a312499e4754730a4e306, type: 3}
   wideTrail: {fileID: 1589067129911577495, guid: 93f41bfe2fb18f440bdc1dfe27f1de4c,
     type: 3}
   bulletExplosion: {fileID: 6698168915975853005, guid: ea78815f25d64d74da67fa80b6bbc5fa,
@@ -14388,7 +14388,7 @@ PrefabInstance:
     - target: {fileID: 454155369900629212, guid: e620f7bc135a312499e4754730a4e306,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 454155369900629212, guid: e620f7bc135a312499e4754730a4e306,
         type: 3}

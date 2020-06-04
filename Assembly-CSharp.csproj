@@ -77,6 +77,8 @@
     <Compile Include="Assets\Scripts\Rhythm.cs" />
     <Compile Include="Assets\Scripts\Rotate.cs" />
     <Compile Include="Assets\Scripts\Scale.cs" />
+    <Compile Include="Assets\Scripts\Tools\MinHeap.cs" />
+    <Compile Include="Assets\Scripts\Tools\PriotityQueue.cs" />
     <Compile Include="Assets\Scripts\UIController.cs" />
     <None Include="Assets\Resources\Text\C1\T1.txt" />
     <None Include="Assets\Particles\Misc Effects\Prefabs\Readme_Dissolve_Respawn_.txt" />

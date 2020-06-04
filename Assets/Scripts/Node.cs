@@ -43,6 +43,20 @@ public class Node : MonoBehaviour
         return left.left.left.GetFirstNodeOnThisAxis();
     }
 
+    public int GetIndexInAxis()
+    {
+        Node aux = this;
+        for(int i = 2; i >= 0; i--)
+        {
+            if(aux.back == null)
+            {
+                return i;
+            }
+            aux = aux.back;
+        }
+        return 0;
+    }
+
     public void ChargeHere(float damage, bool tech, float time)
     {
         StartCoroutine(AnimateCharge(damage, tech, time));
@@ -50,6 +64,46 @@ public class Node : MonoBehaviour
 
     IEnumerator AnimateCharge(float damage, bool tech, float time)
     {
+        meshRenderer.material = tech ? techMaterial : attackMaterial;
+        if (tech)
+        {
+            iTween.ValueTo(gameObject, iTween.Hash(
+                "from", 0,
+                "to", 1,
+                "time", time,
+                "onupdate", "OnTechUpdate",
+                "oncomplete", "OnAttackComplete",
+                "easetype", iTween.EaseType.linear
+                )
+            );
+        }
+        else
+        {
+            iTween.ValueTo(gameObject, iTween.Hash(
+                "from", 0,
+                "to", 1,
+                "time", time,
+                "onupdate", "OnAttackUpdate",
+                "oncomplete", "OnAttackComplete",
+                "easetype", iTween.EaseType.linear
+                )
+            );
+        }
+        yield return new WaitForSeconds(time);
+        AttackHere(damage, tech);
+
+    }
+
+
+
+    public void ChargeHere(float damage, bool tech, float time, float delay)
+    {
+        StartCoroutine(AnimateCharge(damage, tech, time, delay));
+    }
+
+    IEnumerator AnimateCharge(float damage, bool tech, float time, float delay)
+    {
+        yield return new WaitForSeconds(delay);
         meshRenderer.material = tech ? techMaterial : attackMaterial;
         if (tech)
         {
