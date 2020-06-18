@@ -73,6 +73,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Debug 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""322f3967-cf3c-45bb-9f4b-dfc76b298e82"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Debug 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8599d82-c6e0-4b3d-a67b-706f45d0c8be"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -185,6 +201,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Debug 2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69b572dd-17e8-4a5e-ae01-6de0ada7b0c4"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7fee085-074d-499f-90a3-37b098488263"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -200,6 +238,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Fight_Move = m_Fight.FindAction("Move", throwIfNotFound: true);
         m_Fight_Debug1 = m_Fight.FindAction("Debug 1", throwIfNotFound: true);
         m_Fight_Debug2 = m_Fight.FindAction("Debug 2", throwIfNotFound: true);
+        m_Fight_Debug3 = m_Fight.FindAction("Debug 3", throwIfNotFound: true);
+        m_Fight_Debug4 = m_Fight.FindAction("Debug 4", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -256,6 +296,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Fight_Move;
     private readonly InputAction m_Fight_Debug1;
     private readonly InputAction m_Fight_Debug2;
+    private readonly InputAction m_Fight_Debug3;
+    private readonly InputAction m_Fight_Debug4;
     public struct FightActions
     {
         private @PlayerControls m_Wrapper;
@@ -267,6 +309,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Fight_Move;
         public InputAction @Debug1 => m_Wrapper.m_Fight_Debug1;
         public InputAction @Debug2 => m_Wrapper.m_Fight_Debug2;
+        public InputAction @Debug3 => m_Wrapper.m_Fight_Debug3;
+        public InputAction @Debug4 => m_Wrapper.m_Fight_Debug4;
         public InputActionMap Get() { return m_Wrapper.m_Fight; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -297,6 +341,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Debug2.started -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
                 @Debug2.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
                 @Debug2.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug2;
+                @Debug3.started -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug3;
+                @Debug3.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug3;
+                @Debug3.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug3;
+                @Debug4.started -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug4;
+                @Debug4.performed -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug4;
+                @Debug4.canceled -= m_Wrapper.m_FightActionsCallbackInterface.OnDebug4;
             }
             m_Wrapper.m_FightActionsCallbackInterface = instance;
             if (instance != null)
@@ -322,6 +372,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Debug2.started += instance.OnDebug2;
                 @Debug2.performed += instance.OnDebug2;
                 @Debug2.canceled += instance.OnDebug2;
+                @Debug3.started += instance.OnDebug3;
+                @Debug3.performed += instance.OnDebug3;
+                @Debug3.canceled += instance.OnDebug3;
+                @Debug4.started += instance.OnDebug4;
+                @Debug4.performed += instance.OnDebug4;
+                @Debug4.canceled += instance.OnDebug4;
             }
         }
     }
@@ -335,5 +391,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnDebug1(InputAction.CallbackContext context);
         void OnDebug2(InputAction.CallbackContext context);
+        void OnDebug3(InputAction.CallbackContext context);
+        void OnDebug4(InputAction.CallbackContext context);
     }
 }

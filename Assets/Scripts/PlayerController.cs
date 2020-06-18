@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour
     [Header("VFX")]
     public float shotCameraShake;
     public float plusShotCameraShake;
+    public float damageCameraShake;
+    public float offBeatShake;
 
 
 
@@ -90,6 +92,8 @@ public class PlayerController : MonoBehaviour
 
         controls.Fight.Debug1.started += context => Debug1();
         controls.Fight.Debug2.started += context => Debug2();
+        controls.Fight.Debug3.started += context => Debug3();
+        controls.Fight.Debug4.started += context => Debug4();
     }
 
     private void Update()
@@ -154,25 +158,29 @@ public class PlayerController : MonoBehaviour
             {
                 if (successChance == 100f) //Crítico
                 {
-                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake, 0.25f);
+                    CameraShake(plusShotCameraShake, 0.25f);
                     enemy.GetAttack(damage * 1.5f);
                     FillChamberSlot(false);
                 }
                 else
                 {
                     enemy.GetAttack(damage * successChance / 100);
-                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.15f);
+                    CameraShake(shotCameraShake * successChance / 100, 0.15f);
                 }
             }
             else                          //Ataque a distancia
             {
-                if (successChance == 100f) //Crítico
+                float shootDamage = Shoot();
+                if(shootDamage != 0)
                 {
-                    enemy.GetAttack(Shoot() * 1.5f);
-                }
-                else
-                {
-                    enemy.GetAttack(Shoot() * successChance / 100);
+                    if (successChance == 100f) //Crítico
+                    {
+                        enemy.GetAttack(shootDamage * 1.5f);
+                    }
+                    else
+                    {
+                        enemy.GetAttack(shootDamage * successChance / 100);
+                    }
                 }
             }
         }
@@ -201,11 +209,11 @@ public class PlayerController : MonoBehaviour
                 {
                     if(successChance == 100)
                     {
-                        iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * 1.5f, 0.25f);
+                        CameraShake(plusShotCameraShake * 1.5f, 0.25f);
                     }
                     else
                     {
-                        iTween.ShakePosition(mainCamera.gameObject, Vector3.one * plusShotCameraShake * successChance / 100, 0.25f);
+                        CameraShake(plusShotCameraShake * successChance / 100, 0.25f);
                     }
                     effects.Bullet(true);
                     bulletDamage *= 2;
@@ -214,7 +222,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     effects.Bullet(false);
-                    iTween.ShakePosition(mainCamera.gameObject, Vector3.one * shotCameraShake * successChance / 100, 0.15f);
+                    CameraShake(shotCameraShake * successChance / 100, 0.15f);
                 }
                 StartCoroutine(BurnBullet(i));
                 chamber[i] = Bullet.Empty;
@@ -365,8 +373,14 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
+                    CameraShake(plusShotCameraShake * 1.5f, 0.25f);
+                }
+                else
+                {
+                    CameraShake(plusShotCameraShake * successChance / 100, 0.15f);
                 }
                 enemy.GetTech(damage * successChance / 100);
+
                 targetNode = currentNode.GetLastNodeOnThisAxis();
                 StartCoroutine(TwirlToTarget());
             }
@@ -376,6 +390,11 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
+                    CameraShake(plusShotCameraShake * 1.5f, 0.25f);
+                }
+                else
+                {
+                    CameraShake(plusShotCameraShake * successChance / 100, 0.15f);
                 }
                 enemy.GetTech(damage * successChance / 100);
                 targetNode = currentNode.GetFirstNodeOnOppositeAxis();
@@ -426,7 +445,6 @@ public class PlayerController : MonoBehaviour
 
     private void Reload(int bullets)
     {
-        print("BULLETS:  " + bullets);
         StartCoroutine(ReloadCoroutine(bullets));
     }
 
@@ -530,8 +548,9 @@ public class PlayerController : MonoBehaviour
         charged = false;
         offBeat = true;
         rhythm.OffBeat(true);
+        CameraShake(offBeatShake, 0.35f);
 
-        if(currentNode.forward == null)
+        if (currentNode.forward == null)
         {
             camAnimator.SetTrigger("Inner");
         }
@@ -576,9 +595,11 @@ public class PlayerController : MonoBehaviour
 
     public void GetDamage(float damage)
     {
+        CameraShake(damageCameraShake * damage, 0.15f);
         UIController.PopUpNumber(damage, NumberType.Damage, damageToBlock > enemy.damage);
         health = Mathf.Max(health - Mathf.RoundToInt(damage), 0);
         StartCoroutine(UpdateHealthBar());
+        enemy.CancelSpearCombo();
     }
 
     public void Heal(float healing)
@@ -854,6 +875,28 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Disable();
     }
 
+    public void CameraShake(float intensity, float duration)
+    {
+        Vector3 cameraPosition = mainCamera.transform.position;
+        if(iTween.Count("shake") == 0)
+        {
+            iTween.ShakePosition(mainCamera.gameObject, iTween.Hash(
+                "name", "shake",
+                "amount", Vector3.one * intensity,
+                "time", duration,
+                "oncomplete", "OnCompleteCameraShake",
+                "oncompleteparams", cameraPosition
+                )
+            );
+        }
+    }
+
+    private void OnCompleteCameraShake(Vector3 cameraPosition)
+    {
+        mainCamera.transform.position = cameraPosition;
+    }
+
+
     private void SetTrigger(string trigger)
     {
         foreach (AnimatorControllerParameter parameter in charAnimator.parameters)
@@ -912,6 +955,16 @@ public class PlayerController : MonoBehaviour
     void Debug2()
     {
         Heal(maxHealth);
+    }
+
+    void Debug3()
+    {
+        Debug.Break();
+    }
+
+    void Debug4()
+    {
+        enemy.NextPhase();
     }
     #endregion
 }

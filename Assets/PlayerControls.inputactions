@@ -60,6 +60,22 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Debug 3",
+                    "type": "Button",
+                    "id": "322f3967-cf3c-45bb-9f4b-dfc76b298e82",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Debug 4",
+                    "type": "Button",
+                    "id": "e8599d82-c6e0-4b3d-a67b-706f45d0c8be",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -170,6 +186,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Debug 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69b572dd-17e8-4a5e-ae01-6de0ada7b0c4",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Debug 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7fee085-074d-499f-90a3-37b098488263",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Debug 4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

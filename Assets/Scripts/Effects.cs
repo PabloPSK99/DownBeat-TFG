@@ -17,7 +17,9 @@ public class Effects : MonoBehaviour
     public GameObject techCharge;
     public GameObject reloadSparks;
     public GameObject spearTrails;
+    public GameObject spearTechTrails;
     public GameObject thunderStrike;
+    public GameObject thunderStrikeTech;
     public float flashTrailDelay;
     public GameObject flashImpact;
     public GameObject attackCharge;
@@ -31,6 +33,7 @@ public class Effects : MonoBehaviour
     public Transform halberdPivot;
     public Transform net;
     public Node enemyNode;
+    private List<IEnumerator> secondStorm = new List<IEnumerator>();
 
     public void Pray()
     {
@@ -39,10 +42,10 @@ public class Effects : MonoBehaviour
         Destroy(Instantiate(techCharge, enemy.position + enemy.forward, techCharge.transform.rotation, enemy), 2f);
     }
 
-    public void FixHalberd()
+    public void FixHalberd(string isTech)
     {
         StartCoroutine(FixHalberdWhile(0.2f));
-        GameObject t = Instantiate(spearTrails, halberd);
+        GameObject t = isTech == "Tech"? Instantiate(spearTechTrails, halberd) : Instantiate(spearTrails, halberd);
         TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
         foreach (TrailRenderer tr in trs)
         {
@@ -174,6 +177,44 @@ public class Effects : MonoBehaviour
         }
     }
 
+    public void StormCombo()
+    {
+        foreach (Transform tr in halberdPivot)
+        {
+            if (tr.parent == halberdPivot)
+            {
+                if(tr.name == "First")
+                {
+                    Destroy(tr.gameObject, 1);
+                    Thunder(tr, false);
+                }
+                else if(tr.name == "Second")
+                {
+                    Destroy(tr.gameObject, 2);
+                    secondStorm.Add(ThunderAfter(1, tr));
+                    print("inicio corrutina rayos 2");
+                    
+                }
+            }
+        }
+        foreach(IEnumerator cr in secondStorm)
+        {
+            StartCoroutine(cr);
+        }
+    }
+
+    public void CancelSecondStorm()
+    {
+        print("cancel corrutina rayos 2");
+        if (secondStorm.Count > 0)
+        {
+            foreach (IEnumerator cr in secondStorm)
+            {
+                StopCoroutine(cr);
+            }
+        }
+    }
+
     private Vector3 RandomVector(float randomness, float height)
     {
         return new Vector3(randomness * (Random.value - 0.5f) * 2, height, randomness * (Random.value - 0.5f) * 2);
@@ -184,7 +225,13 @@ public class Effects : MonoBehaviour
         Thunder(halberdPivot, true);
     }
 
-    public void Thunder(Transform pivot, bool reParent)
+    IEnumerator ThunderAfter(float delay, Transform pivot)
+    {
+        yield return new WaitForSeconds(delay);
+        Thunder(pivot, false, true);
+    }
+
+    public void Thunder(Transform pivot, bool reParent, bool tech)
     {
 
         if (reParent)
@@ -193,7 +240,15 @@ public class Effects : MonoBehaviour
             StartCoroutine(NewParent(halberdPivot, parent, 0.5f));
         }
         halberdPivot.SetParent(null);
-        GameObject t = Instantiate(spearTrails, pivot);
+        GameObject t;
+        if (tech)
+        {
+            t = Instantiate(spearTechTrails, pivot);
+        }
+        else
+        {
+            t = Instantiate(spearTrails, pivot);
+        }
         t.transform.position = Vector3.up * 20;
         TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
         foreach (TrailRenderer tr in trs)
@@ -220,14 +275,62 @@ public class Effects : MonoBehaviour
             "easetype", iTween.EaseType.easeInOutQuad)
         );
 
-        StartCoroutine(ThunderStrikeIn(pivot, 0.1f));
+        StartCoroutine(ThunderStrikeIn(pivot, 0.1f, tech));
         Destroy(t, 2);
     }
 
-    IEnumerator ThunderStrikeIn(Transform pivot, float delay)
+    public void Thunder(Transform pivot, bool reParent)
+    {
+
+        if (reParent)
+        {
+            Transform parent = halberdPivot.parent;
+            StartCoroutine(NewParent(halberdPivot, parent, 0.5f));
+        }
+        halberdPivot.SetParent(null);
+        GameObject t = Instantiate(spearTrails, pivot);
+        t.transform.position = Vector3.up * 20;
+        TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
+        foreach (TrailRenderer tr in trs)
+        {
+            tr.minVertexDistance = 0.2f;
+            StartCoroutine(Trail(tr));
+            StartCoroutine(StopEmit(tr, 0.5f));
+        }
+
+        iTween.MoveTo(t, iTween.Hash(
+            "path", new Vector3[3] { pivot.position + RandomVector(3, 14), pivot.position + RandomVector(2, 7), pivot.position },
+            "time", 0.1f,
+            "easetype", iTween.EaseType.linear
+            )
+        );
+        iTween.RotateBy(t, iTween.Hash(
+            "amount", Vector3.up * 3,
+            "time", 0.1f,
+            "easetype", iTween.EaseType.easeInCubic)
+        );
+        iTween.ScaleTo(t.transform.GetChild(0).gameObject, iTween.Hash(
+            "scale", Vector3.zero,
+            "time", 0.1f,
+            "easetype", iTween.EaseType.easeInOutQuad)
+        );
+
+        StartCoroutine(ThunderStrikeIn(pivot, 0.1f, false));
+        Destroy(t, 2);
+    }
+
+    IEnumerator ThunderStrikeIn(Transform pivot, float delay, bool isTech)
     {
         yield return new WaitForSeconds(delay);
-        Instantiate(thunderStrike, pivot);
+        if (isTech)
+        {
+            Instantiate(thunderStrikeTech, pivot);
+            secondStorm.Clear();
+        }
+        else
+        {
+            Instantiate(thunderStrike, pivot);
+        }
     }
 
     IEnumerator NewParent(Transform target, Transform newParent, float time)

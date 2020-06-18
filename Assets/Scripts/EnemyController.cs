@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
     public float healing;
     public int retaliate;
     private int phase;
+    private bool cancelThrustCombo;
 
     [Header("UI")]
 
@@ -55,7 +56,23 @@ public class EnemyController : MonoBehaviour
     {
         if (!offbeat)
         {
-            Phase3();
+            switch (phase)
+            {
+                case 1:
+                    Phase1();
+                    break;
+                case 2:
+                    Phase2();
+                    break;
+                case 3:
+                    Phase3();
+                    break;
+                case 4:
+                    Phase4();
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
@@ -65,8 +82,12 @@ public class EnemyController : MonoBehaviour
 
     public void NextPhase()
     {
-        phase++;
-        if (phase == 3) retaliate = 5;
+        if(phase <= 3)
+        {
+            phase++;
+            if (phase == 3) retaliate = 5;
+        }
+        print("PHASE: " + phase);
     }
 
     public void Phase1()
@@ -85,7 +106,7 @@ public class EnemyController : MonoBehaviour
             {
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
-                RandomAttack(2f + random - randomness / 2, new int[2] {0, 3}); ///////////////////////////////// PONER 0
+                RandomAttack(2f + random - randomness / 2, new int[2] {0, 1});
                 rhythm.ScheduleFunction(2f, "GoIdle", this);
             }
         }
@@ -197,8 +218,8 @@ public class EnemyController : MonoBehaviour
             {
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
-                Random2Combo(2f + random - randomness / 2, new int[1] { 0 });
-                rhythm.ScheduleFunction(3f, "GoIdle", this);
+                //Random2Combo(2f + random - randomness / 2, new int[3] {0, 1, 2 });
+                Random2Combo(2f + random - randomness / 2, new int[1] { 0});
             }
         }
     }
@@ -206,17 +227,20 @@ public class EnemyController : MonoBehaviour
     public void Random2Combo(float time, int[] indexes)
     {
         int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
-        UpdateCurrentNode();
         switch (index)
         {
             case 0:
+                UpdateCurrentNode();
                 StormCombo(time);
+                rhythm.ScheduleFunction(3f, "GoIdle", this);
                 break;
             case 1:
-                Spear(time);
+                SpearCombo(time);
                 break;
             case 2:
-                Sweep(time);
+                UpdateCurrentNode();
+                SweepCombo(time);
+                rhythm.ScheduleFunction(4f, "GoIdle", this);
                 break;
             case 3:
                 Storm(time);
@@ -224,12 +248,86 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void SpearCombo(float time)
+    {
+        SetTrigger("chargeThrust");
+        StartCoroutine(SpearComboCoroutine(time));
+    }
+
+    IEnumerator SpearComboCoroutine(float time)
+    {
+        //bool clockwise = Random.value < 0.5f;
+        bool clockwise = true;
+        cancelThrustCombo = false;
+        int thrusts = Mathf.FloorToInt(Random.value * 2.99f) + 4; //3-6
+        int committedThrusts = 0; 
+        if (clockwise)
+        {
+            UpdateCurrentNode(currentNode.right);
+            Node node = currentNode;
+            for (int i= 0; i< thrusts+2; i++)
+            {
+                if (i < thrusts && !cancelThrustCombo)
+                {
+                    Spear(time, node, i % 2 != 0);
+                    committedThrusts++;
+                    node = node.left;
+                }
+                if (i>1 && i<=committedThrusts+1)
+                {
+                    if(i <= committedThrusts) StartCoroutine(UpdateCurrentNodeIn(0.5f, currentNode.left));
+                    halberdPivot.position = currentNode.GetLastNodeOnThisAxis().transform.position;
+                    SetTrigger("releaseCombo");
+                }
+                if (i <= committedThrusts)
+                {
+                    yield return new WaitForSeconds(1);
+                }
+            }
+        }
+        else
+        {
+            UpdateCurrentNode(currentNode.left);
+            Node node = currentNode;
+            for (int i = 0; i < thrusts + 2; i++)
+            {
+                if (i < thrusts && !cancelThrustCombo)
+                {
+                    Spear(time, node, i % 2 != 0);
+                    committedThrusts++;
+                    node = node.right;
+                }
+                if (i > 1 && i <= committedThrusts + 1)
+                {
+                    if (i <= committedThrusts) StartCoroutine(UpdateCurrentNodeIn(0.5f, currentNode.right));
+                    halberdPivot.position = currentNode.GetLastNodeOnThisAxis().transform.position;
+                    SetTrigger("releaseCombo");
+                }
+                if (i <= committedThrusts)
+                {
+                    yield return new WaitForSeconds(1);
+                }
+            }
+        }
+        yield return new WaitForSeconds(1);
+        GoIdle();
+    }
+
+    public void CancelSpearCombo()
+    {
+        if(!cancelThrustCombo)
+        {
+            cancelThrustCombo = true;
+        }
+    }
+
     public void StormCombo(float time)
     {
         SetTrigger("chargeStorm");
-        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 3);
+        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 2.9f);
         PriorityQueue<Node> targets = new PriorityQueue<Node>(5);
         Node node = currentNode;
+        StartCoroutine(StormComboAnimation(time));
 
         for (int i = 0; i < 6; i++)
         {
@@ -269,9 +367,37 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void SweepCombo(float time, int startingRing, bool ext)
+    IEnumerator StormComboAnimation(float time)
     {
+        yield return new WaitForSeconds(time);
+        effects.StormCombo();
+        SetTrigger("releaseCombo");
+        yield return new WaitForSeconds(1);
+        SetTrigger("releaseCombo");
+    }
 
+    public void SweepCombo(float time)
+    {
+        bool growing = Random.value < 0.5f;
+        SetTrigger("chargeSweep");
+        if (growing)
+        {
+            Node node = currentNode;
+            for(int i = 0; i<3; i++)
+            {
+                StartCoroutine(SweepAfter(i, time, node, i == 1));
+                if (node.back != null) node = node.back;
+            }
+        }
+        else
+        {
+            Node node = currentNode.GetLastNodeOnThisAxis();
+            for (int i = 0; i < 3; i++)
+            {
+                StartCoroutine(SweepAfter(i, time, node, i == 1));
+                if (node.forward != null) node = node.forward;
+            }
+        }
     }
 
     public void GoIdle()
@@ -312,6 +438,35 @@ public class EnemyController : MonoBehaviour
         currentNode = targetNode;
     }
 
+    IEnumerator UpdateCurrentNodeIn(float delay, Node targetNode)
+    {
+        yield return new WaitForSeconds(delay);
+        UpdateCurrentNode(targetNode);
+    }
+
+    public void UpdateCurrentNode(Node targetNode)
+    {
+        //Contar nodos hacia la izquierda 
+        int nodes = 0;
+        Node aux = currentNode;
+        while (aux != targetNode)
+        {
+            aux = aux.left;
+            nodes++;
+        }
+        float distance;
+        if (nodes <= 3)
+        {
+            distance = nodes / 6f;
+        }
+        else
+        {
+            distance = -(6 - nodes) / 6f;
+        }
+        StartCoroutine(RotateByEased(distance, 0.2f + Mathf.Abs(distance / 2), iTween.EaseType.easeInOutQuad));
+        currentNode = targetNode;
+    }
+
     IEnumerator RotateByEased(float rotation, float duration, iTween.EaseType easetype)
     {
         float lastRotation = transform.rotation.eulerAngles.y;
@@ -333,6 +488,8 @@ public class EnemyController : MonoBehaviour
         }
         UIController.PopUpText("OFFBEAT!");
         SetTrigger("offBeat");
+        effects.CancelSecondStorm();
+        player.CameraShake(player.offBeatShake, 0.1f);
         currentAction = Action.None;
         offbeat = true;
         Node node = currentNode;
@@ -448,7 +605,7 @@ public class EnemyController : MonoBehaviour
     {
         SetTrigger("chargeStorm");
         Release(time);
-        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 3);
+        int thunders = maxThunders - Mathf.FloorToInt(Random.value * 2.9f);
         List<Node> targets = new List<Node>();
         targets.Add(player.currentNode);
         Node node = currentNode;
@@ -489,6 +646,16 @@ public class EnemyController : MonoBehaviour
         halberdPivot.position = node.transform.position;
     }
 
+    public void Spear(float time, Node targetNode, bool isTech)
+    {
+        Node node = targetNode;
+        for (int i = 0; i < 3; i++)
+        {
+            node.ChargeHere(damage, isTech, time);
+            if (i != 2) node = node.back;
+        }
+    }
+
     public void Sweep(float time)
     {
         Node node = player.currentNode;
@@ -500,6 +667,20 @@ public class EnemyController : MonoBehaviour
             node = node.left;
         }
         halberdPivot.position = player.currentNode.right.transform.position;
+    }
+
+    IEnumerator SweepAfter(float delay, float time, Node targetNode, bool isTech)
+    {
+        yield return new WaitForSeconds(delay);
+        Node node = targetNode;
+        for (int i = 0; i < 6; i++)
+        {
+            node.ChargeHere(damage, isTech, time);
+            node = node.left;
+        }
+        yield return new WaitForSeconds(time);
+        SetTrigger("releaseCombo");
+        halberdPivot.position = isTech? targetNode.left.transform.position : targetNode.right.transform.position;
     }
 
     #endregion
@@ -691,9 +872,6 @@ public class EnemyController : MonoBehaviour
         }
         return true;
     }
-
-
-
 
     private void SetTrigger(string trigger)
     {

@@ -2364,7 +2364,11 @@ MonoBehaviour:
     type: 3}
   spearTrails: {fileID: 3512392058916512499, guid: 15e6a82a23c22f34fbee8c78559d192b,
     type: 3}
+  spearTechTrails: {fileID: 3512392058916512499, guid: 45f26936f244a894cbd45fde7aa0d520,
+    type: 3}
   thunderStrike: {fileID: 6698168915975853005, guid: 6794ecfc250bb1346877f8cd5ad1cc7e,
+    type: 3}
+  thunderStrikeTech: {fileID: 6698168915975853005, guid: 2cf2385974542594291728f63f57b460,
     type: 3}
   flashTrailDelay: 1.2
   flashImpact: {fileID: 6698168915975853005, guid: ddc10109b6642984ebb62535a4193241,
@@ -3828,7 +3832,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 619cd776cf0be9f49a2f7ae67c04b86c, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -3940,7 +3944,7 @@ MonoBehaviour:
   dotGlowColor: {r: 0.6179246, g: 1, b: 0.99752825, a: 1}
   outGlowColor: {r: 1, g: 0.83773583, b: 0.3915094, a: 1}
   bpm: 60
-  timeOffset: 1
+  timeOffset: 0.8
   normalized: 0
   transitionTime: 0.5
   aberrationThreshold: 0.9
@@ -4547,6 +4551,8 @@ MonoBehaviour:
   burnBulletTime: 0.2
   shotCameraShake: 0.15
   plusShotCameraShake: 0.3
+  damageCameraShake: 0.03
+  offBeatShake: 0.3
 --- !u!4 &822340551
 Transform:
   m_ObjectHideFlags: 0
@@ -5331,7 +5337,9 @@ MonoBehaviour:
   reloadSparks: {fileID: 218796685131168862, guid: c84802de1e70b3a40978fd7936940a13,
     type: 3}
   spearTrails: {fileID: 0}
+  spearTechTrails: {fileID: 0}
   thunderStrike: {fileID: 0}
+  thunderStrikeTech: {fileID: 0}
   flashTrailDelay: 1.2
   flashImpact: {fileID: 6698168915975853005, guid: ddc10109b6642984ebb62535a4193241,
     type: 3}

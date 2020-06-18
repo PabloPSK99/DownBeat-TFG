@@ -10,6 +10,7 @@ public class Node : MonoBehaviour
     public Node back;
     private PlayerController player;
     private Rhythm rhythm;
+    private float successChanceThreshold;
 
     MeshRenderer meshRenderer;
     Material basicMaterial;
@@ -20,6 +21,7 @@ public class Node : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         rhythm = GameObject.FindGameObjectWithTag("Rhythm").GetComponent<Rhythm>();
+        successChanceThreshold = player.enemy.successChanceThreshold;
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         basicMaterial = meshRenderer.material;
         attackMaterial = Resources.Load<Material>("Materials/AttackTile");
@@ -41,6 +43,12 @@ public class Node : MonoBehaviour
     public Node GetFirstNodeOnOppositeAxis()
     {
         return left.left.left.GetFirstNodeOnThisAxis();
+    }
+
+    public bool isOnThisAxis(Node node)
+    {
+        Node firstNode = GetFirstNodeOnThisAxis();
+        return node == firstNode || node == firstNode.back || firstNode.back.back;
     }
 
     public int GetIndexInAxis()
@@ -160,8 +168,7 @@ public class Node : MonoBehaviour
 
     public void AttackHere(float damage, bool tech)
     {
-        float successChance = Mathf.Min(1, (0.5f - rhythm.normalized) * 2);
-        //print(successChance * 100f + "%  (attack)");
+        float successChance = Mathf.Min(1, (0.5f - rhythm.normalized) * 2 * (1 + successChanceThreshold/100f));
         if (player.currentNode == this)
         {
             if (tech)
@@ -170,8 +177,8 @@ public class Node : MonoBehaviour
             }
             else
             {
-                
-                if (successChance > 0.99f)
+                print(successChance * 100f + "%  (attack)");
+                if (successChance == 1)
                 {
                     player.GetAttack(damage * 1.5f);
                 }

@@ -118,8 +118,8 @@ public class Rhythm : MonoBehaviour
 
     IEnumerator Loop()
     {
-        audioSource.PlayScheduled(timeOffset + beatDuration);
-        yield return new WaitForSeconds(timeOffset);
+        audioSource.PlayDelayed(beatDuration);
+        yield return new WaitForSeconds(beatDuration + timeOffset);
         lastTimeStamp = audioSource.time;
         while (true)
         {
@@ -211,11 +211,11 @@ public class Rhythm : MonoBehaviour
         float offset = (lastTimeStamp + beatDuration + syncCorrection) - audioSource.time; //tiempo esperado - tiempo real
         //print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
         lastTimeStamp = audioSource.time;
-        if(offset > 30) // Si la canción ha vuelto a empezar
+        if(Mathf.Abs(offset) > 5)
         {
-            syncCorrection = -audioSource.time;
+            syncCorrection = offset - (Mathf.Floor(offset / beatDuration) * beatDuration);
         }
-        else                    // Si no
+        else
         {
             syncCorrection = offset;
         }
