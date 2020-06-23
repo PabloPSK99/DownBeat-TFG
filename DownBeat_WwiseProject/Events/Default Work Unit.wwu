@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Music" ID="{1FE5F0D1-CDA2-48D6-8DFA-9CE2AD714A63}">
+					<ChildrenList>
+						<Action Name="" ID="{8B496A90-9166-41BD-BE63-B3C7BE528E46}" ShortID="794981602">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Bound by a Terrible Fate (Corrected &amp; Compressed)" ID="{8BEDE02D-ACFA-4959-ACDD-FE9041886BBA}" WorkUnitID="{468618D6-F11C-4CB1-9B01-DF259BE1E58A}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

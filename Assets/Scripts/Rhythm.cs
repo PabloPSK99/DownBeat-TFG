@@ -10,10 +10,6 @@ public class Rhythm : MonoBehaviour
     public PlayerController player;
     public PostProcessVolume postVolume;
     public Image flashPanel;
-    
-
-    [Header("Audio")]
-    public AudioSource audioSource;
 
     [Header("Circles")]
     public Image circle;
@@ -118,9 +114,10 @@ public class Rhythm : MonoBehaviour
 
     IEnumerator Loop()
     {
-        audioSource.PlayDelayed(beatDuration);
+        yield return new WaitForSeconds(1);
+        AkSoundEngine.PostEvent("Music", gameObject);
         yield return new WaitForSeconds(beatDuration + timeOffset);
-        lastTimeStamp = audioSource.time;
+        lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
         while (true)
         {
             yield return CircleShrink();
@@ -208,9 +205,9 @@ public class Rhythm : MonoBehaviour
 
     private void FixSync()
     {
-        float offset = (lastTimeStamp + beatDuration + syncCorrection) - audioSource.time; //tiempo esperado - tiempo real
-        //print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + audioSource.time);
-        lastTimeStamp = audioSource.time;
+        float offset = (lastTimeStamp + beatDuration + syncCorrection) - AkSoundEngine.GetTimeStamp() / 1000f; //tiempo esperado - tiempo real
+        print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + AkSoundEngine.GetTimeStamp() / 1000f);
+        lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
         if(Mathf.Abs(offset) > 5)
         {
             syncCorrection = offset - (Mathf.Floor(offset / beatDuration) * beatDuration);
