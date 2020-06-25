@@ -82,6 +82,7 @@ public class Rhythm : MonoBehaviour
         this.offBeat = offBeat;
         if(offBeat)
         {
+            AkSoundEngine.PostEvent("OffBeat", gameObject);
             dot.color = offBeatColor;
             externalCircle.color = offBeatColor;
             circle.color = offBeatColor;

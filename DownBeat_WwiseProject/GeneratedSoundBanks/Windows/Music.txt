@@ -1,4 +1,5 @@
 Event	ID	Name			Wwise Object Path	Notes
+	2794812192	OffBeat			\Default Work Unit\OffBeat	
 	3991942870	Music			\Default Work Unit\Music	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size

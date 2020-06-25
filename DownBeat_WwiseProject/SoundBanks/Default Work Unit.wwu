@@ -11,6 +11,7 @@
 				<SoundBank Name="Music" ID="{A2C7A19E-ED68-46C5-A2A8-01735100013C}">
 					<ObjectInclusionList>
 						<ObjectRef Name="Music" ID="{1FE5F0D1-CDA2-48D6-8DFA-9CE2AD714A63}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="OffBeat" ID="{8A008B91-869B-48F2-BCB3-EDEB2833B56B}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

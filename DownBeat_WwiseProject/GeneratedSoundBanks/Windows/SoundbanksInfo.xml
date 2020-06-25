@@ -34,6 +34,7 @@
 						</File>
 					</IncludedMemoryFiles>
 				</Event>
+				<Event Id="2794812192" Name="OffBeat" ObjectPath="\Events\Default Work Unit\OffBeat" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
 			</IncludedEvents>
 		</SoundBank>
 	</SoundBanks>

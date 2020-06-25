@@ -8,9 +8,15 @@
 						<Action Name="" ID="{8B496A90-9166-41BD-BE63-B3C7BE528E46}" ShortID="794981602">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Bound by a Terrible Fate (Corrected &amp; Compressed)" ID="{8BEDE02D-ACFA-4959-ACDD-FE9041886BBA}" WorkUnitID="{468618D6-F11C-4CB1-9B01-DF259BE1E58A}"/>
+									<ObjectRef Name="Bound by a Terrible Fate (Corrected &amp; Compressed)" ID="{C95C6A21-F8FD-463C-B9C6-A0B80D316737}" WorkUnitID="{3C6D000B-ADB3-43A3-BD6B-E93257C539C5}"/>
 								</Reference>
 							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{D35B15CF-5372-4DE8-8D59-81CC51A89CCC}" ShortID="25717354">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="35"/>
+							</PropertyList>
+							<ReferenceList/>
 						</Action>
 					</ChildrenList>
 				</Event>
