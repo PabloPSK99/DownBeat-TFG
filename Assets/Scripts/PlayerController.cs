@@ -34,10 +34,12 @@ public class PlayerController : MonoBehaviour
     [Header("Actions")]
     public Action currentAction;
     public bool charged;
+    public bool nearlyLoaded;
     public float jumpHeight;
     private Bullet[] chamber;
     public float damageToBlock;
     public float maxBlockableRatio;
+    private IEnumerator load;
 
     [Header("UI")]
     public Image healthBar;
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
             //Shoot();
         }
         currentAction = Action.None;
+        load = Load();
 
         controls = new PlayerControls();
 
@@ -116,6 +119,7 @@ public class PlayerController : MonoBehaviour
         if (!rhythm.beatLocked && CheckSuccess() && rhythm.IsDownBeat())
         {
             currentAction = Action.Attack;
+            StartLoading();
             charged = true;
             if (currentNode.forward == null)  //Ataque Melee
             {
@@ -190,6 +194,7 @@ public class PlayerController : MonoBehaviour
             {
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
+                ResetLoading();
                 SetTrigger("fail");
                 effects.Fail();
             }
@@ -245,6 +250,7 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Block);
             currentAction = Action.Block;
             charged = true;
+            StartLoading();
             effects.Block(rhythm.IsDownBeat(), true);
         }
         else
@@ -270,6 +276,7 @@ public class PlayerController : MonoBehaviour
                 SetTrigger("fail");
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
+                ResetLoading();
             }
             charged = false;
         }
@@ -309,6 +316,7 @@ public class PlayerController : MonoBehaviour
         }
         charged = false;
         currentAction = Action.None;
+        ResetLoading();
     }
 #endregion
 
@@ -338,6 +346,7 @@ public class PlayerController : MonoBehaviour
                 effects.Reload();
                 StartCoroutine(WaitForTechCorrection(0.2f));
             }
+            StartLoading();
             charged = true;
         }
         else
@@ -411,6 +420,7 @@ public class PlayerController : MonoBehaviour
                 UIController.PopUpText("FAIL!");
                 effects.Fail();
                 currentAction = Action.None;
+                ResetLoading();
             }
         }
         charged = false;
@@ -545,6 +555,7 @@ public class PlayerController : MonoBehaviour
     {
         SetTrigger("offBeat");
         currentAction = Action.None;
+        ResetLoading();
         charged = false;
         offBeat = true;
         rhythm.OffBeat(true);
@@ -705,6 +716,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
                 currentAction = Action.None;
+                ResetLoading();
             }
         }
         else
@@ -870,7 +882,7 @@ public class PlayerController : MonoBehaviour
         controls.Fight.Enable();
     }
 
-    private void OnDisable()
+    public void DisableFightControls()
     {
         controls.Fight.Disable();
     }
@@ -897,7 +909,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void SetTrigger(string trigger)
+    public void SetTrigger(string trigger)
     {
         foreach (AnimatorControllerParameter parameter in charAnimator.parameters)
         {
@@ -944,7 +956,30 @@ public class PlayerController : MonoBehaviour
         {
             currentAction = Action.None;
             SetTrigger("fail");
+            ResetLoading();
         }
+    }
+
+    private void StartLoading()
+    {
+        ResetLoading();
+        load = Load();
+        StartCoroutine(load);
+    }
+
+    private void ResetLoading()
+    {
+        nearlyLoaded = false;
+        if (load != null)
+        {
+            StopCoroutine(load);
+        }
+    }
+
+    IEnumerator Load()
+    {
+        yield return new WaitForSeconds(1.4f);
+        nearlyLoaded = true;
     }
 
     public void SetIntroTrigger()

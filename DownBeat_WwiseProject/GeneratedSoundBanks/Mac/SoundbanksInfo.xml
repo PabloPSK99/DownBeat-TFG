@@ -16,10 +16,170 @@
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="2385628198" Language="SFX">
-			<ObjectPath>\SoundBanks\Default Work Unit\Footsteps</ObjectPath>
-			<ShortName>Footsteps</ShortName>
-			<Path>Footsteps.bnk</Path>
+		<SoundBank Id="3991942870" Language="SFX">
+			<ObjectPath>\SoundBanks\Default Work Unit\Music</ObjectPath>
+			<ShortName>Music</ShortName>
+			<Path>Music.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3991942870" Name="Music" ObjectPath="\Events\Default Work Unit\Music" DurationType="Infinite">
+					<IncludedMemoryFiles>
+						<File Id="58490247" Language="SFX">
+							<ShortName>08-Phase3\BBATF_Phase3_2-50-5.wav</ShortName>
+							<Path>SFX\08-Phase3\BBATF_Phase3_2-50-5_D79FB2B7.wem</Path>
+						</File>
+						<File Id="64082900" Language="SFX">
+							<ShortName>03-Inter2p1\BBATF_Inter2p1_0-16-0.wav</ShortName>
+							<Path>SFX\03-Inter2p1\BBATF_Inter2p1_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="67854503" Language="SFX">
+							<ShortName>04-Inter2p2\BBATF_Inter2p2_0-16-0.wav</ShortName>
+							<Path>SFX\04-Inter2p2\BBATF_Inter2p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="92449123" Language="SFX">
+							<ShortName>09-Inter4p1\BBATF_Inter4p1_0-24-0.wav</ShortName>
+							<Path>SFX\09-Inter4p1\BBATF_Inter4p1_0-24-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="99602000" Language="SFX">
+							<ShortName>09-Inter4p1\OFFBBATF_Inter4p1_0-24-0.wav</ShortName>
+							<Path>SFX\09-Inter4p1\OFFBBATF_Inter4p1_0-24-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="134788217" Language="SFX">
+							<ShortName>07-Inter3p2\OFFBBATF_Inter3p2_0-16-0.wav</ShortName>
+							<Path>SFX\07-Inter3p2\OFFBBATF_Inter3p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="142249398" Language="SFX">
+							<ShortName>05-Inter2p3+Phase2\OFFBBATF_Inter2p3+Phase2_0-104-4.wav</ShortName>
+							<Path>SFX\05-Inter2p3+Phase2\OFFBBATF_Inter2p3+Phase2_0-104-4_D79FB2B7.wem</Path>
+						</File>
+						<File Id="171596126" Language="SFX">
+							<ShortName>06-Inter3p1\BBATF_Inter3p1_0-40-0.wav</ShortName>
+							<Path>SFX\06-Inter3p1\BBATF_Inter3p1_0-40-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="364144186" Language="SFX">
+							<ShortName>10-Inter4p2\OFFBBATF_Inter4p2_0-16-0.wav</ShortName>
+							<Path>SFX\10-Inter4p2\OFFBBATF_Inter4p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="373301963" Language="SFX">
+							<ShortName>10-Inter4p2\BBATF_Inter4p2_0-16-0.wav</ShortName>
+							<Path>SFX\10-Inter4p2\BBATF_Inter4p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="404924711" Language="SFX">
+							<ShortName>06-Inter3p1\OFFBBATF_Inter3p1_0-40-0.wav</ShortName>
+							<Path>SFX\06-Inter3p1\OFFBBATF_Inter3p1_0-40-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="413446453" Language="SFX">
+							<ShortName>01-Intro\OFFBBATF_Intro_0p135-16-1.wav</ShortName>
+							<Path>SFX\01-Intro\OFFBBATF_Intro_0p135-16-1_D79FB2B7.wem</Path>
+						</File>
+						<File Id="432755657" Language="SFX">
+							<ShortName>03-Inter2p1\OFFBBATF_Inter2p1_0-16-0.wav</ShortName>
+							<Path>SFX\03-Inter2p1\OFFBBATF_Inter2p1_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="537456764" Language="SFX">
+							<ShortName>11-Phase4\BBATF_Phase4_2-50-0.wav</ShortName>
+							<Path>SFX\11-Phase4\BBATF_Phase4_2-50-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="568412557" Language="SFX">
+							<ShortName>07-Inter3p2\BBATF_Inter3p2_0-16-0.wav</ShortName>
+							<Path>SFX\07-Inter3p2\BBATF_Inter3p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="600551616" Language="SFX">
+							<ShortName>08-Phase3\OFFBBATF_Phase3_2-50-5.wav</ShortName>
+							<Path>SFX\08-Phase3\OFFBBATF_Phase3_2-50-5_D79FB2B7.wem</Path>
+						</File>
+						<File Id="664696892" Language="SFX">
+							<ShortName>02-Phase1\OFFBBATF_Phase1_1-68-1.wav</ShortName>
+							<Path>SFX\02-Phase1\OFFBBATF_Phase1_1-68-1_D79FB2B7.wem</Path>
+						</File>
+						<File Id="697566766" Language="SFX">
+							<ShortName>05-Inter2p3+Phase2\BBATF_Inter2p3+Phase2_0-104-4.wav</ShortName>
+							<Path>SFX\05-Inter2p3+Phase2\BBATF_Inter2p3+Phase2_0-104-4_D79FB2B7.wem</Path>
+						</File>
+						<File Id="706920969" Language="SFX">
+							<ShortName>12-Coda\OFFBBATF_Coda_1-17-0.wav</ShortName>
+							<Path>SFX\12-Coda\OFFBBATF_Coda_1-17-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="766695112" Language="SFX">
+							<ShortName>04-Inter2p2\OFFBBATF_Inter2p2_0-16-0.wav</ShortName>
+							<Path>SFX\04-Inter2p2\OFFBBATF_Inter2p2_0-16-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="787337663" Language="SFX">
+							<ShortName>12-Coda\BBATF_Coda_1-17-0.wav</ShortName>
+							<Path>SFX\12-Coda\BBATF_Coda_1-17-0_D79FB2B7.wem</Path>
+						</File>
+						<File Id="856516684" Language="SFX">
+							<ShortName>02-Phase1\BBATF_Phase1_1-68-1.wav</ShortName>
+							<Path>SFX\02-Phase1\BBATF_Phase1_1-68-1_D79FB2B7.wem</Path>
+						</File>
+						<File Id="872308247" Language="SFX">
+							<ShortName>01-Intro\BBATF_Intro_0p135-16-1.wav</ShortName>
+							<Path>SFX\01-Intro\BBATF_Intro_0p135-16-1_D79FB2B7.wem</Path>
+						</File>
+						<File Id="998701604" Language="SFX">
+							<ShortName>11-Phase4\OFFBBATF_Phase4_2-50-0.wav</ShortName>
+							<Path>SFX\11-Phase4\OFFBBATF_Phase4_2-50-0_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+					<SwitchContainers>
+						<SwitchContainer SwitchValue="{5185405C-C889-4EAE-A4DA-E381D06E6F9D}">
+							<Media>
+								<File Id="872308247"/>
+								<File Id="413446453"/>
+							</Media>
+						</SwitchContainer>
+						<SwitchContainer SwitchValue="{0073567A-67F7-49EC-B16E-351DE9B99D31}">
+							<Media>
+								<File Id="856516684"/>
+								<File Id="664696892"/>
+								<File Id="64082900"/>
+								<File Id="432755657"/>
+								<File Id="67854503"/>
+								<File Id="766695112"/>
+							</Media>
+						</SwitchContainer>
+						<SwitchContainer SwitchValue="{A00A0E59-7599-412C-99A1-74E812442D4B}">
+							<Media>
+								<File Id="697566766"/>
+								<File Id="142249398"/>
+								<File Id="171596126"/>
+								<File Id="404924711"/>
+								<File Id="568412557"/>
+								<File Id="134788217"/>
+							</Media>
+						</SwitchContainer>
+						<SwitchContainer SwitchValue="{5611680E-84F5-41E3-9343-DC237EE700E1}">
+							<Media>
+								<File Id="58490247"/>
+								<File Id="600551616"/>
+								<File Id="373301963"/>
+								<File Id="364144186"/>
+								<File Id="92449123"/>
+								<File Id="99602000"/>
+							</Media>
+						</SwitchContainer>
+						<SwitchContainer SwitchValue="{2995EE51-F2FB-48F6-99EF-C1ABE139849B}">
+							<Media>
+								<File Id="537456764"/>
+								<File Id="998701604"/>
+								<File Id="787337663"/>
+								<File Id="706920969"/>
+							</Media>
+						</SwitchContainer>
+					</SwitchContainers>
+				</Event>
+			</IncludedEvents>
+			<StateGroups>
+				<StateGroup Id="3459452222" Name="Phase" ObjectPath="\States\Default Work Unit\Phase">
+					<States>
+						<State Id="748895195" Name="None" ObjectPath="\States\Default Work Unit\Phase\None"/>
+						<State Id="1125500713" Name="Intro" ObjectPath="\States\Default Work Unit\Phase\Intro"/>
+						<State Id="3630028971" Name="Phase1" ObjectPath="\States\Default Work Unit\Phase\Phase1"/>
+						<State Id="3630028968" Name="Phase2" ObjectPath="\States\Default Work Unit\Phase\Phase2"/>
+						<State Id="3630028969" Name="Phase3" ObjectPath="\States\Default Work Unit\Phase\Phase3"/>
+						<State Id="3630028974" Name="Phase4" ObjectPath="\States\Default Work Unit\Phase\Phase4"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
 </SoundBanksInfo>

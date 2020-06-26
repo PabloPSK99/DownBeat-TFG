@@ -176,9 +176,11 @@ MonoBehaviour:
   - /DownBeat_WwiseProject
   - /DownBeat_WwiseProject/Events
   - /DownBeat_WwiseProject/Events/Default Work Unit
+  - /DownBeat_WwiseProject/SoundBanks
   - /DownBeat_WwiseProject/States
   - /DownBeat_WwiseProject/States/Default Work Unit
   - /DownBeat_WwiseProject/Switches
   - /DownBeat_WwiseProject/Switches/Default Work Unit
+  - /DownBeat_WwiseProject/Switches/Default Work Unit/OffBeat
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

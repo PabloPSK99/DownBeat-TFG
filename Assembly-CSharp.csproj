@@ -285,15 +285,29 @@
     <Compile Include="Assets\Wwise\Deployment\Components\AkTriggerMouseExit.cs" />
     <Compile Include="Assets\Wwise\Deployment\Components\AkTriggerMouseUp.cs" />
     <Compile Include="Assets\Wwise\Extensions\AkSoundEngine.extensions.cs" />
+    <None Include="Assets\Resources\Text\C1\T3.txt" />
+    <None Include="Assets\Resources\Text\C3\T5.txt" />
+    <None Include="Assets\Resources\Text\C3\T2.txt" />
     <None Include="Assets\Resources\Text\C1\T1.txt" />
+    <None Include="Assets\Resources\Text\C1\T4.txt" />
     <None Include="Assets\Particles\Misc Effects\Prefabs\Readme_Dissolve_Respawn_.txt" />
+    <None Include="Assets\Resources\Text\C2\T3.txt" />
+    <None Include="Assets\Resources\Text\C2\T4.txt" />
+    <None Include="Assets\Resources\Text\C2\T5.txt" />
     <None Include="Assets\Particles\Misc Effects\Shaders\Respawn.shader" />
     <None Include="Assets\WwiseSettings.xml" />
+    <None Include="Assets\Resources\Text\C3\T4.txt" />
+    <None Include="Assets\Resources\Text\C1\T2.txt" />
+    <None Include="Assets\Resources\Text\C3\T3.txt" />
+    <None Include="Assets\Resources\Text\C3\T1.txt" />
     <None Include="Assets\Particles\Misc Effects\Shaders\FireFly.shader" />
     <None Include="Assets\Fonts\OFL.txt" />
     <None Include="Assets\Wwise\Version.txt" />
+    <None Include="Assets\Resources\Text\C2\T2.txt" />
     <None Include="Assets\StreamingAssets\desc.txt" />
+    <None Include="Assets\Resources\Text\C2\T1.txt" />
     <None Include="Assets\Particles\Misc Effects\Shaders\Dissolve.shader" />
+    <None Include="Assets\Resources\Text\C1\T5.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Escritorio/Documentos/DownBeat/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

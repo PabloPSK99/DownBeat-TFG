@@ -11,6 +11,7 @@ public class Rhythm : MonoBehaviour
     public PostProcessVolume postVolume;
     public Image flashPanel;
     public CanvasGroup gameplayUI;
+    public GameObject AKtarget;
 
     [Header("Circles")]
     public Image circle;
@@ -32,6 +33,7 @@ public class Rhythm : MonoBehaviour
     public float bpm;
     public float timeOffset;
     public float normalized;
+    private bool chromVariation;
 
     [Header("Post Process")]
     public float transitionTime;
@@ -58,6 +60,7 @@ public class Rhythm : MonoBehaviour
         offBeatProfile = Resources.Load<PostProcessProfile>("PostProcess Profiles/OffBeat");
         postVolume.profile = crimsonProfile;
         postVolume.profile.TryGetSettings(out chromaticAberration);
+        chromaticAberration.intensity.value = 1;
         beatDuration = bpm / 60f;
         StartCoroutine(Loop());
         normalized = 1;
@@ -65,16 +68,18 @@ public class Rhythm : MonoBehaviour
 
     private void Update()
     {
-        float intensity = Mathf.Abs(0.5f - normalized) * 2;
-        if (intensity > aberrationThreshold)
+        if (chromVariation)
         {
-            chromaticAberration.intensity.value = (intensity- aberrationThreshold) * (maxAberration / (1-aberrationThreshold));
+            float intensity = Mathf.Abs(0.5f - normalized) * 2;
+            if (intensity > aberrationThreshold)
+            {
+                chromaticAberration.intensity.value = (intensity - aberrationThreshold) * (maxAberration / (1 - aberrationThreshold));
+            }
+            else
+            {
+                chromaticAberration.intensity.value = 0;
+            }
         }
-        else
-        {
-            chromaticAberration.intensity.value = 0;
-        }
-
     }
 
     public void OffBeat(bool offBeat)
@@ -82,7 +87,8 @@ public class Rhythm : MonoBehaviour
         this.offBeat = offBeat;
         if(offBeat)
         {
-            AkSoundEngine.SetSwitch("OffBeat", "OffBeat", gameObject);
+            AKRESULT result = AkSoundEngine.SetSwitch("OffBeat", "OffBeat", gameObject);
+            print(result);
             dot.color = offBeatColor;
             externalCircle.color = offBeatColor;
             circle.color = offBeatColor;
@@ -94,12 +100,20 @@ public class Rhythm : MonoBehaviour
         StartCoroutine(PostProcessTransition());
     }
 
-    public void ActivateGameplay()
+    public void EnableGameplay()
     {
-        player.enemy.NextPhase();
+        chromVariation = true;
         player.EnableFightControls();
         player.SetIntroTrigger();
         StartCoroutine(RestoreUIAlpha(1));
+    }
+
+    public void DisableGameplay()
+    {
+        chromVariation = false;
+        chromaticAberration.intensity.value = 0.4f;
+        player.enemy.pause = true;
+        player.DisableFightControls();
     }
 
     IEnumerator Loop()
@@ -228,7 +242,7 @@ public class Rhythm : MonoBehaviour
     private void FixSync()
     {
         float offset = (lastTimeStamp + beatDuration + syncCorrection) - AkSoundEngine.GetTimeStamp() / 1000f; //tiempo esperado - tiempo real
-        print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + AkSoundEngine.GetTimeStamp() / 1000f);
+        //print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + AkSoundEngine.GetTimeStamp() / 1000f);
         lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
         if(Mathf.Abs(offset) > 5)
         {
@@ -397,6 +411,7 @@ public class Rhythm : MonoBehaviour
         {
             player.charged = false;
             player.currentAction = Action.None;
+            player.SetTrigger("fail");
         }
     }
 

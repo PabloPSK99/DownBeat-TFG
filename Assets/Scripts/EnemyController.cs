@@ -29,10 +29,12 @@ public class EnemyController : MonoBehaviour
     public float cutFixRatio;
     private Animator anim;
     public int maxThunders;
+    public int maxThrustCombo;
     public float healing;
     public int retaliate;
     private int phase;
     private bool cancelThrustCombo;
+    public bool pause;
 
     [Header("UI")]
 
@@ -46,6 +48,7 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         health = maxHealth;
+        pause = true;
         retaliate = 5;
         phase = 0;
         currentAction = Action.None;
@@ -54,7 +57,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if (!offbeat)
+        if (!offbeat && !pause)
         {
             switch (phase)
             {
@@ -88,11 +91,22 @@ public class EnemyController : MonoBehaviour
 
             if (phase == 3) retaliate = 5;
         }
-        if (phase > 1)
-        {
-            AkSoundEngine.SetState("Phase", "Phase" + phase);
-            print("PHASE: " + phase);
-        }
+        AkSoundEngine.SetState("Phase", "Phase" + phase);
+    }
+
+    public void StartCombat()
+    {
+        StartCoroutine(SteelTempest());
+    }
+
+    IEnumerator SteelTempest()
+    {
+        phase = 4;
+        pause = false;
+        maxThrustCombo -= 2;
+        yield return new WaitForSeconds(15.5f);
+        maxThrustCombo += 2;
+        phase = 1;
     }
 
     public void Phase1()
@@ -223,8 +237,7 @@ public class EnemyController : MonoBehaviour
             {
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
-                //Random2Combo(2f + random - randomness / 2, new int[3] {0, 1, 2 });
-                Random2Combo(2f + random - randomness / 2, new int[1] { 0});
+                Random2Combo(2f + random - randomness / 2, new int[3] {0, 1, 2 });
             }
         }
     }
@@ -261,10 +274,9 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator SpearComboCoroutine(float time)
     {
-        //bool clockwise = Random.value < 0.5f;
-        bool clockwise = true;
+        bool clockwise = Random.value < 0.5f;
         cancelThrustCombo = false;
-        int thrusts = Mathf.FloorToInt(Random.value * 2.99f) + 4; //3-6
+        int thrusts = Mathf.FloorToInt(Random.value * maxThrustCombo/2.01f) + Mathf.RoundToInt(maxThrustCombo / 2f);
         int committedThrusts = 0; 
         if (clockwise)
         {
@@ -315,6 +327,7 @@ public class EnemyController : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(1);
+        SetTrigger("endCombo");
         GoIdle();
     }
 
@@ -516,41 +529,45 @@ public class EnemyController : MonoBehaviour
 
     public void Counter()
     {
-        if (player.currentAction == Action.Attack)
+        if (!player.nearlyLoaded)
         {
-            SetTrigger("chargeBlock");
-            effects.Block(rhythm.IsDownBeat(), false);
-            float random = Random.value * randomness;
-            if (rhythm.IsDownBeat())
+            if (player.currentAction == Action.Attack)
             {
-                currentAction = Action.Block;
-                rhythm.ScheduleFunction(2f + random - randomness / 2, "Block", this);
+                SetTrigger("chargeBlock");
+                effects.Block(rhythm.IsDownBeat(), false);
+                float random = Random.value * randomness;
+                if (rhythm.IsDownBeat())
+                {
+                    currentAction = Action.Block;
+                    rhythm.ScheduleFunction(2f + random - randomness / 2, "Block", this);
+                }
+                else
+                {
+                    currentAction = Action.Block;
+                    rhythm.ScheduleFunction(1f + random - randomness / 2, "Block", this);
+                }
             }
-            else
+            else if (player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
             {
-                currentAction = Action.Block;
-                rhythm.ScheduleFunction(1f + random - randomness / 2, "Block", this);
+                float random = Random.value * randomness / 2;
+                if (rhythm.IsDownBeat())
+                {
+                    currentAction = Action.Cut;
+                    rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
+                    rhythm.ScheduleFunction(1, "GoIdle", this);
+                }
             }
-        }
-        else if (player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
-        {
-            float random = Random.value * randomness / 2;
-            if (rhythm.IsDownBeat())
+            else if (player.currentAction == Action.Block)
             {
-                currentAction = Action.Cut;
-                rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
-                rhythm.ScheduleFunction(1, "GoIdle", this);
+                float random = Random.value * randomness / 2;
+                if (!rhythm.IsDownBeat())
+                {
+                    currentAction = Action.Cut;
+                    rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
+                    rhythm.ScheduleFunction(1, "GoIdle", this);
+                }
             }
-        }
-        else if (player.currentAction == Action.Block)
-        {
-            float random = Random.value * randomness / 2;
-            if (!rhythm.IsDownBeat())
-            {
-                currentAction = Action.Cut;
-                rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
-                rhythm.ScheduleFunction(1, "GoIdle", this);
-            }
+
         }
     }
 
@@ -793,6 +810,7 @@ public class EnemyController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+        SetTrigger("cancel");
         currentAction = Action.None;
     }
 
