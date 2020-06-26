@@ -1,7 +1,40 @@
 Event	ID	Name			Wwise Object Path	Notes
-	2794812192	OffBeat			\Default Work Unit\OffBeat	
 	3991942870	Music			\Default Work Unit\Music	
 
+State Group	ID	Name			Wwise Object Path	Notes
+	3459452222	Phase			\Default Work Unit\Phase	
+
+State	ID	Name	State Group			Notes
+	748895195	None	Phase			
+	1125500713	Intro	Phase			
+	3630028968	Phase2	Phase			
+	3630028969	Phase3	Phase			
+	3630028971	Phase1	Phase			
+	3630028974	Phase4	Phase			
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	33033658	Bound by a Terrible Fate (Corrected & Compressed)	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\Bound by a Terrible Fate (Corrected & Compressed)_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bound by a Terrible Fate (Corrected & Compressed)		82034752
+	58490247	BBATF_Phase3_2-50-5	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\08-Phase3\BBATF_Phase3_2-50-5_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\08-Phase3\BBATF_Phase3_2-50-5		10054864
+	64082900	BBATF_Inter2p1_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\03-Inter2p1\BBATF_Inter2p1_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\03-Inter2p1\BBATF_Inter2p1_0-16-0		2822464
+	67854503	BBATF_Inter2p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\04-Inter2p2\BBATF_Inter2p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\04-Inter2p2\BBATF_Inter2p2_0-16-0		2822464
+	92449123	BBATF_Inter4p1_0-24-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\09-Inter4p1\BBATF_Inter4p1_0-24-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\09-Inter4p1\BBATF_Inter4p1_0-24-0		4233664
+	99602000	BBATF_Inter4p1_0-24-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\09-Inter4p1\OFFBBATF_Inter4p1_0-24-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\09-Inter4p1\BBATF_Inter4p1_0-24-0		4233664
+	134788217	BBATF_Inter3p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\07-Inter3p2\OFFBBATF_Inter3p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\07-Inter3p2\BBATF_Inter3p2_0-16-0		2822464
+	142249398	BBATF_Inter2p3+Phase2_0-104-4	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\05-Inter2p3+Phase2\OFFBBATF_Inter2p3+Phase2_0-104-4_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\05-Inter2p3+Phase2\BBATF_Inter2p3+Phase2_0-104-4		19051264
+	171596126	BBATF_Inter3p1_0-40-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\06-Inter3p1\BBATF_Inter3p1_0-40-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\06-Inter3p1\BBATF_Inter3p1_0-40-0		7056068
+	364144186	BBATF_Inter4p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\10-Inter4p2\OFFBBATF_Inter4p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\10-Inter4p2\BBATF_Inter4p2_0-16-0		2822464
+	373301963	BBATF_Inter4p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\10-Inter4p2\BBATF_Inter4p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\10-Inter4p2\BBATF_Inter4p2_0-16-0		2822464
+	404924711	BBATF_Inter3p1_0-40-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\06-Inter3p1\OFFBBATF_Inter3p1_0-40-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\06-Inter3p1\BBATF_Inter3p1_0-40-0		7056068
+	413446453	BBATF_Intro_0p135-16-1	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\01-Intro\OFFBBATF_Intro_0p135-16-1_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Intro\01-Intro\BBATF_Intro_0p135-16-1		3126028
+	432755657	BBATF_Inter2p1_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\03-Inter2p1\OFFBBATF_Inter2p1_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\03-Inter2p1\BBATF_Inter2p1_0-16-0		2822464
+	537456764	BBATF_Phase4_2-50-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\11-Phase4\BBATF_Phase4_2-50-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase4\11-Phase4\BBATF_Phase4_2-50-0		9172864
+	568412557	BBATF_Inter3p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\07-Inter3p2\BBATF_Inter3p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\07-Inter3p2\BBATF_Inter3p2_0-16-0		2822464
+	600551616	BBATF_Phase3_2-50-5	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\08-Phase3\OFFBBATF_Phase3_2-50-5_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase3\08-Phase3\BBATF_Phase3_2-50-5		10054864
+	664696892	BBATF_Phase1_1-68-1	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\02-Phase1\OFFBBATF_Phase1_1-68-1_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\02-Phase1\BBATF_Phase1_1-68-1		12171664
+	697566766	BBATF_Inter2p3+Phase2_0-104-4	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\05-Inter2p3+Phase2\BBATF_Inter2p3+Phase2_0-104-4_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase2\05-Inter2p3+Phase2\BBATF_Inter2p3+Phase2_0-104-4		19051264
+	706920969	BBATF_Coda_1-17-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\12-Coda\OFFBBATF_Coda_1-17-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase4\12-Coda\BBATF_Coda_1-17-0		3160140
+	766695112	BBATF_Inter2p2_0-16-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\04-Inter2p2\OFFBBATF_Inter2p2_0-16-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\04-Inter2p2\BBATF_Inter2p2_0-16-0		2822464
+	787337663	BBATF_Coda_1-17-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\12-Coda\BBATF_Coda_1-17-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase4\12-Coda\BBATF_Coda_1-17-0		3160140
+	856516684	BBATF_Phase1_1-68-1	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\02-Phase1\BBATF_Phase1_1-68-1_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase1\02-Phase1\BBATF_Phase1_1-68-1		12171664
+	872308247	BBATF_Intro_0p135-16-1	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\01-Intro\BBATF_Intro_0p135-16-1_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Intro\01-Intro\BBATF_Intro_0p135-16-1		3126028
+	998701604	BBATF_Phase4_2-50-0	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Windows\SFX\11-Phase4\OFFBBATF_Phase4_2-50-0_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Bound By A Terrible Fate Switch\Phase4\11-Phase4\BBATF_Phase4_2-50-0		9172864
 

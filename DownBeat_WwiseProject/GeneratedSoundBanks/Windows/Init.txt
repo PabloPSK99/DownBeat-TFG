@@ -1,3 +1,14 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	3459452222	Phase			\Default Work Unit\Phase	
+
+State	ID	Name	State Group			Notes
+	748895195	None	Phase			
+	1125500713	Intro	Phase			
+	3630028968	Phase2	Phase			
+	3630028969	Phase3	Phase			
+	3630028971	Phase1	Phase			
+	3630028974	Phase4	Phase			
+
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
 

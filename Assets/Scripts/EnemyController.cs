@@ -47,7 +47,7 @@ public class EnemyController : MonoBehaviour
     {
         health = maxHealth;
         retaliate = 5;
-        phase = 1;
+        phase = 0;
         currentAction = Action.None;
         anim = GetComponentInChildren<Animator>();
     }
@@ -85,9 +85,14 @@ public class EnemyController : MonoBehaviour
         if(phase <= 3)
         {
             phase++;
+
             if (phase == 3) retaliate = 5;
         }
-        print("PHASE: " + phase);
+        if (phase > 1)
+        {
+            AkSoundEngine.SetState("Phase", "Phase" + phase);
+            print("PHASE: " + phase);
+        }
     }
 
     public void Phase1()

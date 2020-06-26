@@ -10,6 +10,7 @@ public class Rhythm : MonoBehaviour
     public PlayerController player;
     public PostProcessVolume postVolume;
     public Image flashPanel;
+    public CanvasGroup gameplayUI;
 
     [Header("Circles")]
     public Image circle;
@@ -51,7 +52,6 @@ public class Rhythm : MonoBehaviour
     private float syncCorrection;
     private Vector3 minScale = new Vector3(.1f, .1f, 1);
 
-    // Start is called before the first frame update
     void Start()
     {
         crimsonProfile = Resources.Load<PostProcessProfile>("PostProcess Profiles/Crimson");
@@ -59,8 +59,8 @@ public class Rhythm : MonoBehaviour
         postVolume.profile = crimsonProfile;
         postVolume.profile.TryGetSettings(out chromaticAberration);
         beatDuration = bpm / 60f;
-        normalized = 1;
         StartCoroutine(Loop());
+        normalized = 1;
     }
 
     private void Update()
@@ -82,12 +82,46 @@ public class Rhythm : MonoBehaviour
         this.offBeat = offBeat;
         if(offBeat)
         {
-            AkSoundEngine.PostEvent("OffBeat", gameObject);
+            AkSoundEngine.SetSwitch("OffBeat", "OffBeat", gameObject);
             dot.color = offBeatColor;
             externalCircle.color = offBeatColor;
             circle.color = offBeatColor;
         }
+        else
+        {
+            AkSoundEngine.SetSwitch("OffBeat", "Default", gameObject);
+        }
         StartCoroutine(PostProcessTransition());
+    }
+
+    public void ActivateGameplay()
+    {
+        player.enemy.NextPhase();
+        player.EnableFightControls();
+        player.SetIntroTrigger();
+        StartCoroutine(RestoreUIAlpha(1));
+    }
+
+    IEnumerator Loop()
+    {
+        lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
+        while (true)
+        {
+            yield return CircleGrow();
+            yield return CircleShrink();
+        }
+    }
+
+    IEnumerator RestoreUIAlpha(float duration)
+    {
+        float elapsed = 0;
+        while(elapsed < duration)
+        {
+            gameplayUI.alpha = elapsed / duration;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        gameplayUI.alpha = 1;
     }
 
     IEnumerator PostProcessTransition()
@@ -111,19 +145,6 @@ public class Rhythm : MonoBehaviour
             yield return null;
         }
         flashPanel.color = Color.clear;
-    }
-
-    IEnumerator Loop()
-    {
-        yield return new WaitForSeconds(1);
-        AkSoundEngine.PostEvent("Music", gameObject);
-        yield return new WaitForSeconds(beatDuration + timeOffset);
-        lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
-        while (true)
-        {
-            yield return CircleShrink();
-            yield return CircleGrow();
-        }
     }
 
     IEnumerator CircleGrow()

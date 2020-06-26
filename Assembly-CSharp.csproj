@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Effects.cs" />
     <Compile Include="Assets\Scripts\EnemyController.cs" />
     <Compile Include="Assets\Scripts\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\MenuController.cs" />
     <Compile Include="Assets\Scripts\Node.cs" />
     <Compile Include="Assets\Scripts\NumberType.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

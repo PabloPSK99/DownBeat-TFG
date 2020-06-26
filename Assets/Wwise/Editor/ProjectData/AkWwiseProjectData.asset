@@ -40,17 +40,8 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: c2c0f7da9a64914d8644c92a494c68e0
     GuidInternal: 
-    m_lastTime: -8586086622546385091
+    m_lastTime: -8586084871265928863
     List:
-    - name: Footsteps
-      guid: b32129690af11a4e823fd87e89173c31
-      id: 2385628198
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Footsteps
-        ObjectType: 7
-      Path: Default Work Unit\Footsteps
     - name: Music
       guid: 9ea1c7a268edc546a2a801735100013c
       id: 3991942870
@@ -65,7 +56,7 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 2c435fa6cab1fc46971d7d3ccd6fec9b
     GuidInternal: 
-    m_lastTime: -8586086622546434937
+    m_lastTime: -8586084872801986844
     List:
     - name: Music
       guid: d1f0e51fa2cdd6488dfa9ce2ad714a63
@@ -77,8 +68,8 @@ MonoBehaviour:
         ObjectType: 3
       Path: Default Work Unit\Music
       maxAttenuation: 0
-      maxDuration: 465049250
-      minDuration: 465049250
+      maxDuration: -1
+      minDuration: -1
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     ParentPath: Default Work Unit
@@ -91,15 +82,89 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: 3f91f29c9e816e4eaa45cfa78b945c0d
     GuidInternal: 
-    m_lastTime: -8586090909960536704
-    List: []
+    m_lastTime: -8586085145708089262
+    List:
+    - name: Phase
+      guid: a74a08e885ef8b4cb51edc0b899396ed
+      id: 3459452222
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Phase
+        ObjectType: 9
+      Path: Default Work Unit\Phase
+      values:
+      - name: Intro
+        guid: 5c40855189c8ae4ea4dae381d06e6f9d
+        id: 1125500713
+        PathAndIcons:
+        - ElementName: Intro
+          ObjectType: 8
+      - name: None
+        guid: 092cc2cbb109074190e890fcaa17958d
+        id: 748895195
+        PathAndIcons:
+        - ElementName: None
+          ObjectType: 8
+      - name: Phase1
+        guid: 7a567300f767ec49b16e351de9b99d31
+        id: 3630028971
+        PathAndIcons:
+        - ElementName: Phase1
+          ObjectType: 8
+      - name: Phase2
+        guid: 590e0aa099752c4199a174e812442d4b
+        id: 3630028968
+        PathAndIcons:
+        - ElementName: Phase2
+          ObjectType: 8
+      - name: Phase3
+        guid: 0e681156f584e3419343dc237ee700e1
+        id: 3630028969
+        PathAndIcons:
+        - ElementName: Phase3
+          ObjectType: 8
+      - name: Phase4
+        guid: 51ee9529fbf2f64899efc1abe139849b
+        id: 3630028974
+        PathAndIcons:
+        - ElementName: Phase4
+          ObjectType: 8
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   SwitchWwu:
   - PhysicalPath: Switches\Default Work Unit.wwu
     ParentPath: Default Work Unit
     guid: 717452dd42e91743ab083fe1df694b31
     GuidInternal: 
-    m_lastTime: -8586090909960511708
-    List: []
+    m_lastTime: -8586084871378737877
+    List:
+    - name: OffBeat
+      guid: 1f31dec122668c44b4300f795f00c3b3
+      id: 2794812192
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: OffBeat
+        ObjectType: 11
+      Path: Default Work Unit\OffBeat
+      values:
+      - name: Default
+        guid: 246d66a9d248ad49ba22c9d867605a78
+        id: 782826392
+        PathAndIcons:
+        - ElementName: Default
+          ObjectType: 10
+      - name: OffBeat
+        guid: c4906fdf88a93c4e9a557caca0db9166
+        id: 2794812192
+        PathAndIcons:
+        - ElementName: OffBeat
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   TriggerWwu:
   - PhysicalPath: Triggers\Default Work Unit.wwu
     ParentPath: Default Work Unit
@@ -109,5 +174,11 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /DownBeat_WwiseProject
+  - /DownBeat_WwiseProject/Events
+  - /DownBeat_WwiseProject/Events/Default Work Unit
+  - /DownBeat_WwiseProject/States
+  - /DownBeat_WwiseProject/States/Default Work Unit
+  - /DownBeat_WwiseProject/Switches
+  - /DownBeat_WwiseProject/Switches/Default Work Unit
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

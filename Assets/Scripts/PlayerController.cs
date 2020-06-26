@@ -865,7 +865,7 @@ public class PlayerController : MonoBehaviour
     #region Control & Scheduling
     //------------------------------------CONTROL & SCHEDULING---------------------------------------
 
-    private void OnEnable()
+    public void EnableFightControls()
     {
         controls.Fight.Enable();
     }
@@ -945,6 +945,11 @@ public class PlayerController : MonoBehaviour
             currentAction = Action.None;
             SetTrigger("fail");
         }
+    }
+
+    public void SetIntroTrigger()
+    {
+        camAnimator.SetTrigger("Start");
     }
 
     void Debug1()
