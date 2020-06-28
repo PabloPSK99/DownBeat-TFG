@@ -103,6 +103,7 @@ public class Rhythm : MonoBehaviour
     public void EnableGameplay()
     {
         chromVariation = true;
+        player.enemy.pause = false;
         player.EnableFightControls();
         player.SetIntroTrigger();
         StartCoroutine(RestoreUIAlpha(1));
@@ -113,6 +114,7 @@ public class Rhythm : MonoBehaviour
         chromVariation = false;
         chromaticAberration.intensity.value = 0.4f;
         player.enemy.pause = true;
+        player.enemy.GoIdle();
         player.DisableFightControls();
     }
 

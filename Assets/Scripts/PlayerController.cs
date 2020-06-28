@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     PlayerControls controls;
     public MainCamera mainCamera;
     public Node currentNode;
+    public Node initialNode;
     public Transform center;
     public Rhythm rhythm;
     public UIController UIController;
@@ -747,14 +748,30 @@ public class PlayerController : MonoBehaviour
         {
             if(targetNode == currentNode.forward)
             {
-                camAnimator.SetTrigger("Forward");
                 SetTrigger("forward");
             }
             else
             {
-                camAnimator.SetTrigger("Backward");
                 SetTrigger("back");
             }
+            int nodeIndex = targetNode.GetIndexInAxis();
+            switch (nodeIndex)
+            {
+                case 0:
+                    camAnimator.SetTrigger("Inner");
+                    break;
+                case 1:
+                    camAnimator.SetTrigger("Middle");
+                    break;
+                case 2:
+                    camAnimator.SetTrigger("External");
+                    break;
+                default:
+                    break;
+            }
+            
+
+
             iTween.MoveTo(gameObject, targetNode.transform.position, moveDuration);
         }
         iTween.RotateBy(transform.parent.gameObject, Vector3.up * rotation, moveDuration);
@@ -775,7 +792,7 @@ public class PlayerController : MonoBehaviour
             )
         );
         currentNode = targetNode;
-        camAnimator.SetTrigger("Forward");
+        camAnimator.SetTrigger("External");
         yield return new WaitForSeconds(moveDuration);
         transform.position = targetNode.transform.position;
         canMove = true;
@@ -885,6 +902,18 @@ public class PlayerController : MonoBehaviour
     public void DisableFightControls()
     {
         controls.Fight.Disable();
+    }
+
+    public void ResetAll()
+    {
+        currentNode = initialNode;
+        camAnimator.SetTrigger("External");
+        transform.parent.localRotation = Quaternion.identity;
+        transform.localRotation = Quaternion.identity;
+        transform.position = currentNode.transform.position;
+        mainCamera.transform.localRotation = Quaternion.identity;
+        enemy.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        enemy.currentNode = currentNode.GetFirstNodeOnThisAxis();
     }
 
     public void CameraShake(float intensity, float duration)
@@ -999,7 +1028,7 @@ public class PlayerController : MonoBehaviour
 
     void Debug3()
     {
-        Debug.Break();
+        ResetAll();
     }
 
     void Debug4()

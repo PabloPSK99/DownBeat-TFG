@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 0.26666666666666666
+    m_Start: 0
     m_ClipIn: 0.26666666666666666
     m_Asset: {fileID: -7934136097016126353}
     m_Duration: 3.7666666666666666
@@ -183,7 +183,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C1 Hero Profile 1
   - m_Version: 1
-    m_Start: 4.033333333333333
+    m_Start: 3.7666666666666666
     m_ClipIn: 0.0000000000000008881784197001252
     m_Asset: {fileID: 64539351515609357}
     m_Duration: 3.9833333333333343
@@ -252,7 +252,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C2 Enemy Profile 1
   - m_Version: 1
-    m_Start: 8.016666666666667
+    m_Start: 7.750000000000001
     m_ClipIn: 0.6166666666666671
     m_Asset: {fileID: 258218996433446592}
     m_Duration: 4
@@ -321,7 +321,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C1 Enemy from hero feet
   - m_Version: 1
-    m_Start: 12.016666666666667
+    m_Start: 11.75
     m_ClipIn: 1.9333333333333336
     m_Asset: {fileID: -8712961173197127884}
     m_Duration: 3.9999999999999982
@@ -390,7 +390,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C1 Enemy Hand
   - m_Version: 1
-    m_Start: 19.983333333333334
+    m_Start: 19.71666666666667
     m_ClipIn: 1.0833333333333321
     m_Asset: {fileID: -6972915475702729328}
     m_Duration: 4.016666666666666
@@ -459,7 +459,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: C1 Enemy from hero feet
   - m_Version: 1
-    m_Start: 16.016666666666666
+    m_Start: 15.749999999999998
     m_ClipIn: 1.7377714825306902
     m_Asset: {fileID: -2662574291926519650}
     m_Duration: 3.9666666666666686

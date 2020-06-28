@@ -6,6 +6,5 @@ public enum Bullet
 {
     One,
     Plus,
-    Empty,
-
+    Empty
 }

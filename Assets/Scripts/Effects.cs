@@ -192,8 +192,6 @@ public class Effects : MonoBehaviour
                 {
                     Destroy(tr.gameObject, 2);
                     secondStorm.Add(ThunderAfter(1, tr));
-                    print("inicio corrutina rayos 2");
-                    
                 }
             }
         }
@@ -205,7 +203,6 @@ public class Effects : MonoBehaviour
 
     public void CancelSecondStorm()
     {
-        print("cancel corrutina rayos 2");
         if (secondStorm.Count > 0)
         {
             foreach (IEnumerator cr in secondStorm)
