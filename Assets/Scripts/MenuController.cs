@@ -9,7 +9,7 @@ public class MenuController : MonoBehaviour
     PlayerControls controls;
     float initTime;
     float startTime;
-    float phase1Time;
+    float[] phaseTime = new float[4];
     int cutsceneIndex;
     public Rhythm rhythm;
     public ParticleSystem embers1;
@@ -20,6 +20,8 @@ public class MenuController : MonoBehaviour
 
     public CanvasGroup menuUI;
     public Text text;
+    public Text countDownText;
+    public int[] phaseDurations;
 
     private void Awake()
     {
@@ -69,11 +71,10 @@ public class MenuController : MonoBehaviour
         }
         text.color = Color.clear;
         text.transform.SetParent(text.transform.parent.parent);
-        //StartCoroutine(CutsceneAfter(1, 68));
-        StartCoroutine(CutsceneAfter(1, 8));
+        StartCoroutine(CutsceneAfter(1, phaseDurations[0]));
         rhythm.player.enemy.StartCombat();
         rhythm.EnableGameplay();
-        phase1Time = AkSoundEngine.GetTimeStamp() / 1000f;
+        phaseTime[0] = AkSoundEngine.GetTimeStamp() / 1000f;
         embers2.Play();
         yield return new WaitForSeconds(1);
         Destroy(embers1);
@@ -135,6 +136,7 @@ public class MenuController : MonoBehaviour
                     EndCutscene1();
                     break;
                 default:
+                    EndCutscene2();
                     break;
             }
         }
@@ -150,21 +152,47 @@ public class MenuController : MonoBehaviour
     void EndCutscene1()
     {
         DisableMenuControls();
+        cutsceneText.EmptyText();
         cutsceneText.state = TextState.Unloaded;
-        float waitTime = 8 - (AkSoundEngine.GetTimeStamp() / 1000f - (phase1Time + 68) + 1) % 8;
-        StartCoroutine(EndCutsceneAfter(1, waitTime, 1));
+        float currentTime = (AkSoundEngine.GetTimeStamp() / 1000f - (phaseTime[0] + phaseDurations[0])) % 16;
+        if(currentTime < 14)
+        {
+            StartCoroutine(EndCutsceneAfter(1, 16 - currentTime));
+        }
+        else
+        {
+            StartCoroutine(EndCutsceneAfter(1, 32 - currentTime));
+        }
+
     }
 
-    IEnumerator EndCutsceneAfter(int cutscene, float delay, float threshold)
+    void EndCutscene2()
     {
-        StartCoroutine(ShowCountDown(delay+threshold));
-        yield return new WaitForSeconds(threshold);
+        DisableMenuControls();
+        cutsceneText.EmptyText();
+        cutsceneText.state = TextState.Unloaded;
+        float currentTime = (AkSoundEngine.GetTimeStamp() / 1000f - (phaseTime[1] + phaseDurations[1])) % 4;
+        if (currentTime < 2)
+        {
+            StartCoroutine(EndCutsceneAfter(2, 4 - currentTime));
+        }
+        else
+        {
+            StartCoroutine(EndCutsceneAfter(2, 8 - currentTime));
+        }
+    }
+
+    IEnumerator EndCutsceneAfter(int cutscene, float waitTime)
+    {
+        StartCoroutine(ShowCountDown(waitTime));
         StartCoroutine(SetStateAfter(cutscene+1, 0));
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(waitTime);
         cutscenes[cutscene - 1].SetActive(false);
         rhythm.player.ResetAll();
         rhythm.player.enemy.NextPhase();
         rhythm.EnableGameplay();
+        phaseTime[cutscene] = AkSoundEngine.GetTimeStamp() / 1000f;
+        StartCoroutine(CutsceneAfter(cutscene+1, phaseDurations[cutscene]));
 
         foreach (Transform matte in mattes.transform)
         {
@@ -177,22 +205,22 @@ public class MenuController : MonoBehaviour
 
     IEnumerator ShowCountDown(float waitTime)
     {
-        text.color = Color.white;
-        text.text = "Starting in: " + waitTime.ToString("f").Replace(',', '.') + "s";
-        iTween.PunchScale(text.gameObject, new Vector3(0.5f, 0.5f, 0.5f), 1f);
+        countDownText.color = Color.white;
+        countDownText.text = "Starting in: " + waitTime.ToString("f").Replace(',', '.') + "s";
+        iTween.PunchScale(countDownText.gameObject, new Vector3(0.5f, 0.5f, 0.5f), 1f);
         float elapsed = waitTime;
         Color auxColor = Color.white;
         float auxAlpha = 1;
         while (elapsed > 0)
         {
-            text.text = "Starting in: " + elapsed.ToString("f").Replace(',', '.') + "s";
+            countDownText.text = "Starting in: " + elapsed.ToString("f").Replace(',', '.') + "s";
             elapsed -= Time.deltaTime;
             auxAlpha = elapsed*3 / waitTime;
             auxColor.a = auxAlpha;
-            text.color = auxColor;
+            countDownText.color = auxColor;
             yield return null;
         }
-        text.color = Color.clear;
+        countDownText.color = Color.clear;
     }
 
     private void OnEnable()

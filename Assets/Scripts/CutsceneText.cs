@@ -34,10 +34,16 @@ public class CutsceneText : MonoBehaviour
         if (state == TextState.Unloaded)
         {
             LoadText(cutscene);
+            index = -1;
         }
         print("PERO WENO");
         state = TextState.Writing;
         StartCoroutine(WriteText());
+    }
+
+    public void EmptyText()
+    {
+        text.text = "";
     }
 
     IEnumerator WriteText()

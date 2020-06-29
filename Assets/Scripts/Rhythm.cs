@@ -106,7 +106,7 @@ public class Rhythm : MonoBehaviour
         player.enemy.pause = false;
         player.EnableFightControls();
         player.SetIntroTrigger();
-        StartCoroutine(RestoreUIAlpha(1));
+        StartCoroutine(ChangeUIAlpha(false, 1));
     }
 
     public void DisableGameplay()
@@ -115,7 +115,10 @@ public class Rhythm : MonoBehaviour
         chromaticAberration.intensity.value = 0.4f;
         player.enemy.pause = true;
         player.enemy.GoIdle();
+        player.RecoverBeat();
+        player.SetTrigger("fail");
         player.DisableFightControls();
+        StartCoroutine(ChangeUIAlpha(true, 1));
     }
 
     IEnumerator Loop()
@@ -128,16 +131,30 @@ public class Rhythm : MonoBehaviour
         }
     }
 
-    IEnumerator RestoreUIAlpha(float duration)
+    IEnumerator ChangeUIAlpha(bool toZero, float duration)
     {
-        float elapsed = 0;
-        while(elapsed < duration)
+        if (toZero)
         {
-            gameplayUI.alpha = elapsed / duration;
-            elapsed += Time.deltaTime;
-            yield return null;
+            float elapsed = duration;
+            while (elapsed > 0)
+            {
+                gameplayUI.alpha = elapsed / duration;
+                elapsed -= Time.deltaTime;
+                yield return null;
+            }
+            gameplayUI.alpha = 0;
         }
-        gameplayUI.alpha = 1;
+        else
+        {
+            float elapsed = 0;
+            while (elapsed < duration)
+            {
+                gameplayUI.alpha = elapsed / duration;
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            gameplayUI.alpha = 1;
+        }
     }
 
     IEnumerator PostProcessTransition()

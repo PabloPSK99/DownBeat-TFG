@@ -10530,7 +10530,7 @@ MonoBehaviour:
   charAnimator: {fileID: 3166231813477885664}
   effects: {fileID: 954182307}
   enemy: {fileID: 1680664918}
-  damage: 80
+  damage: 20
   maxHealth: 100
   offBeat: 0
   currentAction: 0
@@ -11808,6 +11808,7 @@ RectTransform:
   m_Children:
   - {fileID: 749741951}
   - {fileID: 296418611}
+  - {fileID: 1992978570}
   m_Father: {fileID: 1630305504}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13669,7 +13670,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 90729.21, y: 53770.93}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1299016983
@@ -21979,6 +21980,83 @@ MonoBehaviour:
   pauseTime: 0.7
   stopTime: 1.5
   state: 0
+--- !u!1 &1992978569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1992978570}
+  - component: {fileID: 1992978572}
+  - component: {fileID: 1992978571}
+  m_Layer: 5
+  m_Name: CountDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1992978570
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992978569}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1020748393}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 750.9, y: -450.5}
+  m_SizeDelta: {x: 418.2, y: 179}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1992978571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992978569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: ceb12a84eb8ace84c8f6516baa20fe5a, type: 3}
+    m_FontSize: 47
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 47
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Starting in 3.98s
+--- !u!222 &1992978572
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992978569}
+  m_CullTransparentMesh: 0
 --- !u!1001 &2024453928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22533,10 +22611,14 @@ MonoBehaviour:
   embers2: {fileID: 1389151096}
   cutscenes:
   - {fileID: 1077615492}
+  - {fileID: 1077615492}
+  - {fileID: 1077615492}
   mattes: {fileID: 1020748395}
   cutsceneText: {fileID: 1979221752}
   menuUI: {fileID: 1902167802}
   text: {fileID: 694524240}
+  countDownText: {fileID: 1992978571}
+  phaseDurations: 44000000580000003200000032000000
 --- !u!1 &2091220282
 GameObject:
   m_ObjectHideFlags: 0

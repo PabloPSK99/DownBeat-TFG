@@ -103,9 +103,9 @@ public class EnemyController : MonoBehaviour
     {
         phase = 4;
         pause = false;
-        maxThrustCombo -= 2;
+        maxThrustCombo -= 1;
         yield return new WaitForSeconds(15.5f);
-        maxThrustCombo += 2;
+        maxThrustCombo += 1;
         phase = 1;
     }
 
