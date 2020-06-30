@@ -177,7 +177,6 @@ public class Node : MonoBehaviour
             }
             else
             {
-                print(successChance * 100f + "%  (attack)");
                 if (successChance == 1)
                 {
                     player.GetAttack(damage * 1.5f);

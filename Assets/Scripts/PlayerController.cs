@@ -293,6 +293,10 @@ public class PlayerController : MonoBehaviour
                 if (successChance == 100f) //Crítico
                 {
                     enemy.OffBeat();
+                    if(enemy.phase == 4)
+                    {
+                        enemy.GetAttack(damageToBlock / 3);
+                    }
                     SetTrigger("parry");
                     UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
                 }
@@ -607,11 +611,14 @@ public class PlayerController : MonoBehaviour
 
     public void GetDamage(float damage)
     {
-        CameraShake(damageCameraShake * damage, 0.15f);
-        UIController.PopUpNumber(damage, NumberType.Damage, damageToBlock > enemy.damage);
-        health = Mathf.Max(health - Mathf.RoundToInt(damage), 0);
-        StartCoroutine(UpdateHealthBar());
-        enemy.CancelSpearCombo();
+        if (!enemy.pause)
+        {
+            CameraShake(damageCameraShake * damage, 0.15f);
+            UIController.PopUpNumber(damage, NumberType.Damage, damageToBlock > enemy.damage);
+            health = Mathf.Max(health - Mathf.RoundToInt(damage), 0);
+            StartCoroutine(UpdateHealthBar());
+            enemy.CancelSpearCombo();
+        }
     }
 
     public void Heal(float healing)

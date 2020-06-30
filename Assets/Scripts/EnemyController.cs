@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour
     public int maxThrustCombo;
     public float healing;
     public int retaliate;
-    private int phase;
+    public int phase;
     private bool cancelThrustCombo;
     public bool pause;
 
@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         health = maxHealth;
         pause = true;
         retaliate = 5;
-        phase = 0;
+        phase = -1;
         currentAction = Action.None;
         anim = GetComponentInChildren<Animator>();
     }
@@ -61,6 +61,9 @@ public class EnemyController : MonoBehaviour
         {
             switch (phase)
             {
+                case 0:
+                    Phase0();
+                    break;
                 case 1:
                     Phase1();
                     break;
@@ -101,12 +104,27 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator SteelTempest()
     {
-        phase = 4;
+        phase = 0;
         pause = false;
+        damage += 10;
         maxThrustCombo -= 1;
         yield return new WaitForSeconds(15.5f);
         maxThrustCombo += 1;
-        phase = 1;
+        damage -= 10;
+        phase = 4;
+    }
+
+    public void Phase0()
+    {
+        if (currentAction == Action.None)
+        {
+            if (rhythm.normalized < 0.02f)
+            {
+                currentAction = Action.Attack;
+                float random = Random.value * randomness;
+                Random2Combo(2f + random - randomness / 2, new int[3] { 0, 1, 2 });
+            }
+        }
     }
 
     public void Phase1()
@@ -235,6 +253,8 @@ public class EnemyController : MonoBehaviour
         {
             if (rhythm.normalized < 0.02f)
             {
+                damage += 2;
+                player.damage += 1;
                 currentAction = Action.Attack;
                 float random = Random.value * randomness;
                 Random2Combo(2f + random - randomness / 2, new int[3] {0, 1, 2 });
@@ -367,7 +387,6 @@ public class EnemyController : MonoBehaviour
         {
             GameObject g = new GameObject();
             g.name = "First";
-            print("Firsts: "+ targets.PeekPriority());
             aux = targets.RemoveMin();
             g.transform.position = aux.transform.position;
             g.transform.SetParent(halberdPivot);
@@ -377,7 +396,6 @@ public class EnemyController : MonoBehaviour
         {
             GameObject g = new GameObject();
             g.name = "Second";
-            print("Seconds: " + targets.PeekPriority());
             aux = targets.RemoveMin();
             g.transform.position = aux.transform.position;
             g.transform.SetParent(halberdPivot);
@@ -500,6 +518,10 @@ public class EnemyController : MonoBehaviour
 
     public void OffBeat()
     {
+        if(phase == 4)
+        {
+            StopAllCoroutines();
+        }
         if(currentAction == Action.Tech)
         {
             retaliate = Mathf.Max(retaliate - 1, 0);
@@ -769,8 +791,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-
-
     private void Block()
     {
         if (rhythm.IsDownBeat())
@@ -844,13 +864,22 @@ public class EnemyController : MonoBehaviour
 
     public void GetTech(float damage)
     {
-        UIController.PopUpNumber(damage, NumberType.Tech, true);
+        UIController.PopUpNumber(damage, NumberType.Tech, false);
         GetDamage(damage);
     }
 
     private void GetDamage(float damage)
     {
-        health = Mathf.Max(health-Mathf.RoundToInt(damage), 0);
+        if (health-damage <= 10)
+        {
+            UIController.PopUpText("ENDURED THE HIT!");
+            OffBeat();
+        }
+        health = Mathf.Max(health-Mathf.RoundToInt(damage), 10);
+        if(health == 10)
+        {
+            healthBar.color = player.plusBulletColor;
+        }
         StartCoroutine(UpdateHealthBar());
     }
 

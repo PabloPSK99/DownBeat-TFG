@@ -306,19 +306,6 @@
 										<MusicTransition Name="Transition" ID="{71567AC3-891A-4E3A-B33F-412D8E12D788}">
 											<TransitionInfo/>
 										</MusicTransition>
-										<MusicTransition Name="LoopIntro" ID="{B7072C30-1ACF-4C0F-98BD-1911700C7944}">
-											<PropertyList>
-												<Property Name="PlayDestinationPreEntry" Type="bool" Value="False"/>
-												<Property Name="PlaySourcePostExit" Type="bool" Value="False"/>
-											</PropertyList>
-											<TransitionInfo/>
-										</MusicTransition>
-										<MusicTransition Name="ToPhase1" ID="{CA047454-4FCA-4E55-A4EB-87C0FB5B3A2C}">
-											<PropertyList>
-												<Property Name="PlaySourcePostExit" Type="bool" Value="False"/>
-											</PropertyList>
-											<TransitionInfo/>
-										</MusicTransition>
 									</ChildrenList>
 									<TransitionInfo/>
 								</MusicTransition>
@@ -1217,6 +1204,30 @@
 												<Property Name="TimeMs" Type="Real64" Value="40000"/>
 											</PropertyList>
 										</MusicCue>
+										<MusicCue Name="" ID="{BE82C559-DCF4-47B8-BF6E-6688716922C4}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="8000"/>
+											</PropertyList>
+										</MusicCue>
+										<MusicCue Name="" ID="{88737209-947E-407E-9F33-647E4C6CF622}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="16000"/>
+											</PropertyList>
+										</MusicCue>
+										<MusicCue Name="" ID="{E0C2CC46-AAC1-4273-90C3-F6B4C17C705D}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="32000"/>
+											</PropertyList>
+										</MusicCue>
+										<MusicCue Name="" ID="{58164047-33D1-4946-8C66-BB0D9618B843}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="24000"/>
+											</PropertyList>
+										</MusicCue>
 									</CueList>
 								</MusicSegment>
 								<MusicSegment Name="07-Inter3p2" ID="{9867B398-29D6-493F-9352-D56A323BD4FA}" ShortID="448523291">
@@ -1798,6 +1809,18 @@
 											<PropertyList>
 												<Property Name="CueType" Type="int16" Value="1"/>
 												<Property Name="TimeMs" Type="Real64" Value="24000"/>
+											</PropertyList>
+										</MusicCue>
+										<MusicCue Name="" ID="{D0B6EE00-8881-481B-88F8-E826EDB5A1A9}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="8000"/>
+											</PropertyList>
+										</MusicCue>
+										<MusicCue Name="" ID="{81F2C3D3-4AF1-4446-8D1B-ACE93CC508E2}">
+											<PropertyList>
+												<Property Name="CueType" Type="int16" Value="2"/>
+												<Property Name="TimeMs" Type="Real64" Value="16000"/>
 											</PropertyList>
 										</MusicCue>
 									</CueList>

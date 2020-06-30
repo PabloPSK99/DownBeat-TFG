@@ -40,13 +40,11 @@ public class MenuController : MonoBehaviour
 
     void StartBattle()
     {
-        print("START BATTLE");
         StartCoroutine(Count3());
     }
 
     IEnumerator Count3()
     {
-        print("COUNT3");
         float startCountTime = AkSoundEngine.GetTimeStamp() / 1000f - initTime;
         print(startCountTime);
         float waitTime = 0;
@@ -84,12 +82,12 @@ public class MenuController : MonoBehaviour
     IEnumerator SetStateAfter(int phase, float time)
     {
         yield return new WaitForSeconds(time);
+        print(phase + "   +   " + time);
         AkSoundEngine.SetState("Phase", "Phase"+phase);
     }
 
     IEnumerator CutsceneAfter(int cutscene, float delay)
     {
-        print("CUTSCENEAFTER");
         yield return new WaitForSeconds(delay-2);
         mattes.alpha = 1;
         rhythm.DisableGameplay();
@@ -109,21 +107,6 @@ public class MenuController : MonoBehaviour
 
     void Confirm()
     {
-        /*
-        switch (cutsceneIndex)
-        {
-            case 0:
-                DisableMenuControls();
-                StartBattle();
-                break;
-            case 1:
-                EndCutscene1();
-                break;
-            default:
-                break;
-        }
-        */
-        
         if (cutsceneIndex == 0 || cutsceneText.state == TextState.Ended)
         {
             switch (cutsceneIndex)
@@ -135,8 +118,13 @@ public class MenuController : MonoBehaviour
                 case 1:
                     EndCutscene1();
                     break;
-                default:
+                case 2:
                     EndCutscene2();
+                    break;
+                case 3:
+                    EndCutscene3();
+                    break;
+                default:
                     break;
             }
         }
@@ -144,7 +132,6 @@ public class MenuController : MonoBehaviour
         {
             cutsceneText.ShowText(cutsceneIndex);
         }
-        
     }
 
 
@@ -171,14 +158,30 @@ public class MenuController : MonoBehaviour
         DisableMenuControls();
         cutsceneText.EmptyText();
         cutsceneText.state = TextState.Unloaded;
-        float currentTime = (AkSoundEngine.GetTimeStamp() / 1000f - (phaseTime[1] + phaseDurations[1])) % 4;
-        if (currentTime < 2)
+        float currentTime = (AkSoundEngine.GetTimeStamp() / 1000f - (phaseTime[1] + phaseDurations[1])) % 8;
+        if (currentTime < 6)
         {
-            StartCoroutine(EndCutsceneAfter(2, 4 - currentTime));
+            StartCoroutine(EndCutsceneAfter(2, 8 - currentTime));
         }
         else
         {
-            StartCoroutine(EndCutsceneAfter(2, 8 - currentTime));
+            StartCoroutine(EndCutsceneAfter(2, 16 - currentTime));
+        }
+    }
+
+    void EndCutscene3()
+    {
+        DisableMenuControls();
+        cutsceneText.EmptyText();
+        cutsceneText.state = TextState.Unloaded;
+        float currentTime = (AkSoundEngine.GetTimeStamp() / 1000f - (phaseTime[2] + phaseDurations[2])) % 8;
+        if (currentTime < 6)
+        {
+            StartCoroutine(EndCutsceneAfter(3, 8 - currentTime));
+        }
+        else
+        {
+            StartCoroutine(EndCutsceneAfter(3, 16 - currentTime));
         }
     }
 

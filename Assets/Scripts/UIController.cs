@@ -43,7 +43,6 @@ public class UIController : MonoBehaviour
 
     public void PopUpNumber(float number, NumberType type, bool crit)
     {
-        print("POPUP");
         for (int i = 0; i < pivots.Length; i++)
         {
             if (empty[i])
@@ -205,7 +204,6 @@ public class UIController : MonoBehaviour
         Destroy(text.gameObject);
         yield return null;
     }
-
 
     public void PopUpText(string message)
     {
