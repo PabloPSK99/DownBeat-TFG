@@ -10,6 +10,30 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="SFX" ID="{E6EAFFF0-EEBF-43DD-90CA-18E108CCCE46}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Thunder" ID="{396396E9-2074-40FF-8608-AAF22B256E0F}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Shot" ID="{5D0D8D9B-A553-4170-80CC-71E851A3FABE}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Text" ID="{EDCAC38D-2C38-4232-B727-9109151E9171}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="NoAmmo" ID="{99152D93-2138-44D9-9FFD-E3FCF206FA13}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlusShot" ID="{55797EF5-2247-454F-9948-68FA37AABB02}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Confirm" ID="{2BFB7719-FB97-4627-9BDA-D1DFABFCE053}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Slash" ID="{2B07431A-851C-4635-8814-32BEF454086B}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Critical" ID="{EBDB203D-7FFF-4643-BDE9-F76D60A3A87B}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Reload" ID="{DB48DA28-F1D1-4697-8CA1-41A3915FCC35}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="EnemyBlock" ID="{2446FAFC-9869-480D-B3C0-EB71F2CB0714}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Storm" ID="{84C90FB5-AFF2-483C-AE75-9477198F71B9}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Prayer" ID="{BDF0F720-7802-48BB-AFCF-25BF39555760}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Heal" ID="{F37695F3-1849-4944-99B4-8E0FB8016458}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Flash" ID="{8F32020E-DAF2-4980-AE9A-789C885666AA}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Block" ID="{9348B533-C8C7-4AFE-BE28-B8849E245FD6}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Punch" ID="{DCDD3BCA-C3B6-4B46-BC0F-FD342C369FCD}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Twirl" ID="{084C9F81-BFFA-4BD3-8FC1-7DC84641475E}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Cut" ID="{0AA49AAC-4EFD-4F7B-B515-31447201F9B5}" WorkUnitID="{A65F432C-B1CA-46FC-971D-7D3CCD6FEC9B}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

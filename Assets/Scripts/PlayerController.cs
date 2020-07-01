@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
+                    AkSoundEngine.PostEvent("NoAmmo", rhythm.gameObject);
                     UIController.PopUpText("OUT OF AMMO!");
                     StartCoroutine(OutOfAmmo());
                     SetTrigger("outOfAmmo");
@@ -161,8 +162,10 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpChance(successChance, Action.Attack);
             if (currentNode.forward == null)  //Ataque Melee
             {
+                AkSoundEngine.PostEvent("Punch", rhythm.gameObject);
                 if (successChance == 100f) //Crítico
                 {
+                    AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                     CameraShake(plusShotCameraShake, 0.25f);
                     enemy.GetAttack(damage * 1.5f);
                     FillChamberSlot(false);
@@ -178,8 +181,10 @@ public class PlayerController : MonoBehaviour
                 float shootDamage = Shoot();
                 if(shootDamage != 0)
                 {
+                    AkSoundEngine.PostEvent("Shot", rhythm.gameObject);
                     if (successChance == 100f) //Crítico
                     {
+                        AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                         enemy.GetAttack(shootDamage * 1.5f);
                     }
                     else
@@ -290,6 +295,7 @@ public class PlayerController : MonoBehaviour
         {
             if (damageToBlock != 0)
             {
+                AkSoundEngine.PostEvent("Block", rhythm.gameObject);
                 if (successChance == 100f) //Crítico
                 {
                     enemy.OffBeat();
@@ -298,6 +304,7 @@ public class PlayerController : MonoBehaviour
                         enemy.GetAttack(damageToBlock / 3);
                     }
                     SetTrigger("parry");
+                    AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                     UIController.PopUpNumber(damageToBlock, NumberType.Block, true);
                 }
                 else
@@ -384,6 +391,7 @@ public class PlayerController : MonoBehaviour
             else if (currentAction == Action.Twirl) //Pirueta
             {
                 UIController.PopUpChance(successChance, Action.Tech);
+                AkSoundEngine.PostEvent("Twirl", rhythm.gameObject);
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
@@ -401,6 +409,7 @@ public class PlayerController : MonoBehaviour
             else if (currentAction == Action.Flash) //Destello
             {
                 UIController.PopUpChance(successChance, Action.Tech);
+                AkSoundEngine.PostEvent("Flash", rhythm.gameObject);
                 if (successChance == 100f) //Crítico
                 {
                     FillChamberSlot(true);
@@ -442,6 +451,7 @@ public class PlayerController : MonoBehaviour
         {
             if (chamber[i] == Bullet.Empty)
             {
+                AkSoundEngine.PostEvent("Reload", rhythm.gameObject);
                 bulletsUI[i].transform.localScale = Vector3.one * 0.6f;
                 if (isPlus)
                 {
@@ -486,6 +496,7 @@ public class PlayerController : MonoBehaviour
                 chamber[i] = Bullet.One;
                 bulletsUI[i].color = Color.white;
             }
+            AkSoundEngine.PostEvent("Reload", rhythm.gameObject);
             iTween.PunchScale(bulletsUI[i].gameObject, new Vector3(0.1f, -0.1f, 0), 1f);
             yield return new WaitForSeconds(0.1f);
             bullets--;
@@ -543,9 +554,11 @@ public class PlayerController : MonoBehaviour
         if (!rhythm.beatLocked)
         {
             CheckSuccess();
+            AkSoundEngine.PostEvent("Cut", rhythm.gameObject);
             if (successChance == 100f && (enemy.currentAction == Action.Block || enemy.currentAction == Action.Tech))
             {
                 UIController.PopUpChance(successChance, Action.Cut);
+                AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                 enemy.OffBeat();
             }
             else
@@ -623,6 +636,7 @@ public class PlayerController : MonoBehaviour
 
     public void Heal(float healing)
     {
+        AkSoundEngine.PostEvent("Heal", rhythm.gameObject);
         health = Mathf.Min(health + Mathf.RoundToInt(healing), maxHealth);
         StartCoroutine(UpdateHealthBar());
     }

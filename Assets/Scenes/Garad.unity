@@ -7380,6 +7380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3039528a0116204fafc56699cfee9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rhythm: {fileID: 719575788}
   shockWave: {fileID: 6791486430178121601, guid: 0c457f7bffc6e2d40a31d4b19e0ac771,
     type: 3}
   dust: {fileID: 6791486430178121601, guid: a938a96b16722804ba1d118b57ed1cf3, type: 3}
@@ -11844,6 +11845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3039528a0116204fafc56699cfee9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rhythm: {fileID: 0}
   shockWave: {fileID: 6791486430178121601, guid: 0c457f7bffc6e2d40a31d4b19e0ac771,
     type: 3}
   dust: {fileID: 6791486430178121601, guid: a938a96b16722804ba1d118b57ed1cf3, type: 3}
@@ -11986,6 +11988,7 @@ GameObject:
   - component: {fileID: 963194231}
   - component: {fileID: 963194226}
   - component: {fileID: 963194232}
+  - component: {fileID: 963194233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -12199,6 +12202,31 @@ MonoBehaviour:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 320b9b446a51d3f48868db991161cbe2,
+      type: 2}
+  decodeBank: 0
+  loadAsynchronous: 0
+  saveDecodedBank: 0
+  unloadTriggerList: 958ca0ea
+  bankNameInternal: 
+  valueGuidInternal: 
+--- !u!114 &963194233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05fa620e8ffa36148b165416e9d3a29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerList: ae8d9d44f7e1664c
+  useOtherObject: 0
+  data:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 4cc7585dc341bf747b084ac58a31d0d1,
       type: 2}
   decodeBank: 0
   loadAsynchronous: 0
@@ -23129,6 +23157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 157942c6ab7dad34f911a04081937e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rhythm: {fileID: 719575788}
   maxFiles: 5
   fullText: "Con la voz rota, le dices a Garad que no quieres matarle.$Cuando baja
     la cabeza para preparar el pr\xF3ximo ataque,\nte parece ver una l\xE1grima centellear

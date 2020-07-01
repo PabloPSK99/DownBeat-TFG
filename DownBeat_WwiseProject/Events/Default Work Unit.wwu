@@ -14,6 +14,274 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Folder Name="SFX" ID="{8D107F4F-7FCE-4C71-B2FB-3DC3E1434938}" ShortID="172279454">
+					<ChildrenList>
+						<Event Name="Text" ID="{EDCAC38D-2C38-4232-B727-9109151E9171}">
+							<ChildrenList>
+								<Action Name="" ID="{ABB93899-4EC8-44DC-8B19-0168AA92044F}" ShortID="1066910681">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Text" ID="{03E95EED-4CF0-4DFD-9CED-88DC49869770}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Confirm" ID="{2BFB7719-FB97-4627-9BDA-D1DFABFCE053}">
+							<ChildrenList>
+								<Action Name="" ID="{47D673AD-090A-45C7-8286-DAD95C64F7E1}" ShortID="850084556">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Confirm" ID="{9650FFAD-2E63-4077-B375-D1E738BE6011}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Punch" ID="{DCDD3BCA-C3B6-4B46-BC0F-FD342C369FCD}">
+							<ChildrenList>
+								<Action Name="" ID="{582F9FFE-0747-4D91-BF14-7D276FA58F8A}" ShortID="953748971">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Punch" ID="{07AE3230-2CD8-4352-BE95-0D069A54BE8C}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Shot" ID="{5D0D8D9B-A553-4170-80CC-71E851A3FABE}">
+							<ChildrenList>
+								<Action Name="" ID="{73C17EC3-37AD-4B16-A19E-8540C15C4675}" ShortID="381621859">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Shot" ID="{68248271-B03D-4E8A-92F5-F36624F15C11}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="PlusShot" ID="{55797EF5-2247-454F-9948-68FA37AABB02}">
+							<ChildrenList>
+								<Action Name="" ID="{F3CD9495-07D5-492D-8F6E-D0F67BACD0DB}" ShortID="484653621">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="PlusShot" ID="{C1C2931E-DAF6-400F-91CB-A96A400281DC}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Critical" ID="{EBDB203D-7FFF-4643-BDE9-F76D60A3A87B}">
+							<ChildrenList>
+								<Action Name="" ID="{7EAF3537-151A-4A87-AA89-2D29EF730FE4}" ShortID="78124149">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Critical" ID="{B6B5CE18-916E-4739-A89A-B75C3230A66D}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Reload" ID="{DB48DA28-F1D1-4697-8CA1-41A3915FCC35}">
+							<ChildrenList>
+								<Action Name="" ID="{95CF5BD6-D089-40EA-B908-D5776D4C46A5}" ShortID="250134655">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Reload" ID="{CE0AE14B-EBBC-4686-BF65-A65DBA4FC4C2}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="NoAmmo" ID="{99152D93-2138-44D9-9FFD-E3FCF206FA13}">
+							<ChildrenList>
+								<Action Name="" ID="{5B6918F5-2A6F-4E96-9EA5-29C6F8CF1CF1}" ShortID="651026888">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="NoAmmo" ID="{A93ABFB0-174E-4AEC-A291-559359C87F5D}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Block" ID="{9348B533-C8C7-4AFE-BE28-B8849E245FD6}">
+							<ChildrenList>
+								<Action Name="" ID="{CE262B23-1CFB-4F6E-BC12-3586E640423A}" ShortID="41687028">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Block" ID="{25F285C1-0936-4FCB-9014-09132B55017A}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Prayer" ID="{BDF0F720-7802-48BB-AFCF-25BF39555760}">
+							<ChildrenList>
+								<Action Name="" ID="{32FF7F41-E60D-4ABC-A362-A5406D03F7BC}" ShortID="495700531">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Prayer" ID="{D5FFDE38-CE6F-425C-9CDE-3CD71C9FAC7A}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Thunder" ID="{396396E9-2074-40FF-8608-AAF22B256E0F}">
+							<ChildrenList>
+								<Action Name="" ID="{0EA93EC9-1E33-4855-B073-FB7147F065EA}" ShortID="972952934">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Thunder" ID="{2149213E-66AD-4848-9DCD-85166CF1C6DD}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Slash" ID="{2B07431A-851C-4635-8814-32BEF454086B}">
+							<ChildrenList>
+								<Action Name="" ID="{43C5F275-0923-4F19-A775-259ED6CF2297}" ShortID="795989532">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Slash" ID="{00910A51-7C7E-4983-AD22-4FD2DD743C02}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Storm" ID="{84C90FB5-AFF2-483C-AE75-9477198F71B9}">
+							<ChildrenList>
+								<Action Name="" ID="{AFFE7031-21B2-41B8-AB9F-1BC8E057F95D}" ShortID="450246136">
+									<PropertyList>
+										<Property Name="Delay" Type="Real64">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{DB9EB326-9362-4D5E-B853-D84837268536}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="0.3"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Probability" Type="Real64" Value="50"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Thunder1" ID="{16F77844-5829-451D-8312-2C727DBF6AEB}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{244C89B3-0DB2-402B-A655-979006DEA949}" ShortID="763323686">
+									<PropertyList>
+										<Property Name="Delay" Type="Real64">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{53B6F661-AB3E-4603-9C61-3231664C24CD}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="0.3"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Probability" Type="Real64" Value="50"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Thunder2" ID="{9073F207-0913-42EC-8ACC-BA3F6C0A7431}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{DCA85780-EE7A-4F5C-AC97-1A4C5B6D5FEC}" ShortID="826399112">
+									<PropertyList>
+										<Property Name="Delay" Type="Real64">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{277C9270-C2DB-4C94-ABE2-67D0B0C46AEF}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="0.3"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Probability" Type="Real64" Value="50"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Thunder3" ID="{AD4C1A07-89C0-4513-B8A4-8EBB70E0C6D2}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{1E2C5108-9621-4475-BB0C-27B9829B22A0}" ShortID="499374586">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Thunder" ID="{2149213E-66AD-4848-9DCD-85166CF1C6DD}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="EnemyBlock" ID="{2446FAFC-9869-480D-B3C0-EB71F2CB0714}">
+							<ChildrenList>
+								<Action Name="" ID="{A6D062FB-A346-4839-927C-0AB1EE793F57}" ShortID="541424647">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="EnemyBlock" ID="{1C53BF69-E94F-4321-97B5-B3B5486F6773}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Cut" ID="{0AA49AAC-4EFD-4F7B-B515-31447201F9B5}">
+							<ChildrenList>
+								<Action Name="" ID="{96DAC874-D965-4944-8F61-775CD805B8E3}" ShortID="896054416">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Cut" ID="{E0C63A92-FE21-405B-AC55-039A5FE790F0}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Flash" ID="{8F32020E-DAF2-4980-AE9A-789C885666AA}">
+							<ChildrenList>
+								<Action Name="" ID="{8C0F92F9-EE96-4217-9ACE-4FA5C972DBBC}" ShortID="586794023">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Flash" ID="{7A1121DD-90A4-4E04-B0EB-4CDDFC2FB9A9}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Heal" ID="{F37695F3-1849-4944-99B4-8E0FB8016458}">
+							<ChildrenList>
+								<Action Name="" ID="{C485C972-C6C2-4D20-AC8A-202D390C52CC}" ShortID="343732375">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Heal" ID="{BEFCBD81-5690-4182-BA2F-E4D2E7EC71E3}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Twirl" ID="{084C9F81-BFFA-4BD3-8FC1-7DC84641475E}">
+							<ChildrenList>
+								<Action Name="" ID="{C83EE682-F72C-4A74-84D3-BFEFC9CF8CAE}" ShortID="816840257">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Twirl" ID="{6E9B2E5D-14C2-4126-8D2E-07773D143B95}" WorkUnitID="{4C4E819F-8359-470C-80C6-9DAC2A11DA40}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

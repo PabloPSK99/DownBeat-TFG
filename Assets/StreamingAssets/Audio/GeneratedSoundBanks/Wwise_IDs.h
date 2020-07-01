@@ -13,7 +13,25 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID BLOCK = 4001580976U;
+        static const AkUniqueID CONFIRM = 1517537939U;
+        static const AkUniqueID CRITICAL = 2534871658U;
+        static const AkUniqueID CUT = 647463975U;
+        static const AkUniqueID ENEMYBLOCK = 3537999518U;
+        static const AkUniqueID FLASH = 1556996917U;
+        static const AkUniqueID HEAL = 3448274447U;
         static const AkUniqueID MUSIC = 3991942870U;
+        static const AkUniqueID NOAMMO = 16204334U;
+        static const AkUniqueID PLUSSHOT = 4096665489U;
+        static const AkUniqueID PRAYER = 1797089188U;
+        static const AkUniqueID PUNCH = 645565787U;
+        static const AkUniqueID RELOAD = 456382354U;
+        static const AkUniqueID SHOT = 251412229U;
+        static const AkUniqueID SLASH = 4107276880U;
+        static const AkUniqueID STORM = 1686739424U;
+        static const AkUniqueID TEXT = 2972449336U;
+        static const AkUniqueID THUNDER = 186852181U;
+        static const AkUniqueID TWIRL = 468693733U;
     } // namespace EVENTS
 
     namespace STATES
@@ -54,6 +72,7 @@ namespace AK
     {
         static const AkUniqueID INIT = 1355168291U;
         static const AkUniqueID MUSIC = 3991942870U;
+        static const AkUniqueID SFX = 393239870U;
     } // namespace BANKS
 
     namespace BUSSES

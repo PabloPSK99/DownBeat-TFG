@@ -31,7 +31,7 @@
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Switches\Default Work Unit.wwu" DateLow="1593119747" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\States\Default Work Unit.wwu" DateLow="1593092314" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Soundcaster Sessions\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
-	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\SoundBanks\Default Work Unit.wwu" DateLow="1593119758" DateHigh="0"/>
+	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\SoundBanks\Default Work Unit.wwu" DateLow="1593564952" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Queries\Factory Queries.wwu" DateLow="1592515613" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Queries\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Presets\Factory Spatial Audio.wwu" DateLow="1592515613" DateHigh="0"/>
@@ -39,10 +39,10 @@
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Modulators\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Mixing Sessions\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Master-Mixer Hierarchy\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
-	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Interactive Music Hierarchy\Music.wwu" DateLow="1593473257" DateHigh="0"/>
+	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Interactive Music Hierarchy\Music.wwu" DateLow="1593565112" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Interactive Music Hierarchy\Default Work Unit.wwu" DateLow="1592956062" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Game Parameters\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
-	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Events\Default Work Unit.wwu" DateLow="1593119605" DateHigh="0"/>
+	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Events\Default Work Unit.wwu" DateLow="1593564834" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Effects\Factory Effects.wwu" DateLow="1592515613" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Effects\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Dynamic Dialogue\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
@@ -53,5 +53,6 @@
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Control Surface Sessions\Default Work Unit.wwu" DateLow="1592855856" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Audio Devices\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Attenuations\Default Work Unit.wwu" DateLow="1592515889" DateHigh="0"/>
+	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Actor-Mixer Hierarchy\SFX.wwu" DateLow="1593565261" DateHigh="0"/>
 	<ValidationCacheItem File="D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\Actor-Mixer Hierarchy\Default Work Unit.wwu" DateLow="1592956062" DateHigh="0"/>
 </ValidationCache>

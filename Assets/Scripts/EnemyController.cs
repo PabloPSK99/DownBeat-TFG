@@ -111,7 +111,7 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(15.5f);
         maxThrustCombo += 1;
         damage -= 10;
-        phase = 4;
+        phase = 1;
     }
 
     public void Phase0()
@@ -899,6 +899,7 @@ public class EnemyController : MonoBehaviour
 
     public void Heal()
     {
+        AkSoundEngine.PostEvent("Prayer", rhythm.gameObject);
         health = Mathf.Min(health + Mathf.RoundToInt(healing), maxHealth);
         StartCoroutine(UpdateHealthBar());
     }

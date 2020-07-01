@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CutsceneText : MonoBehaviour
 {
+    public Rhythm rhythm;
     public int maxFiles;
     [TextArea(3, 10)] public string fullText;
     private string currentText;
@@ -67,6 +68,7 @@ public class CutsceneText : MonoBehaviour
             }
             else
             {
+                AkSoundEngine.PostEvent("Text", rhythm.gameObject);
                 currentText += fullText[i];
                 text.text = currentText;
                 if (fullText[i] == '.')

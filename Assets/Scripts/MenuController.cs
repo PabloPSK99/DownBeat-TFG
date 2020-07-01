@@ -109,6 +109,7 @@ public class MenuController : MonoBehaviour
     {
         if (cutsceneIndex == 0 || cutsceneText.state == TextState.Ended)
         {
+            AkSoundEngine.PostEvent("Confirm", rhythm.gameObject);
             switch (cutsceneIndex)
             {
                 case 0:

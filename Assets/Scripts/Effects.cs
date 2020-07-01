@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Effects : MonoBehaviour
 {
+    public Rhythm rhythm;
     public GameObject shockWave;
     public GameObject dust;
     public GameObject flash;
@@ -44,6 +45,8 @@ public class Effects : MonoBehaviour
 
     public void FixHalberd(string isTech)
     {
+        AkSoundEngine.PostEvent("Thunder", rhythm.gameObject);
+        AkSoundEngine.PostEvent("Slash", rhythm.gameObject);
         StartCoroutine(FixHalberdWhile(0.2f));
         GameObject t = isTech == "Tech"? Instantiate(spearTechTrails, halberd) : Instantiate(spearTrails, halberd);
         TrailRenderer[] trs = t.GetComponentsInChildren<TrailRenderer>();
@@ -94,6 +97,8 @@ public class Effects : MonoBehaviour
 
     public void Sweep()
     {
+        AkSoundEngine.PostEvent("Thunder", rhythm.gameObject);
+        AkSoundEngine.PostEvent("Slash", rhythm.gameObject);
         Transform parent = halberdPivot.parent;
         halberdPivot.SetParent(transform);
         halberdPivot.position += Vector3.up;
@@ -113,6 +118,7 @@ public class Effects : MonoBehaviour
 
     public void FireSweep()
     {
+        AkSoundEngine.PostEvent("Slash", rhythm.gameObject);
         Transform parent = halberdPivot.parent;
         halberdPivot.SetParent(transform);
         halberdPivot.position += Vector3.up;
@@ -167,7 +173,9 @@ public class Effects : MonoBehaviour
 
     public void Storm()
     {
-        foreach(Transform tr in halberdPivot)
+        AkSoundEngine.PostEvent("Storm", rhythm.gameObject);
+
+        foreach (Transform tr in halberdPivot)
         {
             if (tr.parent == halberdPivot)
             {
@@ -179,6 +187,7 @@ public class Effects : MonoBehaviour
 
     public void StormCombo()
     {
+        AkSoundEngine.PostEvent("Storm", rhythm.gameObject);
         foreach (Transform tr in halberdPivot)
         {
             if (tr.parent == halberdPivot)
@@ -195,10 +204,17 @@ public class Effects : MonoBehaviour
                 }
             }
         }
+        StartCoroutine(SecondStormSFX(1));
         foreach(IEnumerator cr in secondStorm)
         {
             StartCoroutine(cr);
         }
+    }
+
+    IEnumerator SecondStormSFX(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        AkSoundEngine.PostEvent("Storm", rhythm.gameObject);
     }
 
     public void CancelSecondStorm()
@@ -230,7 +246,6 @@ public class Effects : MonoBehaviour
 
     public void Thunder(Transform pivot, bool reParent, bool tech)
     {
-
         if (reParent)
         {
             Transform parent = halberdPivot.parent;
@@ -271,13 +286,13 @@ public class Effects : MonoBehaviour
             "time", 0.1f,
             "easetype", iTween.EaseType.easeInOutQuad)
         );
-
         StartCoroutine(ThunderStrikeIn(pivot, 0.1f, tech));
         Destroy(t, 2);
     }
 
     public void Thunder(Transform pivot, bool reParent)
     {
+        AkSoundEngine.PostEvent("Thunder", rhythm.gameObject);
 
         if (reParent)
         {

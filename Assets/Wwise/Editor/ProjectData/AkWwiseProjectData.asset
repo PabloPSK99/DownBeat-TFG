@@ -40,7 +40,7 @@ MonoBehaviour:
     ParentPath: Default Work Unit
     guid: c2c0f7da9a64914d8644c92a494c68e0
     GuidInternal: 
-    m_lastTime: -8586084871265928863
+    m_lastTime: -8586080419327681702
     List:
     - name: Music
       guid: 9ea1c7a268edc546a2a801735100013c
@@ -51,13 +51,120 @@ MonoBehaviour:
       - ElementName: Music
         ObjectType: 7
       Path: Default Work Unit\Music
+    - name: SFX
+      guid: f0ffeae6bfeedd4390ca18e108ccce46
+      id: 393239870
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 7
+      Path: Default Work Unit\SFX
   EventWwu:
   - PhysicalPath: Events\Default Work Unit.wwu
     ParentPath: Default Work Unit
     guid: 2c435fa6cab1fc46971d7d3ccd6fec9b
     GuidInternal: 
-    m_lastTime: -8586084872801986844
+    m_lastTime: -8586080420505311023
     List:
+    - name: Block
+      guid: 33b54893c7c8fe4abe28b8849e245fd6
+      id: 4001580976
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Block
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Block
+      maxAttenuation: 0
+      maxDuration: 1327169
+      minDuration: 994254
+    - name: Confirm
+      guid: 1977fb2b97fb27469bdad1dfabfce053
+      id: 1517537939
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Confirm
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Confirm
+      maxAttenuation: 0
+      maxDuration: 2041250
+      minDuration: 2041250
+    - name: Critical
+      guid: 3d20dbebff7f4346bde9f76d60a3a87b
+      id: 2534871658
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Critical
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Critical
+      maxAttenuation: 0
+      maxDuration: 503311
+      minDuration: 503311
+    - name: Cut
+      guid: ac9aa40afd4e7b4fb51531447201f9b5
+      id: 647463975
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Cut
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Cut
+      maxAttenuation: 0
+      maxDuration: 108119
+      minDuration: 76451
+    - name: EnemyBlock
+      guid: fcfa462469980d48b3c0eb71f2cb0714
+      id: 3537999518
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: EnemyBlock
+        ObjectType: 3
+      Path: Default Work Unit\SFX\EnemyBlock
+      maxAttenuation: 0
+      maxDuration: 832185
+      minDuration: 588444
+    - name: Flash
+      guid: 0e02328ff2da8049ae9a789c885666aa
+      id: 1556996917
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Flash
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Flash
+      maxAttenuation: 0
+      maxDuration: 2405345
+      minDuration: 1700836
+    - name: Heal
+      guid: f39576f34918444999b48e0fb8016458
+      id: 3448274447
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Heal
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Heal
+      maxAttenuation: 0
+      maxDuration: 1186032
+      minDuration: 1186032
     - name: Music
       guid: d1f0e51fa2cdd6488dfa9ce2ad714a63
       id: 3991942870
@@ -70,6 +177,172 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: NoAmmo
+      guid: 932d15993821d9449ffde3fcf206fa13
+      id: 16204334
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: NoAmmo
+        ObjectType: 3
+      Path: Default Work Unit\SFX\NoAmmo
+      maxAttenuation: 0
+      maxDuration: 775601
+      minDuration: 775601
+    - name: PlusShot
+      guid: f57e795547224f45994868fa37aabb02
+      id: 4096665489
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: PlusShot
+        ObjectType: 3
+      Path: Default Work Unit\SFX\PlusShot
+      maxAttenuation: 0
+      maxDuration: 2681276
+      minDuration: 1504815
+    - name: Prayer
+      guid: 20f7f0bd0278bb48afcf25bf39555760
+      id: 1797089188
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Prayer
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Prayer
+      maxAttenuation: 0
+      maxDuration: 4593152
+      minDuration: 4593152
+    - name: Punch
+      guid: ca3bdddcb6c3464bbc0ffd342c369fcd
+      id: 645565787
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Punch
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Punch
+      maxAttenuation: 0
+      maxDuration: 2840713
+      minDuration: 1420357
+    - name: Reload
+      guid: 28da48dbd1f197468ca141a3915fcc35
+      id: 456382354
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Reload
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Reload
+      maxAttenuation: 0
+      maxDuration: 1053396
+      minDuration: 1053396
+    - name: SFX
+      guid: 4f7f108dce7f714cb2fb3dc3e1434938
+      id: 393239870
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      Path: Default Work Unit\SFX
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Shot
+      guid: 9b8d0d5d53a5704180cc71e851a3fabe
+      id: 251412229
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Shot
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Shot
+      maxAttenuation: 0
+      maxDuration: 2681276
+      minDuration: 1504815
+    - name: Slash
+      guid: 1a43072b1c853546881432bef454086b
+      id: 4107276880
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Slash
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Slash
+      maxAttenuation: 0
+      maxDuration: 1796248
+      minDuration: 1270139
+    - name: Storm
+      guid: b50fc984f2af3c48ae759477198f71b9
+      id: 1686739424
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Storm
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Storm
+      maxAttenuation: 0
+      maxDuration: 1901957
+      minDuration: 1009169
+    - name: Text
+      guid: 8dc3caed382c3242b7279109151e9171
+      id: 2972449336
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Text
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Text
+      maxAttenuation: 0
+      maxDuration: 42396
+      minDuration: 42396
+    - name: Thunder
+      guid: e99663397420ff408608aaf22b256e0f
+      id: 186852181
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Thunder
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Thunder
+      maxAttenuation: 0
+      maxDuration: 1601957
+      minDuration: 800684
+    - name: Twirl
+      guid: 819f4c08fabfd34b8fc17dc84641475e
+      id: 468693733
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: SFX
+        ObjectType: 4
+      - ElementName: Twirl
+        ObjectType: 3
+      Path: Default Work Unit\SFX\Twirl
+      maxAttenuation: 0
+      maxDuration: 2128128
+      minDuration: 1613751
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     ParentPath: Default Work Unit
@@ -176,11 +449,6 @@ MonoBehaviour:
   - /DownBeat_WwiseProject
   - /DownBeat_WwiseProject/Events
   - /DownBeat_WwiseProject/Events/Default Work Unit
-  - /DownBeat_WwiseProject/SoundBanks
-  - /DownBeat_WwiseProject/States
-  - /DownBeat_WwiseProject/States/Default Work Unit
-  - /DownBeat_WwiseProject/Switches
-  - /DownBeat_WwiseProject/Switches/Default Work Unit
-  - /DownBeat_WwiseProject/Switches/Default Work Unit/OffBeat
+  - /DownBeat_WwiseProject/Events/Default Work Unit/SFX
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

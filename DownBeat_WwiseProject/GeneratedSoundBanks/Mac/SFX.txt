@@ -1,0 +1,41 @@
+Event	ID	Name			Wwise Object Path	Notes
+	16204334	NoAmmo			\Default Work Unit\SFX\NoAmmo	
+	186852181	Thunder			\Default Work Unit\SFX\Thunder	
+	251412229	Shot			\Default Work Unit\SFX\Shot	
+	456382354	Reload			\Default Work Unit\SFX\Reload	
+	468693733	Twirl			\Default Work Unit\SFX\Twirl	
+	645565787	Punch			\Default Work Unit\SFX\Punch	
+	647463975	Cut			\Default Work Unit\SFX\Cut	
+	1517537939	Confirm			\Default Work Unit\SFX\Confirm	
+	1556996917	Flash			\Default Work Unit\SFX\Flash	
+	1686739424	Storm			\Default Work Unit\SFX\Storm	
+	1797089188	Prayer			\Default Work Unit\SFX\Prayer	
+	2534871658	Critical			\Default Work Unit\SFX\Critical	
+	2972449336	Text			\Default Work Unit\SFX\Text	
+	3448274447	Heal			\Default Work Unit\SFX\Heal	
+	3537999518	EnemyBlock			\Default Work Unit\SFX\EnemyBlock	
+	4001580976	Block			\Default Work Unit\SFX\Block	
+	4096665489	PlusShot			\Default Work Unit\SFX\PlusShot	
+	4107276880	Slash			\Default Work Unit\SFX\Slash	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	9438828	Slash	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Slash_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Slash		290072
+	23902517	Critical	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Critical_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Critical		88848
+	109474922	Twirl	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Twirl_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Twirl		354396
+	151392554	EnemyBlock	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\EnemyBlock_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\EnemyBlock		134420
+	174110548	Text	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Text_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Text		8204
+	199180584	Thunder1	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Thunder1_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Thunder\Thunder1		224352
+	201990034	Confirm	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Confirm_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Confirm		391984
+	218014012	NoAmmo	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\NoAmmo_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\NoAmmo		136880
+	383809308	Heal	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Heal_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Heal		209280
+	387248891	Cut	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Cut_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Cut		17520
+	528083747	Thunder3	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Thunder3_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Thunder\Thunder3		214636
+	614369787	Prayer	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Prayer_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Prayer		810296
+	618030000	Flash	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Flash_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Flash		388412
+	643225865	Block	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Block_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Block		202312
+	796143179	Thunder2	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Thunder2_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Thunder\Thunder2		178016
+	815606792	PlusShot	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\PlusShot_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\PlusShot		385732
+	909947837	Punch	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Punch_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Punch		385732
+	942649117	Shot	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Shot_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Shot		385732
+	960646667	Reload	D:\Escritorio\Documentos\DownBeat\DownBeat_WwiseProject\.cache\Mac\SFX\Reload_10C4C929.wem		\Actor-Mixer Hierarchy\SFX\Reload		202316
+

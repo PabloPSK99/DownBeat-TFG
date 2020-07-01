@@ -11,6 +11,173 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
+		<SoundBank Id="393239870" Language="SFX">
+			<ObjectPath>\SoundBanks\Default Work Unit\SFX</ObjectPath>
+			<ShortName>SFX</ShortName>
+			<Path>SFX.bnk</Path>
+			<IncludedEvents>
+				<Event Id="4001580976" Name="Block" ObjectPath="\Events\Default Work Unit\SFX\Block" DurationType="OneShot" DurationMin="0.994254" DurationMax="1.327169">
+					<IncludedMemoryFiles>
+						<File Id="643225865" Language="SFX">
+							<ShortName>Block.wav</ShortName>
+							<Path>SFX\Block_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1517537939" Name="Confirm" ObjectPath="\Events\Default Work Unit\SFX\Confirm" DurationType="OneShot" DurationMin="2.041250" DurationMax="2.041250">
+					<IncludedMemoryFiles>
+						<File Id="201990034" Language="SFX">
+							<ShortName>Confirm.wav</ShortName>
+							<Path>SFX\Confirm_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="2534871658" Name="Critical" ObjectPath="\Events\Default Work Unit\SFX\Critical" DurationType="OneShot" DurationMin="0.503311" DurationMax="0.503311">
+					<IncludedMemoryFiles>
+						<File Id="23902517" Language="SFX">
+							<ShortName>Critical.wav</ShortName>
+							<Path>SFX\Critical_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="647463975" Name="Cut" ObjectPath="\Events\Default Work Unit\SFX\Cut" DurationType="OneShot" DurationMin="0.076451" DurationMax="0.108119">
+					<IncludedMemoryFiles>
+						<File Id="387248891" Language="SFX">
+							<ShortName>Cut.wav</ShortName>
+							<Path>SFX\Cut_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="3537999518" Name="EnemyBlock" ObjectPath="\Events\Default Work Unit\SFX\EnemyBlock" DurationType="OneShot" DurationMin="0.588444" DurationMax="0.832185">
+					<IncludedMemoryFiles>
+						<File Id="151392554" Language="SFX">
+							<ShortName>EnemyBlock.wav</ShortName>
+							<Path>SFX\EnemyBlock_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1556996917" Name="Flash" ObjectPath="\Events\Default Work Unit\SFX\Flash" DurationType="OneShot" DurationMin="1.700836" DurationMax="2.405345">
+					<IncludedMemoryFiles>
+						<File Id="618030000" Language="SFX">
+							<ShortName>Flash.wav</ShortName>
+							<Path>SFX\Flash_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="3448274447" Name="Heal" ObjectPath="\Events\Default Work Unit\SFX\Heal" DurationType="OneShot" DurationMin="1.186032" DurationMax="1.186032">
+					<IncludedMemoryFiles>
+						<File Id="383809308" Language="SFX">
+							<ShortName>Heal.wav</ShortName>
+							<Path>SFX\Heal_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="16204334" Name="NoAmmo" ObjectPath="\Events\Default Work Unit\SFX\NoAmmo" DurationType="OneShot" DurationMin="0.775601" DurationMax="0.775601">
+					<IncludedMemoryFiles>
+						<File Id="218014012" Language="SFX">
+							<ShortName>NoAmmo.wav</ShortName>
+							<Path>SFX\NoAmmo_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="4096665489" Name="PlusShot" ObjectPath="\Events\Default Work Unit\SFX\PlusShot" DurationType="OneShot" DurationMin="1.504815" DurationMax="2.681276">
+					<IncludedMemoryFiles>
+						<File Id="815606792" Language="SFX">
+							<ShortName>PlusShot.wav</ShortName>
+							<Path>SFX\PlusShot_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1797089188" Name="Prayer" ObjectPath="\Events\Default Work Unit\SFX\Prayer" DurationType="OneShot" DurationMin="4.593152" DurationMax="4.593152">
+					<IncludedMemoryFiles>
+						<File Id="614369787" Language="SFX">
+							<ShortName>Prayer.wav</ShortName>
+							<Path>SFX\Prayer_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="645565787" Name="Punch" ObjectPath="\Events\Default Work Unit\SFX\Punch" DurationType="OneShot" DurationMin="1.420357" DurationMax="2.840713">
+					<IncludedMemoryFiles>
+						<File Id="909947837" Language="SFX">
+							<ShortName>Punch.wav</ShortName>
+							<Path>SFX\Punch_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="456382354" Name="Reload" ObjectPath="\Events\Default Work Unit\SFX\Reload" DurationType="OneShot" DurationMin="1.053396" DurationMax="1.053396">
+					<IncludedMemoryFiles>
+						<File Id="960646667" Language="SFX">
+							<ShortName>Reload.wav</ShortName>
+							<Path>SFX\Reload_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="251412229" Name="Shot" ObjectPath="\Events\Default Work Unit\SFX\Shot" DurationType="OneShot" DurationMin="1.504815" DurationMax="2.681276">
+					<IncludedMemoryFiles>
+						<File Id="942649117" Language="SFX">
+							<ShortName>Shot.wav</ShortName>
+							<Path>SFX\Shot_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="4107276880" Name="Slash" ObjectPath="\Events\Default Work Unit\SFX\Slash" DurationType="OneShot" DurationMin="1.270139" DurationMax="1.796248">
+					<IncludedMemoryFiles>
+						<File Id="9438828" Language="SFX">
+							<ShortName>Slash.wav</ShortName>
+							<Path>SFX\Slash_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1686739424" Name="Storm" ObjectPath="\Events\Default Work Unit\SFX\Storm" DurationType="OneShot" DurationMin="1.009169" DurationMax="1.901957">
+					<IncludedMemoryFiles>
+						<File Id="199180584" Language="SFX">
+							<ShortName>Thunder1.wav</ShortName>
+							<Path>SFX\Thunder1_10C4C929.wem</Path>
+						</File>
+						<File Id="528083747" Language="SFX">
+							<ShortName>Thunder3.wav</ShortName>
+							<Path>SFX\Thunder3_10C4C929.wem</Path>
+						</File>
+						<File Id="796143179" Language="SFX">
+							<ShortName>Thunder2.wav</ShortName>
+							<Path>SFX\Thunder2_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="2972449336" Name="Text" ObjectPath="\Events\Default Work Unit\SFX\Text" DurationType="OneShot" DurationMin="0.042396" DurationMax="0.042396">
+					<IncludedMemoryFiles>
+						<File Id="174110548" Language="SFX">
+							<ShortName>Text.wav</ShortName>
+							<Path>SFX\Text_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="186852181" Name="Thunder" ObjectPath="\Events\Default Work Unit\SFX\Thunder" DurationType="OneShot" DurationMin="0.800684" DurationMax="1.601957">
+					<IncludedMemoryFiles>
+						<File Id="199180584" Language="SFX">
+							<ShortName>Thunder1.wav</ShortName>
+							<Path>SFX\Thunder1_10C4C929.wem</Path>
+						</File>
+						<File Id="528083747" Language="SFX">
+							<ShortName>Thunder3.wav</ShortName>
+							<Path>SFX\Thunder3_10C4C929.wem</Path>
+						</File>
+						<File Id="796143179" Language="SFX">
+							<ShortName>Thunder2.wav</ShortName>
+							<Path>SFX\Thunder2_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="468693733" Name="Twirl" ObjectPath="\Events\Default Work Unit\SFX\Twirl" DurationType="OneShot" DurationMin="1.613751" DurationMax="2.128128">
+					<IncludedMemoryFiles>
+						<File Id="109474922" Language="SFX">
+							<ShortName>Twirl.wav</ShortName>
+							<Path>SFX\Twirl_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+			</IncludedEvents>
+		</SoundBank>
 		<SoundBank Id="1355168291" Language="SFX">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
