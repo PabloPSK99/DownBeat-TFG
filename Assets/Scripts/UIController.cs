@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    [Header("Pivots")]
+
     public Transform[] pivots;
     public Transform chancePivot;
-    bool[] empty;
-    bool emptyChance;
+    private bool[] empty;
+    private bool emptyChance;
 
+    [Header("Size")]
 
     public int minSize;
     public int maxSize;
@@ -18,14 +21,14 @@ public class UIController : MonoBehaviour
     public int minValue;
     public int maxValue;
 
+    [Header("Timing and Displacement")]
 
-    [Header("Movement")]
     public float distance;
     public float screenTime;
     public float fadeTime;
 
+    [Header("Colors")]
 
-    [Header("Text")]
     public Color attackColor;
     public Color plusColor;
     public Color damageColor;
@@ -33,7 +36,6 @@ public class UIController : MonoBehaviour
     public Color techColor;
     public Color cutColor;
     public Color chanceColor;
-
 
     void Awake()
     {

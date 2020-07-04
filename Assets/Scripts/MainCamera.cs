@@ -6,7 +6,6 @@ public class MainCamera : MonoBehaviour
 {
     public Transform characterPivot;
 
-
     public void Rotate(float rotation, float duration)
     {
         StartCoroutine(RotateBy(rotation, duration));

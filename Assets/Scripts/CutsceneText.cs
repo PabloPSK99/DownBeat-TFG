@@ -5,18 +5,22 @@ using UnityEngine.UI;
 
 public class CutsceneText : MonoBehaviour
 {
+    [Header("References & Control")]
+
     public Rhythm rhythm;
     public int maxFiles;
-    [TextArea(3, 10)] public string fullText;
+    public TextState state;
+
+    private string fullText;
     private string currentText;
     private Text text;
     private int index;
 
+    [Header("Timing")]
+
     public float letterTime;
     public float pauseTime;
     public float stopTime;
-
-    public TextState state;
 
     private void Awake()
     {
@@ -37,7 +41,6 @@ public class CutsceneText : MonoBehaviour
             LoadText(cutscene);
             index = -1;
         }
-        print("PERO WENO");
         state = TextState.Writing;
         StartCoroutine(WriteText());
     }

@@ -6,22 +6,22 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    PlayerControls controls;
-    float initTime;
-    float startTime;
-    float[] phaseTime = new float[4];
-    int cutsceneIndex;
     public Rhythm rhythm;
     public ParticleSystem embers1;
     public ParticleSystem embers2;
     public GameObject[] cutscenes;
     public CanvasGroup mattes;
     public CutsceneText cutsceneText;
-
     public CanvasGroup menuUI;
     public Text text;
     public Text countDownText;
     public int[] phaseDurations;
+
+    private PlayerControls controls;
+    float initTime;
+    float startTime;
+    float[] phaseTime = new float[4];
+    int cutsceneIndex;
 
     private void Awake()
     {
@@ -46,7 +46,6 @@ public class MenuController : MonoBehaviour
     IEnumerator Count3()
     {
         float startCountTime = AkSoundEngine.GetTimeStamp() / 1000f - initTime;
-        print(startCountTime);
         float waitTime = 0;
         if (Mathf.Round(startCountTime / 2) == Mathf.Floor(startCountTime / 2))
         {
@@ -82,7 +81,6 @@ public class MenuController : MonoBehaviour
     IEnumerator SetStateAfter(int phase, float time)
     {
         yield return new WaitForSeconds(time);
-        print(phase + "   +   " + time);
         AkSoundEngine.SetState("Phase", "Phase"+phase);
     }
 
@@ -134,8 +132,6 @@ public class MenuController : MonoBehaviour
             cutsceneText.ShowText(cutsceneIndex);
         }
     }
-
-
     
     void EndCutscene1()
     {

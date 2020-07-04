@@ -10279,10 +10279,10 @@ MonoBehaviour:
   bpm: 60
   timeOffset: 0
   normalized: 0
+  beatLocked: 0
   transitionTime: 0.5
   aberrationThreshold: 0.9
   maxAberration: 0.6
-  beatLocked: 0
 --- !u!4 &739179787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1181463237433243136, guid: ac4644ffb369b1f4a914d112ef8db4e4,
@@ -10935,22 +10935,22 @@ MonoBehaviour:
   center: {fileID: 1680664917}
   rhythm: {fileID: 719575788}
   UIController: {fileID: 2040810106}
-  successChanceThreshold: 6
-  minStickMovement: 0.2
-  moveDuration: 0.5
-  successChance: 0
   charAnimator: {fileID: 3166231813477885664}
   effects: {fileID: 954182307}
   enemy: {fileID: 1680664918}
+  successChanceThreshold: 6
   damage: 20
   maxHealth: 100
-  offBeat: 0
   currentAction: 0
-  charged: 0
-  nearlyLoaded: 0
-  jumpHeight: 6
+  minStickMovement: 0.2
+  moveDuration: 0.5
+  successChance: 0
   damageToBlock: 0
   maxBlockableRatio: 0.8
+  jumpHeight: 6
+  offBeat: 0
+  loaded: 0
+  nearlyLoaded: 0
   healthBar: {fileID: 941817015}
   damageBar: {fileID: 1615179772}
   healthBarTime: 0.3
@@ -13753,7 +13753,7 @@ PlayableDirector:
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: f867ba7dd9d4c6d41ac15f432d495330, type: 2}
   m_InitialState: 1
-  m_WrapMode: 1
+  m_WrapMode: 0
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
@@ -14038,8 +14038,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 5.200012, y: -0.7999878}
+  m_SizeDelta: {x: 87.2, y: 85.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1204806486
 MonoBehaviour:
@@ -14315,8 +14315,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 17.700012, y: -9.099976}
+  m_SizeDelta: {x: 107.2, y: 92.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1280979226
 MonoBehaviour:
@@ -20789,10 +20789,10 @@ MonoBehaviour:
   successChance: 0
   successChanceThreshold: 5
   randomness: 0.2
-  cutFixRatio: 0.6
+  cutFixRatio: 0.3
   maxThunders: 7
   maxThrustCombo: 6
-  healing: 20
+  healing: 60
   retaliate: 0
   phase: 0
   pause: 0
@@ -22121,6 +22121,7 @@ RectTransform:
   m_Children:
   - {fileID: 1702357864}
   - {fileID: 694524242}
+  - {fileID: 1979431803}
   m_Father: {fileID: 2079519362}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23159,13 +23160,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rhythm: {fileID: 719575788}
   maxFiles: 5
-  fullText: "Con la voz rota, le dices a Garad que no quieres matarle.$Cuando baja
-    la cabeza para preparar el pr\xF3ximo ataque,\nte parece ver una l\xE1grima centellear
-    en el aire.$"
+  state: 0
   letterTime: 0.025
   pauseTime: 0.7
   stopTime: 1.5
-  state: 0
+--- !u!1 &1979431802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1979431803}
+  - component: {fileID: 1979431805}
+  - component: {fileID: 1979431804}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1979431803
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979431802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1902167799}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 30}
+  m_SizeDelta: {x: 0, y: 182.20001}
+  m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &1979431804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979431802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 37fc6b963bb049c4ab64152a627af96d, type: 3}
+    m_FontSize: 17
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 7
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: '
+
+    In this demo you cannot die. In this way, it is intended that any
+    player can experience full combat despite its difficulty. Even if your health
+    reaches 0, you can press L to heal completely.'
+--- !u!222 &1979431805
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979431802}
+  m_CullTransparentMesh: 0
 --- !u!1 &1992978569
 GameObject:
   m_ObjectHideFlags: 0

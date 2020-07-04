@@ -8,14 +8,14 @@ public class Node : MonoBehaviour
     public Node left;
     public Node right;
     public Node back;
+
     private PlayerController player;
     private Rhythm rhythm;
     private float successChanceThreshold;
-
-    MeshRenderer meshRenderer;
-    Material basicMaterial;
-    Material attackMaterial;
-    Material techMaterial;
+    private MeshRenderer meshRenderer;
+    private Material basicMaterial;
+    private Material attackMaterial;
+    private Material techMaterial;
 
     private void Awake()
     {
@@ -99,10 +99,7 @@ public class Node : MonoBehaviour
         }
         yield return new WaitForSeconds(time);
         AttackHere(damage, tech);
-
     }
-
-
 
     public void ChargeHere(float damage, bool tech, float time, float delay)
     {
@@ -139,7 +136,6 @@ public class Node : MonoBehaviour
         }
         yield return new WaitForSeconds(time);
         AttackHere(damage, tech);
-
     }
 
     public void Cancel()
@@ -165,7 +161,6 @@ public class Node : MonoBehaviour
         meshRenderer.material.SetColor("_EmissionColor", color);
     }
 
-
     public void AttackHere(float damage, bool tech)
     {
         float successChance = Mathf.Min(1, (0.5f - rhythm.normalized) * 2 * (1 + successChanceThreshold/100f));
@@ -188,5 +183,4 @@ public class Node : MonoBehaviour
             }
         }
     }
-
 }

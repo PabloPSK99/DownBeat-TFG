@@ -6,43 +6,53 @@ using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
-    PlayerControls controls;
+    [Header("References")]
+
     public MainCamera mainCamera;
     public Node currentNode;
     public Node initialNode;
     public Transform center;
     public Rhythm rhythm;
     public UIController UIController;
-    public float successChanceThreshold;
-    Node targetNode;
-    Vector2 move;
-    public float minStickMovement;
-    public float moveDuration;
-    public float successChance;
-    private bool canMove = true;
-    private bool moveInput = false;
-    private Animator camAnimator;
     public Animator charAnimator;
     public Effects effects;
     public EnemyController enemy;
 
+    private PlayerControls controls;
+    private Animator camAnimator;
+
     [Header("Stats")]
+
+    public float successChanceThreshold;
     public int damage;
     public int maxHealth;
+
     private int health;
-    public bool offBeat;
 
     [Header("Actions")]
+
     public Action currentAction;
-    public bool charged;
-    public bool nearlyLoaded;
-    public float jumpHeight;
-    private Bullet[] chamber;
+
+    public float minStickMovement;
+    public float moveDuration;
+    public float successChance;
     public float damageToBlock;
     public float maxBlockableRatio;
+    public float jumpHeight;
+    public bool offBeat;
+    public bool loaded;
+    public bool nearlyLoaded;
+
+    private bool canMove = true;
+    private bool moveInput = false;
+    private Bullet[] chamber;
     private IEnumerator load;
+    private Node targetNode;
+    private Vector2 move;
+
 
     [Header("UI")]
+
     public Image healthBar;
     public Image damageBar;
     public float healthBarTime;
@@ -55,25 +65,21 @@ public class PlayerController : MonoBehaviour
     public Color burntPlusBulletColor;
     public Color warningBulletColor;
     public float burnBulletTime;
+
     private readonly float maxFillAmount = 0.2f;
 
     [Header("VFX")]
+
     public float shotCameraShake;
     public float plusShotCameraShake;
     public float damageCameraShake;
     public float offBeatShake;
-
-
 
     private void Awake()
     {
         camAnimator = GetComponent<Animator>();
         health = maxHealth;
         chamber = new Bullet[] { Bullet.One, Bullet.One, Bullet.One, Bullet.Plus };
-        for (int i = 0; i < 4; i++)
-        {
-            //Shoot();
-        }
         currentAction = Action.None;
         load = Load();
 
@@ -111,7 +117,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     #region Attack
     //-------------------------------------------ATTACK----------------------------------------------
 
@@ -121,8 +126,8 @@ public class PlayerController : MonoBehaviour
         {
             currentAction = Action.Attack;
             StartLoading();
-            charged = true;
-            if (currentNode.forward == null)  //Ataque Melee
+            loaded = true;
+            if (currentNode.forward == null)
             {
                 UIController.PopUpChance(successChance, Action.Attack);
                 SetTrigger("chargePunch");
@@ -149,21 +154,21 @@ public class PlayerController : MonoBehaviour
         }
 
         rhythm.LockTwoBeats();
-        rhythm.ScheduleDischarge(3);
+        rhythm.ScheduleUnload(3);
     }
 
     private void Attack()
     {
 
-        if (!rhythm.beatLocked && currentAction == Action.Attack && charged == true && rhythm.IsDownBeat())
+        if (!rhythm.beatLocked && currentAction == Action.Attack && loaded == true && rhythm.IsDownBeat())
         {
             CheckSuccess();
             SetTrigger("release");
             UIController.PopUpChance(successChance, Action.Attack);
-            if (currentNode.forward == null)  //Ataque Melee
+            if (currentNode.forward == null)
             {
                 AkSoundEngine.PostEvent("Punch", rhythm.gameObject);
-                if (successChance == 100f) //Crítico
+                if (successChance == 100f)
                 {
                     AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                     CameraShake(plusShotCameraShake, 0.25f);
@@ -176,13 +181,13 @@ public class PlayerController : MonoBehaviour
                     CameraShake(shotCameraShake * successChance / 100, 0.15f);
                 }
             }
-            else                          //Ataque a distancia
+            else
             {
                 float shootDamage = Shoot();
                 if(shootDamage != 0)
                 {
                     AkSoundEngine.PostEvent("Shot", rhythm.gameObject);
-                    if (successChance == 100f) //Crítico
+                    if (successChance == 100f)
                     {
                         AkSoundEngine.PostEvent("Critical", rhythm.gameObject);
                         enemy.GetAttack(shootDamage * 1.5f);
@@ -205,7 +210,7 @@ public class PlayerController : MonoBehaviour
                 effects.Fail();
             }
         }
-        charged = false;
+        loaded = false;
     }
 
     private float Shoot()
@@ -243,7 +248,7 @@ public class PlayerController : MonoBehaviour
         return bulletDamage;
     }
 
-#endregion
+    #endregion
 
     #region Block
     //-------------------------------------------BLOCK-----------------------------------------------
@@ -255,7 +260,7 @@ public class PlayerController : MonoBehaviour
             SetTrigger("chargeBlock");
             UIController.PopUpChance(successChance, Action.Block);
             currentAction = Action.Block;
-            charged = true;
+            loaded = true;
             StartLoading();
             effects.Block(rhythm.IsDownBeat(), true);
         }
@@ -264,12 +269,12 @@ public class PlayerController : MonoBehaviour
             UIController.PopUpText("FAIL!");
         }
         rhythm.LockThisBeat();
-        rhythm.ScheduleDischarge(3);
+        rhythm.ScheduleUnload(3);
     }
 
     private void Block()
     {
-        if (!rhythm.beatLocked && currentAction == Action.Block && charged == true && rhythm.IsDownBeat())
+        if (!rhythm.beatLocked && currentAction == Action.Block && loaded == true && rhythm.IsDownBeat())
         {
             CheckSuccess();
             UIController.PopUpChance(successChance, Action.Block);
@@ -282,9 +287,14 @@ public class PlayerController : MonoBehaviour
                 SetTrigger("fail");
                 UIController.PopUpText("FAIL!");
                 currentAction = Action.None;
+                if (damageToBlock != 0)
+                {
+                    GetDamage(damageToBlock);
+                    damageToBlock = 0;
+                }
                 ResetLoading();
             }
-            charged = false;
+            loaded = false;
         }
     }
 
@@ -296,7 +306,7 @@ public class PlayerController : MonoBehaviour
             if (damageToBlock != 0)
             {
                 AkSoundEngine.PostEvent("Block", rhythm.gameObject);
-                if (successChance == 100f) //Crítico
+                if (successChance == 100f)
                 {
                     enemy.OffBeat();
                     if(enemy.phase == 4)
@@ -326,11 +336,11 @@ public class PlayerController : MonoBehaviour
         {
             damageToBlock = 0;
         }
-        charged = false;
+        loaded = false;
         currentAction = Action.None;
         ResetLoading();
     }
-#endregion
+    #endregion
 
     #region Techniques
     //-----------------------------------------TECHNIQUES--------------------------------------------
@@ -359,27 +369,27 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(WaitForTechCorrection(0.2f));
             }
             StartLoading();
-            charged = true;
+            loaded = true;
         }
         else
         {
             UIController.PopUpText("FAIL!");
         }
         rhythm.LockTwoBeats();
-        rhythm.ScheduleDischarge(3);
+        rhythm.ScheduleUnload(3);
     }
 
     private void Tech()
     {
 
-        if (!rhythm.beatLocked && !rhythm.IsDownBeat() && charged == true)
+        if (!rhythm.beatLocked && !rhythm.IsDownBeat() && loaded == true)
         {
             CheckSuccess();
             SetTrigger("release");
-            if (currentAction == Action.Reload)  //Recarga
+            if (currentAction == Action.Reload)
             {
                 UIController.PopUpChance(successChance, Action.Tech);
-                if (successChance == 100f) //Crítico
+                if (successChance == 100f)
                 {
                     Reload(4);
                 }
@@ -388,11 +398,11 @@ public class PlayerController : MonoBehaviour
                     Reload(Mathf.FloorToInt(successChance) / 30);
                 }
             }
-            else if (currentAction == Action.Twirl) //Pirueta
+            else if (currentAction == Action.Twirl)
             {
                 UIController.PopUpChance(successChance, Action.Tech);
                 AkSoundEngine.PostEvent("Twirl", rhythm.gameObject);
-                if (successChance == 100f) //Crítico
+                if (successChance == 100f)
                 {
                     FillChamberSlot(true);
                     CameraShake(plusShotCameraShake * 1.5f, 0.25f);
@@ -406,11 +416,11 @@ public class PlayerController : MonoBehaviour
                 targetNode = currentNode.GetLastNodeOnThisAxis();
                 StartCoroutine(TwirlToTarget());
             }
-            else if (currentAction == Action.Flash) //Destello
+            else if (currentAction == Action.Flash)
             {
                 UIController.PopUpChance(successChance, Action.Tech);
                 AkSoundEngine.PostEvent("Flash", rhythm.gameObject);
-                if (successChance == 100f) //Crítico
+                if (successChance == 100f)
                 {
                     FillChamberSlot(true);
                     CameraShake(plusShotCameraShake * 1.5f, 0.25f);
@@ -437,12 +447,11 @@ public class PlayerController : MonoBehaviour
                 ResetLoading();
             }
         }
-        charged = false;
+        loaded = false;
     }
+    #endregion
 
-
-
-
+    #region Ammo
     //--------------------------------------------AMMO-----------------------------------------------
 
     private void FillChamberSlot(bool isPlus)
@@ -574,7 +583,7 @@ public class PlayerController : MonoBehaviour
         SetTrigger("offBeat");
         currentAction = Action.None;
         ResetLoading();
-        charged = false;
+        loaded = false;
         offBeat = true;
         rhythm.OffBeat(true);
         CameraShake(offBeatShake, 0.35f);
@@ -971,17 +980,14 @@ public class PlayerController : MonoBehaviour
     IEnumerator WaitForTechCorrection(float time)
     {
         float elapsed = 0;
-        //print("START: " + currentAction + "--------------");
         while (currentAction == Action.Reload && elapsed <= time)
         {
             if (move.y > minStickMovement && currentNode.forward == null)
             {
-                //print("while: " + currentAction + "   twirlcondition");
                 currentAction = Action.Twirl;
             }
             else if (move.y < -minStickMovement && currentNode.back == null)
             {
-                //print("while: " + currentAction + "   flashcondition");
                 currentAction = Action.Flash;
                 camAnimator.SetTrigger("Charging Flash");
                 SetTrigger("chargeFlash");
@@ -989,8 +995,6 @@ public class PlayerController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        //print("FINISH: " + currentAction + "--------------");
-
     }
 
     IEnumerator ScheduleFinish(float time)

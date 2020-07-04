@@ -7,6 +7,7 @@ using UnityEngine.Rendering.PostProcessing;
 public class Rhythm : MonoBehaviour
 {
     [Header("References")]
+
     public PlayerController player;
     public PostProcessVolume postVolume;
     public Image flashPanel;
@@ -14,45 +15,49 @@ public class Rhythm : MonoBehaviour
     public GameObject AKtarget;
 
     [Header("Circles")]
+
     public Image circle;
     public Image dot;
     public Image externalCircle;
 
+    private bool grow;
+    private Vector3 minScale = new Vector3(.1f, .1f, 1);
+
     [Header("Colors")]
+
     public Color downBeatColor;
     public Color offBeatColor;
     public Color upBeatColor;
 
     [Header("Glow")]
+
     public Image dotGlow;
     public Image outGlow;
     public Color dotGlowColor;
     public Color outGlowColor;
 
     [Header("Timing")]
+
     public float bpm;
     public float timeOffset;
     public float normalized;
-    private bool chromVariation;
+    public bool beatLocked;
+
+    private bool offBeat;
+    private float lastTimeStamp;
+    private float beatDuration;
+    private float syncCorrection;
 
     [Header("Post Process")]
+
     public float transitionTime;
     public float aberrationThreshold;
     public float maxAberration;
 
-    public bool beatLocked;
-
+    private bool chromVariation;
     private PostProcessProfile crimsonProfile;
     private PostProcessProfile offBeatProfile;
     private ChromaticAberration chromaticAberration;
-
-
-    private bool offBeat;
-    private float lastTimeStamp;
-    private bool grow;
-    private float beatDuration;
-    private float syncCorrection;
-    private Vector3 minScale = new Vector3(.1f, .1f, 1);
 
     void Start()
     {
@@ -87,8 +92,7 @@ public class Rhythm : MonoBehaviour
         this.offBeat = offBeat;
         if(offBeat)
         {
-            AKRESULT result = AkSoundEngine.SetSwitch("OffBeat", "OffBeat", gameObject);
-            print(result);
+            AkSoundEngine.SetSwitch("OffBeat", "OffBeat", gameObject);
             dot.color = offBeatColor;
             externalCircle.color = offBeatColor;
             circle.color = offBeatColor;
@@ -260,8 +264,7 @@ public class Rhythm : MonoBehaviour
 
     private void FixSync()
     {
-        float offset = (lastTimeStamp + beatDuration + syncCorrection) - AkSoundEngine.GetTimeStamp() / 1000f; //tiempo esperado - tiempo real
-        //print("Duration: " + (beatDuration + syncCorrection ) + "    Expected time: " + (lastTimeStamp + beatDuration + syncCorrection) + "    Actual time: " + AkSoundEngine.GetTimeStamp() / 1000f);
+        float offset = (lastTimeStamp + beatDuration + syncCorrection) - AkSoundEngine.GetTimeStamp() / 1000f;
         lastTimeStamp = AkSoundEngine.GetTimeStamp() / 1000f;
         if(Mathf.Abs(offset) > 5)
         {
@@ -398,13 +401,12 @@ public class Rhythm : MonoBehaviour
         beatLocked = false;
     }
 
-
-    public void ScheduleDischarge(int beats)
+    public void ScheduleUnload(int beats)
     {
-        StartCoroutine(DischargeAfter(beats));
+        StartCoroutine(UnloadAfter(beats));
     }
 
-    IEnumerator DischargeAfter(int beats)
+    IEnumerator UnloadAfter(int beats)
     {
         Action currentAction = player.currentAction;
         for(int i = 0; i<beats; i++)
@@ -428,7 +430,15 @@ public class Rhythm : MonoBehaviour
         }
         if(player.currentAction == currentAction)
         {
-            player.charged = false;
+            if(player.currentAction == Action.Block)
+            {
+                if (player.damageToBlock != 0)
+                {
+                    player.GetDamage(player.damageToBlock);
+                    player.damageToBlock = 0;
+                }
+            }
+            player.loaded = false;
             player.currentAction = Action.None;
             player.SetTrigger("fail");
         }

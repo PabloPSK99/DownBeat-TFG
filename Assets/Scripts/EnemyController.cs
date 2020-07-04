@@ -86,6 +86,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    #region Phases
+    //-------------------------------------------PHASES----------------------------------------------
+
     public void NextPhase()
     {
         if(phase <= 3)
@@ -261,6 +264,10 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Combos
+    //-------------------------------------------COMBOS----------------------------------------------
 
     public void Random2Combo(float time, int[] indexes)
     {
@@ -436,6 +443,10 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Control
+    //-------------------------------------------CONTROL-----------------------------------------------
     public void GoIdle()
     {
         currentAction = Action.Wait;
@@ -515,6 +526,10 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         transform.rotation = Quaternion.Euler(0, lastRotation + rotation * 360, 0);
     }
+    #endregion
+
+    #region OffBeat & Counter
+    //---------------------------------------OFFBEAT & COUNTER------------------------------------------
 
     public void OffBeat()
     {
@@ -571,21 +586,21 @@ public class EnemyController : MonoBehaviour
             }
             else if (player.currentAction == Action.Twirl || player.currentAction == Action.Flash || player.currentAction == Action.Reload)
             {
-                float random = Random.value * randomness / 2;
+                float random = Random.value * randomness * cutFixRatio;
                 if (rhythm.IsDownBeat())
                 {
                     currentAction = Action.Cut;
-                    rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
+                    rhythm.ScheduleFunction(random, "Cut", this);
                     rhythm.ScheduleFunction(1, "GoIdle", this);
                 }
             }
             else if (player.currentAction == Action.Block)
             {
-                float random = Random.value * randomness / 2;
+                float random = Random.value * randomness * cutFixRatio;
                 if (!rhythm.IsDownBeat())
                 {
                     currentAction = Action.Cut;
-                    rhythm.ScheduleFunction(random * cutFixRatio, "Cut", this);
+                    rhythm.ScheduleFunction(random, "Cut", this);
                     rhythm.ScheduleFunction(1, "GoIdle", this);
                 }
             }
@@ -613,6 +628,10 @@ public class EnemyController : MonoBehaviour
             OffBeat();
         }
     }
+    #endregion
+
+    #region Attacks
+    //-------------------------------------------ATTACKS----------------------------------------------
 
     public void RandomAttack(float time, int[] indexes)
     {
@@ -634,8 +653,6 @@ public class EnemyController : MonoBehaviour
                 break;
         }
     }
-
-    #region Attacks
 
     public void Thunder(float time)
     {
@@ -729,6 +746,9 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
+    #region Techniques
+    //----------------------------------------TECHNIQUES--------------------------------------------
+
     public void RandomTech(float time, int[] indexes)
     {
         int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
@@ -769,27 +789,7 @@ public class EnemyController : MonoBehaviour
         }
         halberdPivot.position = player.currentNode.left.left.left.transform.position;
     }
-
-    public void RandomAttackPlusTech(float time, int[] indexes)
-    {
-        int index = indexes[Mathf.FloorToInt(Random.value * (indexes.Length - 0.01f))];
-        UpdateCurrentNode();
-        switch (index)
-        {
-            case 0:
-                Sweep(time);
-                break;
-            case 1:
-                Spear(time);
-                break;
-            case 2:
-                Sweep(time);
-                break;
-            case 3:
-                Storm(time);
-                break;
-        }
-    }
+    #endregion
 
     private void Block()
     {
@@ -908,15 +908,13 @@ public class EnemyController : MonoBehaviour
 
     private bool CheckSuccess()
     {
-        if (rhythm.IsDownBeat()) //Si es tiempo 
+        if (rhythm.IsDownBeat())
         {
             successChance = Mathf.Min(100, (0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold));
-            print((0.5f - rhythm.normalized) * 2 * (100 + successChanceThreshold) + "%");
         }
-        else                   //Si es contratiempo
+        else 
         {
             successChance = Mathf.Min(100, (rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold));
-            print((rhythm.normalized - 0.5f) * 2 * (100 + successChanceThreshold) + "%");
         }
         if (successChance < 50)
         {
